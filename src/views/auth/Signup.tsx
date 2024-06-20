@@ -1,17 +1,35 @@
 import { Link } from "react-router-dom";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 export default function Signup() {
+  const [state, setState] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    setState({ ...state, [target.name]: target.value });
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    console.log(state);
+  };
+
   return (
     <div className='min-w-full min-h-screen bg-[#cdcae9] flex justify-center items-center'>
       <div className='w-[350px] text-[#fff] p-2'>
         <div className='bg-[#6f68d1] p-4 rounded-md'>
           <h2 className='text-xl mb-3 font-bold '>Welcome</h2>
           <p className='text-sm mb-3 font-medium'>Please register your account</p>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className='flex flex-col w-full gap-1 mb-3'>
               <label htmlFor='name'>Name</label>
               <input
+                value={state.name}
+                onChange={handleChange}
                 type='text'
                 name='name'
                 placeholder='Name'
@@ -23,6 +41,8 @@ export default function Signup() {
             <div className='flex flex-col w-full gap-1 mb-3'>
               <label htmlFor='email'>Email</label>
               <input
+                value={state.email}
+                onChange={handleChange}
                 type='email'
                 name='email'
                 placeholder='Email'
@@ -34,6 +54,8 @@ export default function Signup() {
             <div className='flex flex-col w-full gap-1 mb-3'>
               <label htmlFor='password'>Password</label>
               <input
+                value={state.password}
+                onChange={handleChange}
                 type='password'
                 name='password'
                 placeholder='Password'
