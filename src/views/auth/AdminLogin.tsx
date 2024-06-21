@@ -1,7 +1,10 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import logoImage from "../../../public/logo.png";
+import { useDispatch } from "react-redux";
+import { admin_login } from "../../store/reducers/authReducer";
 
 export default function AdminLogin() {
+  const dispatch = useDispatch();
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -13,7 +16,7 @@ export default function AdminLogin() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(state);
+    dispatch(admin_login(state));
   };
   return (
     <div className='min-w-full min-h-screen bg-[#cdcae9] flex justify-center items-center'>
