@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import router from "./routes/authRoutes";
+import dbConnect from "./utils/db";
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.use(
 app.use(express.json());
 app.use("/api", router);
 app.use(cookieParser());
+
+dbConnect();
 
 app.get("/", (req, res) => res.send("Backend!!"));
 const port = process.env.PORT;
