@@ -8,7 +8,7 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const navs = getNav("admin");
+    const navs = getNav("seller");
     setAllNav(navs);
   }, []);
 
