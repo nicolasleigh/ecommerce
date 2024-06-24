@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from "react";
+import { IoMdCloseCircle, IoMdImages } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 export default function AddProduct() {
@@ -42,6 +43,8 @@ export default function AddProduct() {
   const [category, setCategory] = useState("");
   const [allCategory, setAllCategory] = useState(categories);
   const [searchValue, setSearchValue] = useState("");
+  const [images, setImages] = useState([]);
+  const [imageShow, setImageShow] = useState([]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -59,6 +62,38 @@ export default function AddProduct() {
     } else {
       setAllCategory(categories);
     }
+  };
+
+  const imageHandle = (e) => {
+    const files = e.target.files;
+    const length = files.length;
+    if (length > 0) {
+      setImages([...images, ...files]);
+      let imageUrl = [];
+      for (let i = 0; i < length; i++) {
+        imageUrl.push({ url: URL.createObjectURL(files[i]) });
+      }
+      setImageShow([...imageShow, ...imageUrl]);
+    }
+  };
+
+  const changeImage = (img, index) => {
+    if (img) {
+      const tempUrl = imageShow;
+      const tempImages = images;
+
+      tempImages[index] = img;
+      tempUrl[index] = { url: URL.createObjectURL(img) };
+      setImageShow([...tempUrl]);
+      setImages([...tempImages]);
+    }
+  };
+
+  const removeImage = (i) => {
+    const filterImage = images.filter((img, index) => index !== i);
+    const filterImageUrl = imageShow.filter((img, index) => index !== i);
+    setImages(filterImage);
+    setImageShow(filterImageUrl);
   };
 
   return (
@@ -195,7 +230,7 @@ export default function AddProduct() {
             </div>
 
             {/* fourth row */}
-            <div className='flex flex-col w-full gap-1'>
+            <div className='flex flex-col w-full gap-1 mb-5'>
               <label htmlFor='description' className='text-[#d0d2d6]'>
                 Description
               </label>
@@ -209,6 +244,39 @@ export default function AddProduct() {
                 cols='10'
                 rows='4'
               ></textarea>
+            </div>
+
+            <div className='grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 gap-3 w-full text-[#d0d2d6] mb-4'>
+              {imageShow.map((image, i) => (
+                <div key={i} className='h-[180px] relative'>
+                  <label htmlFor={i}>
+                    <img src={image.url} alt='image' className='w-full h-full rounded-sm' />
+                  </label>
+                  <input onChange={(e) => changeImage(e.target.files[0], i)} type='file' id={i} className='hidden' />
+                  <span
+                    onClick={() => removeImage(i)}
+                    className='p-2 z-10 cursor-pointer bg-slate-700 hover:shadow-lg hover:shadow-slate-400/50 text-white absolute top-1 right-1 rounded-full'
+                  >
+                    <IoMdCloseCircle />
+                  </span>
+                </div>
+              ))}
+              <label
+                htmlFor='image'
+                className='flex justify-center items-center flex-col h-[180px] cursor-pointer border border-dashed hover:border-red-500 w-full text-[#d0d2d6]'
+              >
+                <span>
+                  <IoMdImages />
+                </span>
+                <span>Select Image</span>
+              </label>
+              <input onChange={imageHandle} type='file' id='image' multiple className='hidden' />
+            </div>
+
+            <div className='flex'>
+              <button className='bg-red-500 hover:shadow-red-500/40 hover:shadow-md text-white rounded-md px-7 py-2'>
+                Add Product
+              </button>
             </div>
           </form>
         </div>
