@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { PropagateLoader } from "react-spinners";
+import { overrideStyle } from "../../utils/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { messageClear, seller_login } from "../../store/reducers/authReducer";
+import toast from "react-hot-toast";
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const { loader, errorMessage, successMessage } = useSelector((state) => state.auth);
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -14,8 +21,20 @@ export default function Login() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(state);
+    dispatch(seller_login(state));
   };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage, errorMessage]);
+
   return (
     <div className='min-w-full min-h-screen bg-[#cdcae9] flex justify-center items-center'>
       <div className='w-[350px] text-[#fff] p-2'>
@@ -50,8 +69,11 @@ export default function Login() {
               />
             </div>
 
-            <button className='bg-slate-800 w-full hover:shadow-blue-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'>
-              Sign in
+            <button
+              disabled={loader}
+              className='bg-slate-800 w-full hover:shadow-blue-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
+            >
+              {loader ? <PropagateLoader color='white' cssOverride={overrideStyle} /> : "Login"}
             </button>
 
             <div className='flex items-center mb-3 gap-3 justify-center'>
