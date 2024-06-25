@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import adminModel from "../models/adminModel";
+import sellerModel from "../models/sellerModel";
 import { responseReturn } from "../utils/response";
 import createToken from "../utils/tokenCreate";
 
@@ -25,6 +26,27 @@ class authControllers {
       }
     } catch (error) {
       responseReturn(res, 500, { error: error.message });
+    }
+  };
+
+  seller_register = async (req, res) => {
+    const { email, name, password } = req.body;
+    try {
+      const user = await sellerModel.findOne({ email });
+      if (user) {
+        responseReturn(res, 404, { error: "Email Already Exists!" });
+      } else {
+        const seller = await sellerModel.create({
+          name,
+          email,
+          password: await bcrypt.hash(password, 10),
+          method: "manually",
+          shopInfo: {},
+        });
+        console.log(seller);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
