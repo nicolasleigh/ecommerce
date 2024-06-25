@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import adminModel from "../models/adminModel";
 import sellerModel from "../models/sellerModel";
+import sellerCustomerModel from "../models/chat/sellerCustomerModel";
 import { responseReturn } from "../utils/response";
 import createToken from "../utils/tokenCreate";
 
@@ -29,6 +30,30 @@ class authControllers {
     }
   };
 
+  seller_login = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+      const seller = await sellerModel.findOne({ email }).select("+password");
+      if (seller) {
+        const matched = await bcrypt.compare(password, seller.password);
+        if (matched) {
+          const token = await createToken({
+            id: seller.id,
+            role: seller.role,
+          });
+          res.cookie("accessToken", token, { expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) });
+          responseReturn(res, 200, { token, message: "Login success." });
+        } else {
+          responseReturn(res, 404, { error: "Password wrong." });
+        }
+      } else {
+        responseReturn(res, 404, { error: "Email not found." });
+      }
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+
   seller_register = async (req, res) => {
     const { email, name, password } = req.body;
     try {
@@ -43,10 +68,18 @@ class authControllers {
           method: "manually",
           shopInfo: {},
         });
-        console.log(seller);
+        await sellerCustomerModel.create({
+          myId: seller.id,
+        });
+        const token = await createToken({
+          id: seller.id,
+          role: seller.role,
+        });
+        res.cookie("accessToken", token, { expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) });
+        responseReturn(res, 201, { token, message: "Register Success" });
       }
     } catch (error) {
-      console.log(error);
+      responseReturn(res, 500, { error: "Internal Server Error" });
     }
   };
 
