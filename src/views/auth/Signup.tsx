@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { PropagateLoader } from "react-spinners";
+import { overrideStyle } from "../../utils/utils";
+import { messageClear, seller_register } from "../../store/reducers/authReducer";
+import toast from "react-hot-toast";
 
 export default function Signup() {
+  const dispatch = useDispatch();
+  const { loader, successMessage, errorMessage } = useSelector((state) => state.auth);
   const [state, setState] = useState({
     name: "",
     email: "",
@@ -15,8 +22,19 @@ export default function Signup() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(state);
+    dispatch(seller_register(state));
   };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage, errorMessage]);
 
   return (
     <div className='min-w-full min-h-screen bg-[#cdcae9] flex justify-center items-center'>
@@ -75,8 +93,11 @@ export default function Signup() {
               <label htmlFor='checkbox'>I agree to the privacy terms</label>
             </div>
 
-            <button className='bg-slate-800 w-full hover:shadow-blue-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'>
-              Sign up
+            <button
+              disabled={loader}
+              className='bg-slate-800 w-full hover:shadow-blue-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
+            >
+              {loader ? <PropagateLoader color='white' cssOverride={overrideStyle} /> : "Sign Up"}
             </button>
 
             <div className='flex items-center mb-3 gap-3 justify-center'>

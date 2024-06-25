@@ -5,6 +5,7 @@ import logoImage from "../../../public/logo.png";
 import { admin_login, messageClear } from "../../store/reducers/authReducer";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { overrideStyle } from "../../utils/utils";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -22,14 +23,6 @@ export default function AdminLogin() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     dispatch(admin_login(state));
-  };
-
-  const overrideStyle = {
-    display: "flex",
-    margin: "0 auto",
-    height: "24px",
-    justifyContent: "center",
-    alignItem: "center",
   };
 
   useEffect(() => {
