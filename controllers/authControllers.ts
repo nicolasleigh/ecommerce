@@ -89,11 +89,13 @@ class authControllers {
     try {
       if (role === "admin") {
         const user = await adminModel.findById(id);
-        responseReturn(req, 200, { userInfo: user });
+        responseReturn(res, 200, { userInfo: user });
       } else {
-        console.log("Seller info");
+        const seller = await sellerModel.findById(id);
+        responseReturn(res, 200, { userInfo: seller });
       }
     } catch (error) {
+      // responseReturn(res, 500, { error: "Internal Server Error" });
       console.log(error.message);
     }
   };

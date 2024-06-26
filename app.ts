@@ -2,6 +2,7 @@ import express from "express";
 import "dotenv/config";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import morgan from "morgan";
 
 import router from "./routes/authRoutes";
 import dbConnect from "./utils/db";
@@ -14,9 +15,10 @@ app.use(
     credentials: true,
   })
 );
+app.use(morgan("dev"));
 app.use(express.json());
+app.use(cookieParser()); // cookieParser() must appear before the router
 app.use("/api", router);
-app.use(cookieParser());
 
 dbConnect();
 
