@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import { messageClear, seller_register } from "../../store/reducers/authReducer"
 import toast from "react-hot-toast";
 
 export default function Signup() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loader, successMessage, errorMessage } = useSelector((state) => state.auth);
   const [state, setState] = useState({
@@ -29,6 +30,7 @@ export default function Signup() {
     if (successMessage) {
       toast.success(successMessage);
       dispatch(messageClear());
+      navigate("/");
     }
     if (errorMessage) {
       toast.error(errorMessage);
