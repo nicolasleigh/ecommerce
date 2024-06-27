@@ -21,6 +21,36 @@ export const getProducts = createAsyncThunk(
       const { data } = await api.get(`/products-get?page=${page}&searchValue=${searchValue}&parPage=${parPage}`, {
         withCredentials: true,
       });
+      // console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getProduct = createAsyncThunk(
+  "product/getProduct",
+  async (productId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/product-get/${productId}`, {
+        withCredentials: true,
+      });
+      // console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  "product/updateProduct",
+  async (product, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post(`/product-update`, product, {
+        withCredentials: true,
+      });
       console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
@@ -36,11 +66,13 @@ export const productReducer = createSlice({
     errorMessage: "",
     loader: false,
     products: [],
+    product: "",
     totalProduct: 0,
   },
   reducers: {
     messageClear: (state, _) => {
       state.errorMessage = "";
+      state.successMessage = "";
     },
   },
   extraReducers: (builder) => {
@@ -59,6 +91,21 @@ export const productReducer = createSlice({
       .addCase(getProducts.fulfilled, (state, { payload }) => {
         state.totalProduct = payload.totalProduct;
         state.products = payload.products;
+      })
+      .addCase(getProduct.fulfilled, (state, { payload }) => {
+        state.product = payload.product;
+      })
+      .addCase(updateProduct.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(updateProduct.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error;
+      })
+      .addCase(updateProduct.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.product = payload.product;
+        state.successMessage = payload.message;
       });
   },
 });
