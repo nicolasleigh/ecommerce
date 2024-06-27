@@ -6,6 +6,7 @@ import morgan from "morgan";
 
 import authRoutes from "./routes/authRoutes";
 import categoryRoutes from "./routes/categoryRoutes";
+import productRoutes from "./routes/productRoutes";
 import dbConnect from "./utils/db";
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(cookieParser()); // cookieParser() must appear before the router
 app.use("/api", authRoutes);
 app.use("/api", categoryRoutes);
+app.use("/api", productRoutes);
 
 dbConnect();
 
