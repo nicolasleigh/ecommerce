@@ -1,13 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Search from "../components/Search";
 import Pagination from "../Pagination";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../../store/reducers/productReducer";
 
 export default function Products() {
   const [parPage, setParPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
+
+  const dispatch = useDispatch();
+  const { products, totalProduct } = useSelector((state) => state.product);
+
+  useEffect(() => {
+    const obj = {
+      parPage: parseInt(parPage),
+      page: parseInt(currentPage),
+      searchValue,
+    };
+    dispatch(getProducts(obj));
+  }, [searchValue, currentPage, parPage]);
+
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <h1 className='text-black mb-3 font-semibold text-lg'>All Products</h1>
@@ -48,36 +63,32 @@ export default function Products() {
               </tr>
             </thead>
             <tbody>
-              {[1, 2, 3, 4, 5].map((data, index) => {
+              {products.map((data, index) => {
                 return (
                   <tr key={index}>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      {data}
+                      {index + 1}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      <img
-                        src={`http://localhost:5173/category/${data}.jpg`}
-                        alt='product image'
-                        className='w-[45px] h-[45px]'
-                      />
+                      <img src={data?.images[0]} alt='product image' className='w-[45px] h-[45px]' />
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      Men Full Sleeve
+                      {data?.name?.slice(0, 15)}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      T-shirt
+                      {data.category}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      Verido
+                      {data.brand}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      $230
+                      ${data.price}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      10%
+                      {data.discount === 0 ? <span>No Discount</span> : <span>%{data.discount}</span>}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      20
+                      {data.stock}
                     </td>
 
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
@@ -103,15 +114,19 @@ export default function Products() {
           </table>
         </div>
 
-        <div className='w-full flex justify-end mt-4 '>
-          <Pagination
-            pageNumber={currentPage}
-            setPageNumber={setCurrentPage}
-            totalItem={50}
-            parPage={parPage}
-            showItem={3}
-          />
-        </div>
+        {totalProduct <= parPage ? (
+          ""
+        ) : (
+          <div className='w-full flex justify-end mt-4 '>
+            <Pagination
+              pageNumber={currentPage}
+              setPageNumber={setCurrentPage}
+              totalItem={50}
+              parPage={parPage}
+              showItem={3}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -318,7 +318,7 @@ export default function AddProduct() {
                 disabled={loader}
                 className='bg-red-500 w-[280px] hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
               >
-                {loader ? <PropagateLoader color='white' cssOverride={overrideStyle} /> : "Add Category"}
+                {loader ? <PropagateLoader color='white' cssOverride={overrideStyle} /> : "Add Product"}
               </button>
             </div>
           </form>
