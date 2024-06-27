@@ -5,5 +5,7 @@ const router = Router();
 
 router.post("/product-add", authMiddleware, productController.productAdd);
 router.get("/products-get", authMiddleware, productController.productsGet);
+router.get("/product-get/:productId", authMiddleware, productController.productGet);
+router.post("/product-update", authMiddleware, productController.productUpdate);
 
 export default router;
