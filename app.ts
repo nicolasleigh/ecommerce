@@ -4,7 +4,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 
-import router from "./routes/authRoutes";
+import authRoutes from "./routes/authRoutes";
+import categoryRoutes from "./routes/categoryRoutes";
 import dbConnect from "./utils/db";
 
 const app = express();
@@ -18,7 +19,8 @@ app.use(
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser()); // cookieParser() must appear before the router
-app.use("/api", router);
+app.use("/api", authRoutes);
+app.use("/api", categoryRoutes);
 
 dbConnect();
 
