@@ -113,6 +113,41 @@ class productController {
       console.log(error.message);
     }
   };
+
+  productImageUpdate = async (req, res) => {
+    const form = formidable({ multiples: true });
+    form.parse(req, async (err, fields, files) => {
+      const { oldImage, productId } = fields;
+      const { newImage } = files;
+
+      if (err) {
+        responseReturn(res, 404, { error: err.message });
+      } else {
+        try {
+          cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+            api_key: process.env.CLOUDINARY_API_KEY,
+            api_secret: process.env.CLOUDINARY_API_SECRET,
+            secure: true,
+          });
+          const result = await cloudinary.uploader.upload(newImage.filepath, { folder: "products" });
+          if (result) {
+            let { images } = await productModel.findById(productId);
+            const index = images.findIndex((img) => img === oldImage);
+            images[index] = result.url;
+            await productModel.findByIdAndUpdate(productId, { images });
+
+            const product = await productModel.findById(productId);
+            responseReturn(res, 200, { product, message: "Image updated successfully" });
+          } else {
+            responseReturn(res, 404, { error: "Image upload failed" });
+          }
+        } catch (error) {
+          responseReturn(res, 404, { error: error.message });
+        }
+      }
+    });
+  };
 }
 
 export default new productController();
