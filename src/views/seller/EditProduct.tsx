@@ -3,7 +3,7 @@ import { IoMdCloseCircle, IoMdImages } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getCategory } from "../../store/reducers/categoryReducer";
-import { getProduct, messageClear, updateProduct } from "../../store/reducers/productReducer";
+import { getProduct, messageClear, updateProduct, productImageUpdate } from "../../store/reducers/productReducer";
 import { PropagateLoader } from "react-spinners";
 import { overrideStyle } from "../../utils/utils";
 import toast from "react-hot-toast";
@@ -76,8 +76,13 @@ export default function EditProduct() {
 
   const changeImage = (img, files) => {
     if (files.length > 0) {
-      console.log(img);
-      console.log(files[0]);
+      dispatch(
+        productImageUpdate({
+          oldImage: img,
+          newImage: files[0],
+          productId,
+        })
+      );
     }
   };
 
