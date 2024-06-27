@@ -1,14 +1,70 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEdit, FaImage, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Pagination from "../Pagination";
 import { IoMdCloseCircle } from "react-icons/io";
+import { PropagateLoader } from "react-spinners";
+import { overrideStyle } from "../../utils/utils";
+import { categoryAdd, messageClear, getCategory } from "../../store/reducers/categoryReducer";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import Search from "../components/Search";
 
 export default function Category() {
   const [parPage, setParPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [show, setShow] = useState(false);
+  const [imageShow, setImage] = useState("");
+  const dispatch = useDispatch();
+  const { loader, successMessage, errorMessage, categories } = useSelector((state) => state.category);
+
+  const [state, setState] = useState({
+    name: "",
+    image: "",
+  });
+
+  const imageHandle = (e) => {
+    const files = e.target.files;
+    if (files.length > 0) {
+      setImage(URL.createObjectURL(files[0]));
+      setState({
+        ...state,
+        image: files[0],
+      });
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(categoryAdd(state));
+    console.log(state);
+  };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+      setState({
+        name: "",
+        image: "",
+      });
+      setImage("");
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage, errorMessage]);
+
+  useEffect(() => {
+    const obj = {
+      parPage: parseInt(parPage),
+      page: parseInt(currentPage),
+      searchValue,
+    };
+    dispatch(getCategory(obj));
+  }, [searchValue, currentPage, parPage]);
 
   return (
     <div className='px-2 lg:px-7 pt-5'>
@@ -24,23 +80,7 @@ export default function Category() {
       <div className='flex flex-wrap w-full'>
         <div className='w-full lg:w-7/12'>
           <div className='w-full p-4 bg-[#6a5fdf] rounded-md'>
-            <div className='flex justify-between items-center'>
-              <select
-                onChange={(e) => setParPage(parseInt(e.target.value))}
-                name=''
-                id=''
-                className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-              >
-                <option value='5'>5</option>
-                <option value='10'>10</option>
-                <option value='20'>20</option>
-              </select>
-              <input
-                type='text'
-                placeholder='Search...'
-                className='px-4 py-2 focus:border-indigo-500 outline-none bg-transparent border border-slate-700 rounded-md text-[#d0d2d6]'
-              />
-            </div>
+            <Search setParPage={setParPage} setSearchValue={setSearchValue} searchValue={searchValue} />
 
             <div className='relative overflow-x-auto'>
               <table className='w-full text-sm text-left text-[#d0d2d6]'>
@@ -61,21 +101,17 @@ export default function Category() {
                   </tr>
                 </thead>
                 <tbody>
-                  {[1, 2, 3, 4, 5].map((data, index) => {
+                  {categories.map((data, index) => {
                     return (
                       <tr key={index}>
                         <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                          {data}
+                          {index + 1}
                         </td>
                         <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                          <img
-                            src={`http://localhost:5173/category/${data}.jpg`}
-                            alt='product image'
-                            className='w-[45px] h-[45px]'
-                          />
+                          <img src={data.image} alt='product image' className='w-[45px] h-[45px]' />
                         </td>
                         <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                          T-shirt
+                          {data.name}
                         </td>
 
                         <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
@@ -120,10 +156,12 @@ export default function Category() {
                 </div>
               </div>
 
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className='flex flex-col w-full gap-1 mb-3'>
                   <label htmlFor='name'>Category Name</label>
                   <input
+                    value={state.name}
+                    onChange={(e) => setState({ ...state, name: e.target.value })}
                     type='text'
                     id='name'
                     name='category_name'
@@ -136,15 +174,23 @@ export default function Category() {
                     htmlFor='image'
                     className='flex justify-center items-center flex-col h-[238px] cursor-pointer border border-dashed hover:border-red-500 w-full border-[#d0d2d6]'
                   >
-                    <span>
-                      <FaImage />
-                    </span>
+                    {imageShow ? (
+                      <img src={imageShow} className='w-full h-full' />
+                    ) : (
+                      <span>
+                        <FaImage />
+                      </span>
+                    )}
+
                     <span>Select Image</span>
                   </label>
-                  <input type='file' name='image' id='image' className='hidden' />
-                  <div>
-                    <button className='bg-red-500 w-full hover:shadow-red-500/40 hover:shadow-md text-white rounded-md px-7 py-2 my-2'>
-                      Add Category
+                  <input onChange={imageHandle} type='file' name='image' id='image' className='hidden' />
+                  <div className='mt-4'>
+                    <button
+                      disabled={loader}
+                      className='bg-red-800 w-full hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
+                    >
+                      {loader ? <PropagateLoader color='white' cssOverride={overrideStyle} /> : "Add Category"}
                     </button>
                   </div>
                 </div>
