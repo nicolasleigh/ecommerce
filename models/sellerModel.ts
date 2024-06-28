@@ -31,6 +31,10 @@ const sellerSchema = new Schema(
       type: String,
       required: true,
     },
+    image: {
+      type: String,
+      default: "",
+    },
     shopInfo: {
       type: Object,
       default: {},
