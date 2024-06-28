@@ -8,7 +8,36 @@ export const getSellerRequest = createAsyncThunk(
       const { data } = await api.get(`/request-seller-get?page=${page}&searchValue=${searchValue}&parPage=${parPage}`, {
         withCredentials: true,
       });
+      // console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getSeller = createAsyncThunk(
+  "seller/getSeller",
+  async (sellerId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/get-seller/${sellerId}`, {
+        withCredentials: true,
+      });
       console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const sellerStatusUpdate = createAsyncThunk(
+  "seller/sellerStatusUpdate",
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post(`/seller-status-update`, info, {
+        withCredentials: true,
+      });
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -24,6 +53,7 @@ export const sellerReducer = createSlice({
     loader: false,
     sellers: [],
     totalSeller: 0,
+    seller: "",
   },
   reducers: {
     messageClear: (state, _) => {
@@ -31,10 +61,18 @@ export const sellerReducer = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getSellerRequest.fulfilled, (state, { payload }) => {
-      state.sellers = payload.sellers;
-      state.totalSeller = payload.totalSeller;
-    });
+    builder
+      .addCase(getSellerRequest.fulfilled, (state, { payload }) => {
+        state.sellers = payload.sellers;
+        state.totalSeller = payload.totalSeller;
+      })
+      .addCase(getSeller.fulfilled, (state, { payload }) => {
+        state.seller = payload.seller;
+      })
+      .addCase(sellerStatusUpdate.fulfilled, (state, { payload }) => {
+        state.seller = payload.seller;
+        state.successMessage = payload.message;
+      });
   },
 });
 
