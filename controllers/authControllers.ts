@@ -129,6 +129,26 @@ class authControllers {
       }
     });
   };
+
+  profileInfoAdd = async (req, res) => {
+    const { division, district, shopName, subDistrict } = req.body;
+    const { id } = req;
+
+    try {
+      await sellerModel.findByIdAndUpdate(id, {
+        shopInfo: {
+          shopName,
+          division,
+          district,
+          subDistrict,
+        },
+      });
+      const userInfo = await sellerModel.findById(id);
+      responseReturn(res, 201, { message: "Profile info added successfully", userInfo });
+    } catch (error) {
+      responseReturn(res, 500, { message: error.message });
+    }
+  };
 }
 
 export default new authControllers();
