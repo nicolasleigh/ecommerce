@@ -1,11 +1,19 @@
 import { FaImages, FaRegEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { FadeLoader } from "react-spinners";
-import { profileImageUpload, messageClear } from "../../store/reducers/authReducer";
+import { FadeLoader, PropagateLoader } from "react-spinners";
+import { profileImageUpload, messageClear, profileInfoAdd } from "../../store/reducers/authReducer";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { overrideStyle } from "../../utils/utils";
 
 export default function Profile() {
+  const [state, setState] = useState({
+    division: "",
+    district: "",
+    shopName: "",
+    subDistrict: "",
+  });
+
   const dispatch = useDispatch();
   const { userInfo, loader, successMessage } = useSelector((state) => state.auth);
 
@@ -25,6 +33,18 @@ export default function Profile() {
       dispatch(messageClear());
     }
   }, [successMessage]);
+
+  const handleChange = (e) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(profileInfoAdd(state));
+  };
 
   return (
     <div className='px-2 lg:px-7 py-5'>
@@ -104,12 +124,14 @@ export default function Profile() {
 
             <div className='px-0 md:px-5 py-2'>
               {!userInfo?.shopInfo ? (
-                <form>
+                <form onSubmit={handleSubmit}>
                   <div className='flex flex-col w-full gap-1 mb-2'>
                     <label htmlFor='shop'>Shop Name</label>
                     <input
+                      value={state.shopName}
+                      onChange={handleChange}
                       type='text'
-                      name='shop'
+                      name='shopName'
                       id='shop'
                       placeholder='Shop Name'
                       className='px-4 py-2 focus:border-indigo-200 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
@@ -118,6 +140,8 @@ export default function Profile() {
                   <div className='flex flex-col w-full gap-1 mb-2'>
                     <label htmlFor='division'>Division Name</label>
                     <input
+                      value={state.division}
+                      onChange={handleChange}
                       type='text'
                       name='division'
                       id='division'
@@ -128,6 +152,8 @@ export default function Profile() {
                   <div className='flex flex-col w-full gap-1 mb-2'>
                     <label htmlFor='district'>District Name</label>
                     <input
+                      value={state.district}
+                      onChange={handleChange}
                       type='text'
                       name='district'
                       id='district'
@@ -138,16 +164,21 @@ export default function Profile() {
                   <div className='flex flex-col w-full gap-1 mb-2'>
                     <label htmlFor='subdis'>Sub District Name</label>
                     <input
+                      value={state.subDistrict}
+                      onChange={handleChange}
                       type='text'
-                      name='subdis'
+                      name='subDistrict'
                       id='subdis'
                       placeholder='Sub District Name'
                       className='px-4 py-2 focus:border-indigo-200 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
                     />
                   </div>
 
-                  <button className='bg-red-500 hover:shadow-red-500/40 hover:shadow-md text-white rounded-md px-7 py-2'>
-                    Save Changes
+                  <button
+                    disabled={loader}
+                    className='bg-red-500 w-[200px] hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
+                  >
+                    {loader ? <PropagateLoader color='white' cssOverride={overrideStyle} /> : "Save Changes"}
                   </button>
                 </form>
               ) : (
@@ -157,19 +188,19 @@ export default function Profile() {
                   </span>
                   <div className='flex gap-2'>
                     <span>Shop Name:</span>
-                    <span>Easy Shop</span>
+                    <span>{userInfo.shopInfo?.shopName}</span>
                   </div>
                   <div className='flex gap-2'>
                     <span>Division:</span>
-                    <span>Dhaka</span>
+                    <span>{userInfo.shopInfo.division}</span>
                   </div>
                   <div className='flex gap-2'>
                     <span>District:</span>
-                    <span>Rajabi</span>
+                    <span>{userInfo.shopInfo.district}</span>
                   </div>
                   <div className='flex gap-2'>
                     <span>Sub District:</span>
-                    <span>Voli</span>
+                    <span>{userInfo.shopInfo.subDistrict}</span>
                   </div>
                 </div>
               )}

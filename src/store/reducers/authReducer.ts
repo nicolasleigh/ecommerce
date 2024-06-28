@@ -56,7 +56,19 @@ export const seller_register = createAsyncThunk(
     try {
       const { data } = await api.post("/seller-register", info, { withCredentials: true });
       localStorage.setItem("accessToken", data.token);
-      console.log(data);
+      // console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const profileInfoAdd = createAsyncThunk(
+  "auth/profileInfoAdd",
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post("/profile-info-add", info, { withCredentials: true });
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -139,6 +151,14 @@ export const authReducer = createSlice({
         state.loader = true;
       })
       .addCase(profileImageUpload.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.userInfo = payload.userInfo;
+        state.successMessage = payload.message;
+      })
+      .addCase(profileInfoAdd.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(profileInfoAdd.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.userInfo = payload.userInfo;
         state.successMessage = payload.message;
