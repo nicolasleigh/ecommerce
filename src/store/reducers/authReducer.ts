@@ -38,6 +38,18 @@ export const get_user_info = createAsyncThunk(
   }
 );
 
+export const profileImageUpload = createAsyncThunk(
+  "auth/profileImageUpload",
+  async (image, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post("/profile-image-upload", image, { withCredentials: true });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const seller_register = createAsyncThunk(
   "auth/seller_register",
   async (info, { rejectWithValue, fulfillWithValue }) => {
@@ -122,6 +134,14 @@ export const authReducer = createSlice({
       .addCase(get_user_info.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.userInfo = payload.userInfo;
+      })
+      .addCase(profileImageUpload.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(profileImageUpload.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.userInfo = payload.userInfo;
+        state.successMessage = payload.message;
       });
   },
 });
