@@ -129,10 +129,15 @@ export default function Header() {
               <div className='flex justify-between md-lg:justify-center items-center flex-wrap pl-8'>
                 <ul className='flex justify-start items-start gap-8 text-sm font-bold uppercase md-lg:hidden'>
                   <li>
-                    <Link className={`p-2 block ${pathname === "/" ? "text-[#059473]" : "text-slate-600"}`}>Home</Link>
+                    <Link to='/' className={`p-2 block ${pathname === "/" ? "text-[#059473]" : "text-slate-600"}`}>
+                      Home
+                    </Link>
                   </li>
                   <li>
-                    <Link className={`p-2 block ${pathname === "/shop" ? "text-[#059473]" : "text-slate-600"}`}>
+                    <Link
+                      to='/shop'
+                      className={`p-2 block ${pathname === "/shop" ? "text-[#059473]" : "text-slate-600"}`}
+                    >
                       Shop
                     </Link>
                   </li>
@@ -228,10 +233,14 @@ export default function Header() {
 
             <ul className='flex flex-col justify-start items-start text-sm font-bold uppercase '>
               <li>
-                <Link className={`py-2 block ${pathname === "/" ? "text-[#059473]" : "text-slate-600"}`}>Home</Link>
+                <Link to='/' className={`py-2 block ${pathname === "/" ? "text-[#059473]" : "text-slate-600"}`}>
+                  Home
+                </Link>
               </li>
               <li>
-                <Link className={`py-2 block ${pathname === "/shop" ? "text-[#059473]" : "text-slate-600"}`}>Shop</Link>
+                <Link to='/shop' className={`py-2 block ${pathname === "/shop" ? "text-[#059473]" : "text-slate-600"}`}>
+                  Shop
+                </Link>
               </li>
               <li>
                 <Link className={`py-2 block ${pathname === "/blog" ? "text-[#059473]" : "text-slate-600"}`}>Blog</Link>
