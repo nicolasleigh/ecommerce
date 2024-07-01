@@ -1,5 +1,4 @@
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
-import { CiStar } from "react-icons/ci";
 
 export default function Rating({ ratings }) {
   return (
@@ -14,7 +13,7 @@ export default function Rating({ ratings }) {
         </span>
       ) : (
         <span className='text-slate-600'>
-          <CiStar />
+          <FaRegStar />
         </span>
       )}
       {ratings >= 2 ? (
@@ -27,7 +26,7 @@ export default function Rating({ ratings }) {
         </span>
       ) : (
         <span className='text-slate-600'>
-          <CiStar />
+          <FaRegStar />
         </span>
       )}
       {ratings >= 3 ? (
@@ -40,7 +39,7 @@ export default function Rating({ ratings }) {
         </span>
       ) : (
         <span className='text-slate-600'>
-          <CiStar />
+          <FaRegStar />
         </span>
       )}
       {ratings >= 4 ? (
@@ -53,7 +52,7 @@ export default function Rating({ ratings }) {
         </span>
       ) : (
         <span className='text-slate-600'>
-          <CiStar />
+          <FaRegStar />
         </span>
       )}
       {ratings >= 5 ? (
