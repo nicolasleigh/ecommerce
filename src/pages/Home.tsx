@@ -1,16 +1,26 @@
+import { useDispatch, useSelector } from "react-redux";
 import Banner from "../components/Banner";
 import Category from "../components/Category";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import FeatureProducts from "../components/products/FeatureProducts";
 import Products from "../components/products/Products";
+import { useEffect } from "react";
+import { get_category } from "../store/reducers/homeReducer";
 
 export default function Home() {
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.home);
+
+  useEffect(() => {
+    dispatch(get_category());
+  }, []);
+
   return (
     <div className='w-full'>
-      <Header />
+      <Header categories={categories} />
       <Banner />
-      <Category />
+      <Category categories={categories} />
       <div className='py-[45px]'>
         <FeatureProducts />
       </div>

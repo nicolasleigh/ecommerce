@@ -15,7 +15,7 @@ import { MdEmail } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
 
-export default function Header() {
+export default function Header({ categories }) {
   const { pathname } = useLocation();
   const user = true;
   const wishlistCount = 4;
@@ -23,16 +23,16 @@ export default function Header() {
   const [showCategory, setShowCategory] = useState(true);
   const [searchValue, setSearchValue] = useState("");
   const [category, setCategory] = useState("");
-  const categories = [
-    "Mobiles",
-    "Laptops",
-    "Speakers",
-    "Top wear",
-    "Footwear",
-    "Watches",
-    "Home Decor",
-    "Smart Watches",
-  ];
+  // const categories = [
+  //   "Mobiles",
+  //   "Laptops",
+  //   "Speakers",
+  //   "Top wear",
+  //   "Footwear",
+  //   "Watches",
+  //   "Home Decor",
+  //   "Smart Watches",
+  // ];
 
   return (
     <div className='w-full bg-white'>
@@ -321,7 +321,12 @@ export default function Header() {
                   {categories.map((c, i) => {
                     return (
                       <li key={i} className='flex justify-start items-center gap-2 px-[24px] py-[6px]'>
-                        <Link className='text-sm block'>{c}</Link>
+                        <img
+                          src={c.image}
+                          alt='category image'
+                          className='w-[30px] h-[30px] rounded-full overflow-hidden'
+                        />
+                        <Link className='text-sm block'>{c.name}</Link>
                       </li>
                     );
                   })}
@@ -344,7 +349,7 @@ export default function Header() {
                       <option value=''>Select Category</option>
                       {categories.map((c, i) => (
                         <option value={c} key={i}>
-                          {c}
+                          {c.name}
                         </option>
                       ))}
                     </select>
