@@ -1,6 +1,7 @@
 import categoryModel from "../../models/categoryModel";
 import productModel from "../../models/productModel";
 import { responseReturn } from "../../utils/response";
+import queryProducts from "../../utils/queryProducts";
 
 class homeControllers {
   formateProduct = (products) => {
@@ -66,6 +67,38 @@ class homeControllers {
       responseReturn(res, 200, {
         latestProduct,
         priceRange,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  queryProducts = async (req, res) => {
+    const parPage = 2;
+    req.query.parPage = parPage;
+
+    try {
+      const products = await productModel.find({}).sort({ createdAt: -1 });
+      const totalProduct = new queryProducts(products, req.query)
+        .categoryQuery()
+        .ratingQuery()
+        .priceQuery()
+        .sortByPrice()
+        .countProducts();
+      const result = new queryProducts(products, req.query)
+        .categoryQuery()
+        .ratingQuery()
+        .priceQuery()
+        .sortByPrice()
+        .skip()
+        .limit()
+        .getProducts();
+
+      // console.log(result);
+      responseReturn(res, 200, {
+        products: result,
+        totalProduct,
+        parPage,
       });
     } catch (error) {
       console.log(error.message);
