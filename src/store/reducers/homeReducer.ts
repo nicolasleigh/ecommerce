@@ -21,6 +21,16 @@ export const get_products = createAsyncThunk("product/get_products", async (_, {
   }
 });
 
+export const price_range_product = createAsyncThunk("product/price_range_product", async (_, { fulfillWithValue }) => {
+  try {
+    const { data } = await api.get("/home/price-range-latest-product");
+    console.log(data);
+    return fulfillWithValue(data);
+  } catch (error) {
+    console.log(error.response);
+  }
+});
+
 export const homeReducer = createSlice({
   name: "home",
   initialState: {
@@ -29,6 +39,10 @@ export const homeReducer = createSlice({
     latestProduct: [],
     topRatedProduct: [],
     discountProduct: [],
+    priceRange: {
+      low: 0,
+      high: 100,
+    },
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -41,6 +55,10 @@ export const homeReducer = createSlice({
         state.latestProduct = payload.latestProduct;
         state.topRatedProduct = payload.topRatedProduct;
         state.discountProduct = payload.discountProduct;
+      })
+      .addCase(price_range_product.fulfilled, (state, { payload }) => {
+        state.latestProduct = payload.latestProduct;
+        state.priceRange = payload.priceRange;
       });
   },
 });

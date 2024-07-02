@@ -10,18 +10,17 @@ import { get_category, get_products } from "../store/reducers/homeReducer";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const { categories, products, latestProduct, topRatedProduct, discountProduct } = useSelector((state) => state.home);
+  const { products, latestProduct, topRatedProduct, discountProduct } = useSelector((state) => state.home);
 
   useEffect(() => {
-    dispatch(get_category());
     dispatch(get_products());
   }, []);
 
   return (
     <div className='w-full'>
-      <Header categories={categories} />
+      <Header />
       <Banner />
-      <Category categories={categories} />
+      <Category />
       <div className='py-[45px]'>
         <FeatureProducts products={products} />
       </div>

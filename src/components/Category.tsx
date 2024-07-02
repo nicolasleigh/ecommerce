@@ -1,8 +1,9 @@
 import Carousel from "react-multi-carousel";
 import { Link } from "react-router-dom";
 import "react-multi-carousel/lib/styles.css";
+import { useSelector } from "react-redux";
 
-export default function Category({ categories }) {
+export default function Category() {
   // const categories = [
   //   "Mobiles",
   //   "Laptops",
@@ -13,6 +14,7 @@ export default function Category({ categories }) {
   //   "Home Decor",
   //   "Smart Watches",
   // ];
+  const { categories } = useSelector((state) => state.home);
 
   const responsive = {
     superLargeDesktop: {

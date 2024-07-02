@@ -14,8 +14,10 @@ import { IoIosArrowDown, IoMdArrowDropdown, IoMdPhonePortrait } from "react-icon
 import { MdEmail } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 
-export default function Header({ categories }) {
+export default function Header() {
+  const { categories } = useSelector((state) => state.home);
   const { pathname } = useLocation();
   const user = true;
   const wishlistCount = 4;
