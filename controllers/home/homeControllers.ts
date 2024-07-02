@@ -47,6 +47,30 @@ class homeControllers {
       console.log(error.message);
     }
   };
+
+  priceRangeProduct = async (req, res) => {
+    try {
+      const priceRange = {
+        low: 0,
+        high: 0,
+      };
+      const products = await productModel.find({}).limit(9).sort({
+        createdAt: -1,
+      });
+      const latestProduct = this.formateProduct(products);
+      const getForPrice = await productModel.find({}).sort({ price: 1 });
+      if (getForPrice.length) {
+        priceRange.high = getForPrice[getForPrice.length - 1].price;
+        priceRange.low = getForPrice[0].price;
+      }
+      responseReturn(res, 200, {
+        latestProduct,
+        priceRange,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 }
 
 export default new homeControllers();
