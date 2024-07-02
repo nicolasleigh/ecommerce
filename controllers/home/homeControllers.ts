@@ -74,7 +74,7 @@ class homeControllers {
   };
 
   queryProducts = async (req, res) => {
-    const parPage = 2;
+    const parPage = 12;
     req.query.parPage = parPage;
 
     try {
@@ -83,12 +83,14 @@ class homeControllers {
         .categoryQuery()
         .ratingQuery()
         .priceQuery()
+        .searchQuery()
         .sortByPrice()
         .countProducts();
       const result = new queryProducts(products, req.query)
         .categoryQuery()
         .ratingQuery()
         .priceQuery()
+        .searchQuery()
         .sortByPrice()
         .skip()
         .limit()
