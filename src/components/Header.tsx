@@ -328,7 +328,9 @@ export default function Header() {
                           alt='category image'
                           className='w-[30px] h-[30px] rounded-full overflow-hidden'
                         />
-                        <Link className='text-sm block'>{c.name}</Link>
+                        <Link to={`/products?category=${c.name}`} className='text-sm block'>
+                          {c.name}
+                        </Link>
                       </li>
                     );
                   })}

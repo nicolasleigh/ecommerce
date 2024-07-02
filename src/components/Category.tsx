@@ -57,7 +57,7 @@ export default function Category() {
       </div>
       <Carousel autoPlay={true} infinite={true} arrows={true} responsive={responsive} transitionDuration={500}>
         {categories.map((c, i) => (
-          <Link key={i} className='h-[185px] border block'>
+          <Link to={`/products?category=${c.name}`} key={i} className='h-[185px] border block'>
             <div className='w-full h-full relative p-3'>
               <img src={c.image} alt='products images' />
               <div className='absolute bottom-6 w-full mx-auto font-bold left-0 flex justify-center items-center'>
