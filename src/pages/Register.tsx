@@ -1,7 +1,7 @@
 import { FaFacebookF, FaGoogle } from "react-icons/fa";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { customer_register, messageClear } from "../store/reducers/authReducer";
@@ -15,7 +15,8 @@ export default function Register() {
     password: "",
   });
   const dispatch = useDispatch();
-  const { loader, errorMessage, successMessage } = useSelector((state) => state.auth);
+  const { loader, userInfo, errorMessage, successMessage } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setState({
@@ -37,6 +38,9 @@ export default function Register() {
     if (errorMessage) {
       toast.error(errorMessage);
       dispatch(messageClear());
+    }
+    if (userInfo) {
+      navigate("/");
     }
   }, [successMessage, errorMessage]);
 

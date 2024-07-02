@@ -19,8 +19,8 @@ import { useSelector } from "react-redux";
 export default function Header() {
   const navigate = useNavigate();
   const { categories } = useSelector((state) => state.home);
+  const { userInfo } = useSelector((state) => state.auth);
   const { pathname } = useLocation();
-  const user = false;
   const wishlistCount = 4;
   const [showSidebar, setShowSidebar] = useState(true);
   const [showCategory, setShowCategory] = useState(true);
@@ -86,7 +86,7 @@ export default function Header() {
                     <li>English</li>
                   </ul>
                 </div>
-                {user ? (
+                {userInfo ? (
                   <Link
                     className='flex cursor-pointer justify-center items-center gap-2 text-sm text-black'
                     to='/dashboard'
@@ -94,7 +94,7 @@ export default function Header() {
                     <span>
                       <FaUser />
                     </span>
-                    <span>Nicolas Leigh</span>
+                    <span>{userInfo.name}</span>
                   </Link>
                 ) : (
                   <Link
@@ -218,7 +218,7 @@ export default function Header() {
                   <li>English</li>
                 </ul>
               </div>
-              {user ? (
+              {userInfo ? (
                 <Link
                   className='flex cursor-pointer justify-center items-center gap-2 text-sm text-black'
                   to='/dashboard'
@@ -226,7 +226,7 @@ export default function Header() {
                   <span>
                     <FaUser />
                   </span>
-                  <span>Nicolas Leigh</span>
+                  <span>{userInfo.name}</span>
                 </Link>
               ) : (
                 <Link className='flex cursor-pointer justify-center items-center gap-2 text-sm text-black' to='/login'>
