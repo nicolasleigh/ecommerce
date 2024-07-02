@@ -20,7 +20,7 @@ export default function Header() {
   const navigate = useNavigate();
   const { categories } = useSelector((state) => state.home);
   const { pathname } = useLocation();
-  const user = true;
+  const user = false;
   const wishlistCount = 4;
   const [showSidebar, setShowSidebar] = useState(true);
   const [showCategory, setShowCategory] = useState(true);

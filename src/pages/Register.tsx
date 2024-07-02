@@ -2,7 +2,11 @@ import { FaFacebookF, FaGoogle } from "react-icons/fa";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { customer_register, messageClear } from "../store/reducers/authReducer";
+import toast from "react-hot-toast";
+import { FadeLoader } from "react-spinners";
 
 export default function Register() {
   const [state, setState] = useState({
@@ -10,6 +14,8 @@ export default function Register() {
     email: "",
     password: "",
   });
+  const dispatch = useDispatch();
+  const { loader, errorMessage, successMessage } = useSelector((state) => state.auth);
 
   const handleChange = (e) => {
     setState({
@@ -20,11 +26,27 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(state);
+    dispatch(customer_register(state));
   };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage, errorMessage]);
 
   return (
     <div>
+      {loader && (
+        <div className='w-screen h-screen flex justify-center items-center fixed left-0 top-0 bg-[#38303033] z-[999]'>
+          <FadeLoader />
+        </div>
+      )}
       <Header />
 
       <div className='bg-slate-200 mt-4'>
