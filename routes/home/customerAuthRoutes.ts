@@ -3,5 +3,6 @@ import customerAuthController from "../../controllers/home/customerAuthControlle
 const router = express.Router();
 
 router.post("/customer/customer-register", customerAuthController.customerRegister);
+router.post("/customer/customer-login", customerAuthController.customerLogin);
 
 export default router;

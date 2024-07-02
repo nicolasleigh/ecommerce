@@ -38,6 +38,34 @@ class customerAuthController {
       console.log(error.message);
     }
   };
+
+  customerLogin = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+      const customer = await customerModel.findOne({ email }).select("+password");
+      if (customer) {
+        const match = await bcrypt.compare(password, customer.password);
+        if (match) {
+          const token = await createToken({
+            id: customer.id,
+            name: customer.name,
+            email: customer.email,
+            method: customer.method,
+          });
+          res.cookie("customerToken", token, {
+            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          });
+          responseReturn(res, 201, { token, message: "User login successfully" });
+        } else {
+          responseReturn(res, 404, { error: "Password wrong" });
+        }
+      } else {
+        responseReturn(res, 404, { error: "Email not found" });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 }
 
 export default new customerAuthController();
