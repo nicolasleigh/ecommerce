@@ -12,11 +12,12 @@ import {
 } from "react-icons/fa";
 import { IoIosArrowDown, IoMdArrowDropdown, IoMdPhonePortrait } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 
 export default function Header() {
+  const navigate = useNavigate();
   const { categories } = useSelector((state) => state.home);
   const { pathname } = useLocation();
   const user = true;
@@ -35,6 +36,10 @@ export default function Header() {
   //   "Home Decor",
   //   "Smart Watches",
   // ];
+
+  const handleClick = () => {
+    navigate(`/products/search?category=${category}&value=${searchValue}`);
+  };
 
   return (
     <div className='w-full bg-white'>
@@ -352,7 +357,7 @@ export default function Header() {
                     >
                       <option value=''>Select Category</option>
                       {categories.map((c, i) => (
-                        <option value={c} key={i}>
+                        <option value={c.name} key={i}>
                           {c.name}
                         </option>
                       ))}
@@ -366,7 +371,10 @@ export default function Header() {
                     placeholder='What do you need?'
                     className='w-full relative bg-transparent text-slate-500 outline-0 h-full px-3'
                   />
-                  <button className='bg-[#059473] right-0 absolute px-8 h-full font-semibold uppercase text-white'>
+                  <button
+                    onClick={handleClick}
+                    className='bg-[#059473] right-0 absolute px-8 h-full font-semibold uppercase text-white'
+                  >
                     Search
                   </button>
                 </div>
