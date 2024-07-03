@@ -9,6 +9,7 @@ import categoryRoutes from "./routes/categoryRoutes";
 import productRoutes from "./routes/productRoutes";
 import sellerRoutes from "./routes/sellerRoutes";
 import homeRoutes from "./routes/home/homeRoutes";
+import cardRoutes from "./routes/home/cardRoutes";
 import customerAuthRoutes from "./routes/home/customerAuthRoutes";
 import dbConnect from "./utils/db";
 
@@ -29,6 +30,7 @@ app.use("/api", productRoutes);
 app.use("/api", sellerRoutes);
 app.use("/api/home", homeRoutes);
 app.use("/api", customerAuthRoutes);
+app.use("/api", cardRoutes);
 
 dbConnect();
 
