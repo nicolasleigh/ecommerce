@@ -128,6 +128,40 @@ class cardController {
       console.log(error.message);
     }
   };
+
+  deleteCardProduct = async (req, res) => {
+    const { id } = req.params;
+    try {
+      await cardModel.findByIdAndDelete(id);
+      responseReturn(res, 200, { message: "Product removed successfully" });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  quantityIncrement = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const product = await cardModel.findById(id);
+      const { quantity } = product;
+      await cardModel.findByIdAndUpdate(id, { quantity: quantity + 1 });
+      responseReturn(res, 200, { message: "Quantity updated" });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  quantityDecrement = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const product = await cardModel.findById(id);
+      const { quantity } = product;
+      await cardModel.findByIdAndUpdate(id, { quantity: quantity - 1 });
+      responseReturn(res, 200, { message: "Quantity updated" });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 }
 
 export default new cardController();
