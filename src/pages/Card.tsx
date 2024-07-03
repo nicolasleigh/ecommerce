@@ -4,7 +4,14 @@ import Header from "../components/Header";
 import { IoIosArrowForward } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { get_card_products } from "../store/reducers/cardReducer";
+import {
+  get_card_products,
+  delete_card_product,
+  messageClear,
+  quantity_increment,
+  quantity_decrement,
+} from "../store/reducers/cardReducer";
+import toast from "react-hot-toast";
 
 export default function Card() {
   const navigate = useNavigate();
@@ -28,9 +35,35 @@ export default function Card() {
     });
   };
 
+  const increment = (quantity, stock, id) => {
+    {
+      const temp = quantity + 1;
+      if (temp <= stock) {
+        dispatch(quantity_increment(id));
+      }
+    }
+  };
+
+  const decrement = (quantity, id) => {
+    {
+      const temp = quantity - 1;
+      if (temp !== 0) {
+        dispatch(quantity_decrement(id));
+      }
+    }
+  };
+
   useEffect(() => {
     dispatch(get_card_products(userInfo.id));
   }, []);
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+      dispatch(get_card_products(userInfo.id));
+    }
+  }, [successMessage]);
   return (
     <div>
       <Header />
@@ -93,18 +126,30 @@ export default function Card() {
                               </div>
                               <div className='flex gap-2 flex-col'>
                                 <div className='flex bg-slate-200 h-[30px] justify-center items-center text-xl'>
-                                  <div className='px-3 cursor-pointer'>-</div>
+                                  <div onClick={() => decrement(pt.quantity, pt._id)} className='px-3 cursor-pointer'>
+                                    -
+                                  </div>
                                   <div className='px-3'>{pt.quantity}</div>
-                                  <div className='px-3 cursor-pointer'>+</div>
+                                  <div
+                                    onClick={() => increment(pt.quantity, pt.productInfo.stock, pt._id)}
+                                    className='px-3 cursor-pointer'
+                                  >
+                                    +
+                                  </div>
                                 </div>
-                                <button className='px-5 py-[3px] bg-red-500 text-white'>Delete</button>
+                                <button
+                                  onClick={() => dispatch(delete_card_product(pt._id))}
+                                  className='px-5 py-[3px] bg-red-500 text-white'
+                                >
+                                  Delete
+                                </button>
                               </div>
                             </div>
                           </div>
                         ))}
                       </div>
                     ))}
-                    {outOfStockProducts?.length && (
+                    {outOfStockProducts?.length > 0 && (
                       <div className='flex flex-col gap-3'>
                         <div className='bg-white p-4'>
                           <h2 className=' text-red-500 font-semibold'>Out of Stock {outOfStockProducts.length}</h2>
@@ -134,11 +179,18 @@ export default function Card() {
                                 </div>
                                 <div className='flex gap-2 flex-col'>
                                   <div className='flex bg-slate-200 h-[30px] justify-center items-center text-xl'>
-                                    <div className='px-3 cursor-pointer'>-</div>
+                                    <div onClick={() => decrement(p.quantity, p._id)} className='px-3 cursor-pointer'>
+                                      -
+                                    </div>
                                     <div className='px-3'>{p.quantity}</div>
                                     <div className='px-3 cursor-pointer'>+</div>
                                   </div>
-                                  <button className='px-5 py-[3px] bg-red-500 text-white'>Delete</button>
+                                  <button
+                                    onClick={() => dispatch(delete_card_product(p._id))}
+                                    className='px-5 py-[3px] bg-red-500 text-white'
+                                  >
+                                    Delete
+                                  </button>
                                 </div>
                               </div>
                             </div>
@@ -156,12 +208,12 @@ export default function Card() {
                     <div className='bg-white p-3 text-slate-600 flex flex-col gap-3'>
                       <h2 className='text-xl font-bold'>Order Summary</h2>
                       <div className='flex justify-between items-center'>
-                        <span>2 Items</span>
-                        <span>$343</span>
+                        <span>{buyProductItem} Items</span>
+                        <span>${price}</span>
                       </div>
                       <div className='flex justify-between items-center'>
                         <span>Shipping Fee</span>
-                        <span>$33</span>
+                        <span>${shippingFee}</span>
                       </div>
                       <div className='flex gap-2'>
                         <input
@@ -176,7 +228,7 @@ export default function Card() {
 
                       <div className='flex justify-between items-center'>
                         <span>Total</span>
-                        <span className='text-lg text-[#059473]'>$433</span>
+                        <span className='text-lg text-[#059473]'>${price + shippingFee}</span>
                       </div>
                       <button
                         onClick={redirect}

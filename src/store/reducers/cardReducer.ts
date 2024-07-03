@@ -23,6 +23,46 @@ export const get_card_products = createAsyncThunk(
     }
   }
 );
+
+export const delete_card_product = createAsyncThunk(
+  "card/delete_card_product",
+  async (id, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.delete(`/home/product/delete-card-product/${id}`);
+      // console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const quantity_increment = createAsyncThunk(
+  "card/quantity_increment",
+  async (id, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.put(`/home/product/quantity-increment/${id}`);
+      // console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const quantity_decrement = createAsyncThunk(
+  "card/quantity_decrement",
+  async (id, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.put(`/home/product/quantity-decrement/${id}`);
+      // console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const cardReducer = createSlice({
   name: "card",
   initialState: {
@@ -59,6 +99,15 @@ export const cardReducer = createSlice({
         state.shippingFee = payload.shippingFee;
         state.outOfStockProducts = payload.outOfStockProducts;
         state.buyProductItem = payload.buyProductItem;
+      })
+      .addCase(delete_card_product.fulfilled, (state, { payload }) => {
+        state.successMessage = payload.message;
+      })
+      .addCase(quantity_increment.fulfilled, (state, { payload }) => {
+        state.successMessage = payload.message;
+      })
+      .addCase(quantity_decrement.fulfilled, (state, { payload }) => {
+        state.successMessage = payload.message;
       });
   },
 });
