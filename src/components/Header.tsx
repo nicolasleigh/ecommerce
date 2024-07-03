@@ -20,6 +20,7 @@ export default function Header() {
   const navigate = useNavigate();
   const { categories } = useSelector((state) => state.home);
   const { userInfo } = useSelector((state) => state.auth);
+  const { cardProductCount } = useSelector((state) => state.card);
   const { pathname } = useLocation();
   const wishlistCount = 4;
   const [showSidebar, setShowSidebar] = useState(true);
@@ -39,6 +40,14 @@ export default function Header() {
 
   const handleClick = () => {
     navigate(`/products/search?category=${category}&value=${searchValue}`);
+  };
+
+  const redirectCartPage = () => {
+    if (userInfo) {
+      navigate("/card");
+    } else {
+      navigate("/login");
+    }
   };
 
   return (
@@ -175,13 +184,18 @@ export default function Header() {
                         {wishlistCount}
                       </div>
                     </div>
-                    <div className='relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]'>
+                    <div
+                      onClick={redirectCartPage}
+                      className='relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]'
+                    >
                       <span className='text-xl text-green-500'>
                         <FaCartShopping />
                       </span>
-                      <div className='w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] '>
-                        {wishlistCount}
-                      </div>
+                      {cardProductCount !== 0 && (
+                        <div className='w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] '>
+                          {cardProductCount}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
