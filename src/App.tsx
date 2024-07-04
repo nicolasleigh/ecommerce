@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { get_category } from "./store/reducers/homeReducer";
 import CategoryShop from "./pages/CategoryShop";
 import SearchProducts from "./pages/SearchProducts";
+import Payment from "./pages/Payment";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ export default function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/shop' element={<Shop />} />
         <Route path='/card' element={<Card />} />
+        <Route path='/payment' element={<Payment />} />
         <Route path='/shipping' element={<Shipping />} />
         <Route path='/products?' element={<CategoryShop />} />
         <Route path='/products/search?' element={<SearchProducts />} />
