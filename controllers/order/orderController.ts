@@ -3,6 +3,8 @@ import customerOrder from "../../models/customerOrderModel";
 import authOrderModel from "../../models/authOrderModel";
 import cardModel from "../../models/cardModel";
 import { responseReturn } from "../../utils/response";
+import customerOrderModel from "../../models/customerOrderModel";
+import mongoose from "mongoose";
 
 class orderController {
   paymentCheck = async (id) => {
@@ -86,6 +88,39 @@ class orderController {
       }, 15000);
 
       responseReturn(res, 200, { orderId: order.id, message: "Order placed successfully" });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  getCustomerDashboardData = async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+      const recentOrders = await customerOrderModel
+        .find({
+          customerId: mongoose.Types.ObjectId.createFromHexString(userId),
+        })
+        .limit(5);
+      const pendingOrder = await customerOrderModel
+        .find({
+          customerId: mongoose.Types.ObjectId.createFromHexString(userId),
+          deliveryStatus: "pending",
+        })
+        .countDocuments();
+      const totalOrder = await customerOrderModel
+        .find({
+          customerId: mongoose.Types.ObjectId.createFromHexString(userId),
+        })
+        .countDocuments();
+      const cancelledOrder = await customerOrderModel
+        .find({
+          customerId: mongoose.Types.ObjectId.createFromHexString(userId),
+          deliveryStatus: "cancelled",
+        })
+        .countDocuments();
+
+      responseReturn(res, 200, { recentOrders, pendingOrder, totalOrder, cancelledOrder });
     } catch (error) {
       console.log(error.message);
     }
