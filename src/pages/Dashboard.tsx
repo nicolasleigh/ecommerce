@@ -68,7 +68,7 @@ export default function Dashboard() {
                   <span className='text-xl'>
                     <RiLockPasswordFill />
                   </span>
-                  <Link to='/dashboard' className='block'>
+                  <Link to='/dashboard/change-password' className='block'>
                     Change Password
                   </Link>
                 </li>
