@@ -96,6 +96,7 @@ class cardController {
             p[i] = {
               sellerId: unique[i],
               shopName: tempProduct.shopName,
+              price,
               products: p[i]
                 ? [
                     ...p[i].products,
