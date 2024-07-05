@@ -7,5 +7,6 @@ router.get("/home/product/get-card-product/:userId", cardController.getCardProdu
 router.delete("/home/product/delete-card-product/:id", cardController.deleteCardProduct);
 router.put("/home/product/quantity-increment/:id", cardController.quantityIncrement);
 router.put("/home/product/quantity-decrement/:id", cardController.quantityDecrement);
+router.post("/home/product/add-to-wishlist", cardController.addWishlist);
 
 export default router;

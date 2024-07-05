@@ -1,6 +1,7 @@
 import mongoose, { mongo } from "mongoose";
 import cardModel from "../../models/cardModel";
 import { responseReturn } from "../../utils/response";
+import wishlistModel from "../../models/wishlistModel";
 
 class cardController {
   addToCard = async (req, res) => {
@@ -159,6 +160,22 @@ class cardController {
       const { quantity } = product;
       await cardModel.findByIdAndUpdate(id, { quantity: quantity - 1 });
       responseReturn(res, 200, { message: "Quantity updated" });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  addWishlist = async (req, res) => {
+    const { slug } = req.body;
+
+    try {
+      const product = await wishlistModel.findOne({ slug });
+      if (product) {
+        responseReturn(res, 404, { error: "Product is already in wishlist" });
+      } else {
+        await wishlistModel.create(req.body);
+        responseReturn(res, 201, { message: "Product added to wishlist" });
+      }
     } catch (error) {
       console.log(error.message);
     }
