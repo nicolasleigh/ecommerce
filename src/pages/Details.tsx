@@ -1,9 +1,9 @@
 import { IoIosArrowForward } from "react-icons/io";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Carousel from "react-multi-carousel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Rating from "../components/Rating";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -11,13 +11,23 @@ import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FaFacebookF, FaGithub, FaHeart, FaLinkedin, FaTwitter } from "react-icons/fa";
 import Reviews from "../components/Reviews";
+import { useDispatch, useSelector } from "react-redux";
+import { product_details } from "../store/reducers/homeReducer";
+import toast from "react-hot-toast";
+import { add_to_card, messageClear } from "../store/reducers/cardReducer";
 
 export default function Details() {
-  const images = [1, 2, 3, 4, 5, 6];
   const [image, setImage] = useState("");
   const discount = 10;
   const stock = 3;
   const [state, setState] = useState("reviews");
+  const [quantity, setQuantity] = useState(1);
+  const { slug } = useParams();
+  const dispatch = useDispatch();
+  const { product, relatedProducts, moreProducts } = useSelector((state) => state.home);
+  const { userInfo } = useSelector((state) => state.auth);
+  const { errorMessage, successMessage } = useSelector((state) => state.card);
+  const navigate = useNavigate();
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -48,6 +58,50 @@ export default function Details() {
       items: 1,
     },
   };
+
+  const decrement = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const increment = () => {
+    if (quantity >= product.stock) {
+      toast.error("Out of Stock");
+    } else {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const addCart = () => {
+    if (userInfo) {
+      dispatch(
+        add_to_card({
+          userId: userInfo.id,
+          quantity,
+          productId: product._id,
+        })
+      );
+    } else {
+      navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    dispatch(product_details(slug));
+  }, [slug]);
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage, errorMessage]);
+
   return (
     <div>
       <Header />
@@ -77,11 +131,11 @@ export default function Details() {
               <span className='pt-1'>
                 <IoIosArrowForward />
               </span>
-              <Link to='/'>Category</Link>
+              <Link to='/'>{product?.category}</Link>
               <span className='pt-1'>
                 <IoIosArrowForward />
               </span>
-              <span>Product Name</span>
+              <span>{product?.name}</span>
             </div>
           </div>
         </div>
@@ -92,23 +146,15 @@ export default function Details() {
           <div className='grid grid-cols-2 md-lg:grid-cols-1 gap-8'>
             <div>
               <div className='p-5 border'>
-                <img
-                  src={image ? `/images/products/${image}.webp` : `/images/products/${images[2]}.webp`}
-                  alt='product images'
-                  className='h-[400px] w-full'
-                />
+                <img src={image ? image : product.images?.[0]} alt='product images' className='h-[400px] w-full' />
               </div>
               <div className='py-3'>
-                {images && (
+                {product.images && (
                   <Carousel autoPlay={true} infinite={true} responsive={responsive} transitionDuration={500}>
-                    {images.map((img, i) => {
+                    {product.images.map((img, i) => {
                       return (
                         <div key={i} onClick={() => setImage(img)}>
-                          <img
-                            src={`/images/products/${img}.webp`}
-                            alt='product images'
-                            className='h-[120px] cursor-pointer'
-                          />
+                          <img src={img} alt='product images' className='h-[120px] cursor-pointer' />
                         </div>
                       );
                     })}
@@ -119,7 +165,7 @@ export default function Details() {
 
             <div className='flex flex-col gap-5'>
               <div className='text-3xl text-slate-600 font-bold'>
-                <h3>Product Name</h3>
+                <h3>{product.name}</h3>
               </div>
               <div className='flex justify-start items-center gap-4'>
                 <div className='flex text-xl'>
@@ -129,36 +175,40 @@ export default function Details() {
               </div>
 
               <div className='text-2xl text-red-500 font-bold flex gap-3'>
-                {discount !== 0 ? (
+                {product.discount !== 0 ? (
                   <>
-                    Price : <h2 className='line-through'>$500</h2>
+                    Price : <h2 className='line-through'>${product.price}</h2>
                     <h2>
-                      ${500 - Math.floor((500 * discount) / 100)} (-{discount}%)
+                      ${product.price - Math.floor((product.price * product.discount) / 100)} (-{product.discount}%)
                     </h2>
                   </>
                 ) : (
-                  <h2>Price : $200</h2>
+                  <h2>Price : ${product.price}</h2>
                 )}
               </div>
 
               <div className='text-slate-600'>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi sint quibusdam, voluptatum sunt, quas
-                  voluptatibus non cumque, eligendi illo magni amet! Tempora nostrum quibusdam accusantium.
-                </p>
+                <p>{product.description}</p>
               </div>
 
               <div className='flex gap-3 pb-10 border-b'>
-                {stock ? (
+                {product.stock ? (
                   <>
                     <div className='flex bg-slate-200 h-[50px] justify-center items-center text-xl'>
-                      <div className='px-6 cursor-pointer'>-</div>
-                      <div className='px-6 '>2</div>
-                      <div className='px-6 cursor-pointer'>+</div>
+                      <div onClick={decrement} className='px-6 cursor-pointer'>
+                        -
+                      </div>
+                      <div className='px-6 '>{quantity}</div>
+                      <div onClick={increment} className='px-6 cursor-pointer'>
+                        +
+                      </div>
                     </div>
 
                     <div>
-                      <button className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#059473] text-white'>
+                      <button
+                        onClick={addCart}
+                        className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#059473] text-white'
+                      >
                         Add To Cart
                       </button>
                     </div>
@@ -180,8 +230,8 @@ export default function Details() {
                   <span>Share On</span>
                 </div>
                 <div className='flex flex-col gap-5'>
-                  <span className={`${stock ? "text-green-500" : "text-red-500"}`}>
-                    {stock ? `In Stock(${stock})` : "Out of Stock"}
+                  <span className={`${product.stock ? "text-green-500" : "text-red-500"}`}>
+                    {product.stock ? `In Stock(${product.stock})` : "Out of Stock"}
                   </span>
 
                   <ul className='flex justify-start items-center gap-3'>
@@ -288,23 +338,23 @@ export default function Details() {
                   <h2 className='font-semibold'>From Easy Shop</h2>
                 </div>
                 <div className='flex flex-col gap-5 mt-3 border p-3'>
-                  {[1, 2, 3].map((p, i) => {
+                  {moreProducts.map((p, i) => {
                     return (
-                      <Link className='block'>
+                      <Link key={i} className='block'>
                         <div className='relative h-[270px]'>
-                          <img src={`/images/products/${p}.webp`} alt='product' className='w-full h-full' />
-                          {discount !== 0 && (
+                          <img src={p.images[0]} alt='product' className='w-full h-full' />
+                          {p.discount !== 0 && (
                             <div className='flex justify-center items-center absolute text-white w-[38px] h-[38px] rounded-full bg-red-500 font-semibold text-xs left-2 top-2'>
-                              {discount}%
+                              {p.discount}%
                             </div>
                           )}
                         </div>
 
-                        <h2 className='text-slate-600 py-1 font-semibold'>Product Name</h2>
+                        <h2 className='text-slate-600 py-1 font-semibold'>{p.name}</h2>
                         <div className='flex gap-2'>
-                          <h2 className='text-lg font-bold text-slate-600'>$434</h2>
+                          <h2 className='text-lg font-bold text-slate-600'>${p.price}</h2>
                           <div className='flex items-center gap-2'>
-                            <Rating ratings={4.5} />
+                            <Rating ratings={p.rating} />
                           </div>
                         </div>
                       </Link>
@@ -340,28 +390,28 @@ export default function Details() {
               modules={[Pagination]}
               className='mySwiper'
             >
-              {[1, 2, 3, 4, 5, 6].map((p, i) => {
+              {relatedProducts.map((p, i) => {
                 return (
                   <SwiperSlide key={i}>
                     <Link className='block'>
                       <div className='relative h-[270px]'>
                         <div className='w-full h-full'>
-                          <img src={`/images/products/${p}.webp`} alt='products' className='w-full h-full' />
+                          <img src={p.images[0]} alt='products' className='w-full h-full' />
                           <div className='absolute h-full w-full top-0 left-0 bg-[#000] opacity-25 hover:opacity-50 transition-all duration-500'></div>
                         </div>
-                        {discount !== 0 && (
+                        {p.discount !== 0 && (
                           <div className='flex justify-center items-center absolute text-white w-[38px] h-[38px] rounded-full bg-red-500 font-semibold text-xs left-2 top-2'>
-                            {discount}%
+                            {p.discount}%
                           </div>
                         )}
                       </div>
 
                       <div className='p-4 flex flex-col gap-1'>
-                        <h2 className='text-slate-600 text-lg font-semibold'>Product Name</h2>
+                        <h2 className='text-slate-600 text-lg font-semibold'>{p.name}</h2>
                         <div className='flex justify-start items-center gap-3'>
-                          <h2 className='text-lg font-bold text-slate-600'>$434</h2>
+                          <h2 className='text-lg font-bold text-slate-600'>${p.price}</h2>
                           <div className='flex '>
-                            <Rating ratings={4.5} />
+                            <Rating ratings={p.rating} />
                           </div>
                         </div>
                       </div>
