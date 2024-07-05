@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../api";
 
 export const place_order = createAsyncThunk(
-  "card/place_order",
+  "order/place_order",
   async ({ price, products, shippingFee, items, userId, navigate, shippingInfo }) => {
     try {
       const { data } = await api.post("/home/order/place-order", {
@@ -28,6 +28,19 @@ export const place_order = createAsyncThunk(
   }
 );
 
+export const get_orders = createAsyncThunk(
+  "order/get_orders",
+  async ({ customerId, status }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/home/customer/get-orders/${customerId}/${status}`);
+      // console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const orderReducer = createSlice({
   name: "order",
   initialState: {
@@ -43,14 +56,9 @@ export const orderReducer = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // builder
-    //   .addCase(add_to_card.rejected, (state, { payload }) => {
-    //     state.errorMessage = payload.error;
-    //   })
-    //   .addCase(add_to_card.fulfilled, (state, { payload }) => {
-    //     state.successMessage = payload.message;
-    //     state.cardProductCount = state.cardProductCount + 1;
-    //   })
+    builder.addCase(get_orders.fulfilled, (state, { payload }) => {
+      state.myOrders = payload.orders;
+    });
   },
 });
 

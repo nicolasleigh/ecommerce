@@ -1,8 +1,34 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { get_orders } from "../../store/reducers/orderReducer";
 
 export default function Orders() {
   const [state, setState] = useState("all");
+  const { userInfo } = useSelector((state) => state.auth);
+  const { myOrders } = useSelector((state) => state.order);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(get_orders({ status: state, customerId: userInfo.id }));
+  }, [state]);
+
+  const redirect = (order) => {
+    let items = 0;
+    for (let i = 0; i < order.products.length; i++) {
+      items = order.products[i].quantity + items;
+    }
+    // console.log(order);
+    navigate("/payment", {
+      state: {
+        price: order.price,
+        items,
+        orderId: order._id,
+      },
+    });
+  };
+
   return (
     <div className='bg-white p-4 rounded-md'>
       <div className='flex justify-between items-center'>
@@ -43,55 +69,35 @@ export default function Orders() {
               </tr>
             </thead>
             <tbody>
-              <tr className='bg-white border-b'>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                  #344
-                </td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                  $233
-                </td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                  pending
-                </td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                  pending
-                </td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                  <Link>
-                    <span className='bg-green-200 text-green-800 font-semibold mr-2 px-3 py-[2px] rounded'>View</span>
-                  </Link>
-                  <Link>
-                    <span className='bg-green-200 text-green-800 font-semibold mr-2 px-3 py-[2px] rounded'>
-                      Pay Now
-                    </span>
-                  </Link>
-                </td>
-              </tr>
-
-              <tr className='bg-white border-b'>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                  #344
-                </td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                  $233
-                </td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                  pending
-                </td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                  pending
-                </td>
-                <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                  <Link>
-                    <span className='bg-green-200 text-green-800 font-semibold mr-2 px-3 py-[2px] rounded'>View</span>
-                  </Link>
-                  <Link>
-                    <span className='bg-green-200 text-green-800 font-semibold mr-2 px-3 py-[2px] rounded'>
-                      Pay Now
-                    </span>
-                  </Link>
-                </td>
-              </tr>
+              {myOrders.map((order, i) => (
+                <tr key={i} className='bg-white border-b'>
+                  <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
+                    #{order._id}
+                  </td>
+                  <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
+                    ${order.price}
+                  </td>
+                  <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
+                    {order.paymentStatus}
+                  </td>
+                  <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
+                    {order.deliveryStatus}
+                  </td>
+                  <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
+                    <Link to={`/dashboard/order/details/${order._id}`}>
+                      <span className='bg-green-200 text-green-800 font-semibold mr-2 px-3 py-[2px] rounded'>View</span>
+                    </Link>
+                    {order.paymentStatus !== "paid" && (
+                      <span
+                        onClick={() => redirect(order)}
+                        className='bg-green-200 text-green-800 font-semibold mr-2 px-3 py-[2px] rounded cursor-pointer'
+                      >
+                        Pay Now
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
