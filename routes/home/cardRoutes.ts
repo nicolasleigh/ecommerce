@@ -8,5 +8,7 @@ router.delete("/home/product/delete-card-product/:id", cardController.deleteCard
 router.put("/home/product/quantity-increment/:id", cardController.quantityIncrement);
 router.put("/home/product/quantity-decrement/:id", cardController.quantityDecrement);
 router.post("/home/product/add-to-wishlist", cardController.addWishlist);
+router.get("/home/product/get-wishlist-products/:userId", cardController.getWishlist);
+router.delete("/home/product/remove-wishlist-product/:wishlistId", cardController.removeWishlist);
 
 export default router;

@@ -180,6 +180,27 @@ class cardController {
       console.log(error.message);
     }
   };
+
+  getWishlist = async (req, res) => {
+    const { userId } = req.params;
+    try {
+      const wishlists = await wishlistModel.find({ userId });
+      responseReturn(res, 200, { wishlistCount: wishlists.length, wishlists });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  removeWishlist = async (req, res) => {
+    const { wishlistId } = req.params;
+
+    try {
+      const wishlist = await wishlistModel.findByIdAndDelete(wishlistId);
+      responseReturn(res, 200, { wishlistId, message: "Wishlist product removed" });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 }
 
 export default new cardController();
