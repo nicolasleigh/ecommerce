@@ -5,5 +5,6 @@ const router = express.Router();
 router.post("/home/order/place-order", orderController.placeOrder);
 router.get("/home/customer/get-dashboard-data/:userId", orderController.getCustomerDashboardData);
 router.get("/home/customer/get-orders/:customerId/:status", orderController.getOrders);
+router.get("/home/customer/get-order-details/:orderId", orderController.getOrderDetails);
 
 export default router;
