@@ -125,6 +125,27 @@ class orderController {
       console.log(error.message);
     }
   };
+
+  getOrders = async (req, res) => {
+    const { customerId, status } = req.params;
+
+    try {
+      let orders = [];
+      if (status !== "all") {
+        orders = await customerOrderModel.find({
+          customerId: mongoose.Types.ObjectId.createFromHexString(customerId),
+          deliveryStatus: status,
+        });
+      } else {
+        orders = await customerOrderModel.find({
+          customerId: mongoose.Types.ObjectId.createFromHexString(customerId),
+        });
+      }
+      responseReturn(res, 200, { orders });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 }
 
 export default new orderController();
