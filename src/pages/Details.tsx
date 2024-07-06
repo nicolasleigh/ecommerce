@@ -106,6 +106,38 @@ export default function Details() {
     }
   };
 
+  const buyNow = () => {
+    let price = 0;
+    if (product.discount !== 0) {
+      price = product.price - Math.floor((product.price * product.discount) / 100);
+    } else {
+      price = product.price;
+    }
+
+    const obj = [
+      {
+        sellerId: product.sellerId,
+        shopName: product.shopName,
+        price: quantity * (price - Math.floor((price * 5) / 100)),
+        products: [
+          {
+            quantity,
+            productInfo: product,
+          },
+        ],
+      },
+    ];
+
+    navigate("/shipping", {
+      state: {
+        products: obj,
+        price: price * quantity,
+        shippingFee: 50,
+        items: 1,
+      },
+    });
+  };
+
   useEffect(() => {
     dispatch(product_details(slug));
   }, [slug]);
@@ -294,8 +326,11 @@ export default function Details() {
               </div>
 
               <div className='flex gap-3'>
-                {stock ? (
-                  <button className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#059473] text-white'>
+                {product.stock ? (
+                  <button
+                    onClick={buyNow}
+                    className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#059473] text-white'
+                  >
                     Buy Now
                   </button>
                 ) : (
