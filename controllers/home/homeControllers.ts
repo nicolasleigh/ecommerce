@@ -4,6 +4,7 @@ import { responseReturn } from "../../utils/response";
 import queryProducts from "../../utils/queryProducts";
 import reviewModel from "../../models/reviewModel";
 import moment from "moment";
+import mongoose from "mongoose";
 
 class homeControllers {
   formateProduct = (products) => {
@@ -176,6 +177,80 @@ class homeControllers {
         rating: productRating,
       });
       responseReturn(res, 201, { message: "Review added successfully" });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  getReviews = async (req, res) => {
+    const { productId } = req.params;
+    let { pageNo } = req.query;
+    pageNo = parseInt(pageNo);
+    const limit = 5;
+    const skipPage = limit * (pageNo - 1);
+
+    try {
+      let getRating = await reviewModel.aggregate([
+        {
+          $match: {
+            productId: {
+              $eq: mongoose.Types.ObjectId.createFromHexString(productId),
+            },
+            rating: {
+              $not: {
+                $size: 0,
+              },
+            },
+          },
+        },
+        {
+          $unwind: "$rating",
+        },
+        {
+          $group: {
+            _id: "$rating",
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+      ]);
+
+      let ratingReview = [
+        {
+          rating: 5,
+          sum: 0,
+        },
+        {
+          rating: 4,
+          sum: 0,
+        },
+        {
+          rating: 3,
+          sum: 0,
+        },
+        {
+          rating: 2,
+          sum: 0,
+        },
+        {
+          rating: 1,
+          sum: 0,
+        },
+      ];
+      for (let i = 0; i < ratingReview.length; i++) {
+        for (let j = 0; j < getRating.length; j++) {
+          if (ratingReview[i].rating === getRating[j]._id) {
+            ratingReview[i].sum = getRating[j].count;
+            break;
+          }
+        }
+      }
+      const getAll = await reviewModel.find({
+        productId,
+      });
+      const reviews = await reviewModel.find({ productId }).skip(skipPage).limit(limit).sort({ createdAt: -1 });
+      responseReturn(res, 200, { reviews, totalReview: getAll.length, ratingReview });
     } catch (error) {
       console.log(error.message);
     }
