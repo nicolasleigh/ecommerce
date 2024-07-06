@@ -19,6 +19,7 @@ import Orders from "./components/dashboard/Orders";
 import ChangePassword from "./components/dashboard/ChangePassword";
 import Wishlist from "./components/dashboard/Wishlist";
 import OrderDetails from "./components/dashboard/OrderDetails";
+import Chat from "./components/dashboard/Chat";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -48,6 +49,8 @@ export default function App() {
             <Route path='change-password' element={<ChangePassword />} />
             <Route path='my-wishlist' element={<Wishlist />} />
             <Route path='order/details/:orderId' element={<OrderDetails />} />
+            <Route path='chat' element={<Chat />} />
+            <Route path='chat/:sellerId' element={<Chat />} />
           </Route>
         </Route>
       </Routes>

@@ -60,7 +60,7 @@ export default function Dashboard() {
                   <span className='text-xl'>
                     <IoChatbubbleEllipses />
                   </span>
-                  <Link to='/dashboard' className='block'>
+                  <Link to='/dashboard/chat' className='block'>
                     Chat
                   </Link>
                 </li>
