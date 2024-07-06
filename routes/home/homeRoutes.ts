@@ -7,5 +7,6 @@ router.get("/get-products", homeControllers.getProducts);
 router.get("/price-range-latest-product", homeControllers.priceRangeProduct);
 router.get("/query-products", homeControllers.queryProducts);
 router.get("/product-details/:slug", homeControllers.productDetails);
+router.post("/customer/submit-review", homeControllers.submitReview);
 
 export default router;

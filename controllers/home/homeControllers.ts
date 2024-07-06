@@ -2,6 +2,8 @@ import categoryModel from "../../models/categoryModel";
 import productModel from "../../models/productModel";
 import { responseReturn } from "../../utils/response";
 import queryProducts from "../../utils/queryProducts";
+import reviewModel from "../../models/reviewModel";
+import moment from "moment";
 
 class homeControllers {
   formateProduct = (products) => {
@@ -145,6 +147,35 @@ class homeControllers {
         .limit(3);
       responseReturn(res, 200, { product, relatedProducts, moreProducts });
       // console.log(product);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  submitReview = async (req, res) => {
+    const { productId, name, review, rating } = req.body;
+
+    try {
+      await reviewModel.create({
+        productId,
+        name,
+        rating,
+        review,
+        date: moment(Date.now()).format("LL"),
+      });
+      let rate = 0;
+      const reviews = await reviewModel.find({ productId });
+      for (let i = 0; i < reviews.length; i++) {
+        rate = rate + reviews[i].rating;
+      }
+      let productRating = 0;
+      if (reviews.length !== 0) {
+        productRating = (rate / reviews.length).toFixed(1);
+      }
+      await productModel.findByIdAndUpdate(productId, {
+        rating: productRating,
+      });
+      responseReturn(res, 201, { message: "Review added successfully" });
     } catch (error) {
       console.log(error.message);
     }
