@@ -371,7 +371,7 @@ export default function Details() {
 
                 <div>
                   {state === "reviews" ? (
-                    <Reviews />
+                    <Reviews product={product} />
                   ) : (
                     <p className='py-5 text-slate-600'>
                       Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, voluptatum. Possimus omnis eius

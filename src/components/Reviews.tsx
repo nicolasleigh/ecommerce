@@ -1,17 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Rating from "./Rating";
 import RatingTemp from "./RatingTemp";
 import Pagination from "./products/Pagination";
 import { Link } from "react-router-dom";
 import RatingReact from "react-rating";
 import { FaRegStar, FaStar } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { customer_review, messageClear } from "../store/reducers/homeReducer";
+import toast from "react-hot-toast";
 
-export default function Reviews() {
+export default function Reviews({ product }) {
   const [parPage, setParPage] = useState(1);
   const [pageNumber, setPageNumber] = useState(10);
-  const userInfo = {};
   const [rate, setRate] = useState("");
   const [review, setReview] = useState("");
+  const { userInfo } = useSelector((state) => state.auth);
+  const { successMessage } = useSelector((state) => state.home);
+  const dispatch = useDispatch();
+
+  const reviewSubmit = (e) => {
+    e.preventDefault();
+    const obj = {
+      name: userInfo.name,
+      review: review,
+      rating: rate,
+      productId: product._id,
+    };
+    dispatch(customer_review(obj));
+  };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      setRate("");
+      setReview("");
+      dispatch(messageClear());
+    }
+  }, [successMessage]);
 
   return (
     <div className='mt-8'>
@@ -142,8 +167,17 @@ export default function Reviews() {
                 }
               />
             </div>
-            <form>
-              <textarea required name='' id='' cols='30' rows='5' className='border outline-0 p-3 w-full'></textarea>
+            <form onSubmit={reviewSubmit}>
+              <textarea
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+                required
+                name=''
+                id=''
+                cols='30'
+                rows='5'
+                className='border outline-0 p-3 w-full'
+              ></textarea>
               <div className='mt-2'>
                 <button className='py-1 px-5 bg-indigo-500 text-white rounded-sm'>Submit</button>
               </div>
