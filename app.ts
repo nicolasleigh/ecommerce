@@ -22,7 +22,7 @@ const httpServer = http.createServer(app);
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     credentials: true,
   })
 );
@@ -34,7 +34,8 @@ const io = new Server(httpServer, {
   },
 });
 
-const allCustomer = [];
+let allCustomer = [];
+let allSeller = [];
 const addUser = (customerId, socketId, userInfo) => {
   const checkUser = allCustomer.some((user) => user.customerId === customerId);
   if (!checkUser) {
@@ -42,11 +43,52 @@ const addUser = (customerId, socketId, userInfo) => {
   }
 };
 
+const addSeller = (sellerId, socketId, userInfo) => {
+  const checkSeller = allSeller.some((user) => user.sellerId === sellerId);
+  if (!checkSeller) {
+    allSeller.push({ sellerId, socketId, userInfo });
+  }
+};
+
+const findCustomer = (customerId) => {
+  return allCustomer.find((c) => c.customerId === customerId);
+};
+
+const findSeller = (sellerId) => {
+  return allSeller.find((c) => c.sellerId === sellerId);
+};
+
+const removeSocket = (socketId) => {
+  allCustomer = allCustomer.filter((c) => c.socketId !== socketId);
+  allSeller = allSeller.filter((c) => c.socketId !== socketId);
+};
+
 io.on("connection", (socket) => {
   console.log("socket server running...");
   socket.on("add_user", (customerId, userInfo) => {
     addUser(customerId, socket.id, userInfo);
+    io.emit("activeSeller", allSeller);
     // console.log(allCustomer);
+  });
+  socket.on("add_seller", (sellerId, userInfo) => {
+    addSeller(sellerId, socket.id, userInfo);
+    io.emit("activeSeller", allSeller);
+  });
+  socket.on("send_seller_message", (msg) => {
+    const customer = findCustomer(msg.receiverId);
+    if (customer) {
+      socket.to(customer.socketId).emit("seller_message", msg);
+    }
+  });
+  socket.on("send_customer_message", (msg) => {
+    const seller = findSeller(msg.receiverId);
+    if (seller) {
+      socket.to(seller.socketId).emit("customer_message", msg);
+    }
+  });
+  socket.on("disconnect", () => {
+    removeSocket(socket.id);
+    io.emit("activeSeller", allSeller);
   });
 });
 
