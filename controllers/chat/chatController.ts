@@ -270,6 +270,15 @@ class chatController {
       console.log(error.message);
     }
   };
+
+  getSellers = async (req, res) => {
+    try {
+      const sellers = await sellerModel.find({});
+      responseReturn(res, 200, { sellers });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 }
 
 export default new chatController();

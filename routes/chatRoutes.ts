@@ -8,5 +8,6 @@ router.post("/chat/customer/send-message-to-seller", chatController.AddCustomerM
 router.get("/chat/seller/get-customers/:sellerId", chatController.getCustomers);
 router.get("/chat/seller/get-customer-message/:customerId", authMiddleware, chatController.getCustomersSellerMessage);
 router.post("/chat/seller/send-message-to-customer", authMiddleware, chatController.addSellerMessage);
+router.get("/chat/admin/get-sellers", authMiddleware, chatController.getSellers);
 
 export default router;
