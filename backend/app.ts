@@ -36,6 +36,7 @@ const io = new Server(httpServer, {
 
 let allCustomer = [];
 let allSeller = [];
+let admin = {};
 const addUser = (customerId, socketId, userInfo) => {
   const checkUser = allCustomer.some((user) => user.customerId === customerId);
   if (!checkUser) {
@@ -86,6 +87,28 @@ io.on("connection", (socket) => {
       socket.to(seller.socketId).emit("customer_message", msg);
     }
   });
+  socket.on("send_message_admin_to_seller", (msg) => {
+    const seller = findSeller(msg.receiverId);
+    if (seller) {
+      socket.to(seller.socketId).emit("received_admin_message", msg);
+    }
+  });
+  socket.on("send_message_seller_to_admin", (msg) => {
+    if (admin.socketId) {
+      socket.to(admin.socketId).emit("received_seller_message", msg);
+    }
+  });
+
+  socket.on("add_admin", (adminInfo) => {
+    delete adminInfo.email;
+    delete adminInfo.password;
+    if (adminInfo) {
+      adminInfo.socketId = socket.id;
+      admin = adminInfo;
+      io.emit("activeSeller", allSeller);
+    }
+  });
+
   socket.on("disconnect", () => {
     removeSocket(socket.id);
     io.emit("activeSeller", allSeller);

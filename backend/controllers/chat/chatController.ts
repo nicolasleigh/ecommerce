@@ -1,5 +1,6 @@
 import sellerCustomerMessageModel from "../../models/chat/sellerCustomerMessageModel";
 import sellerCustomerModel from "../../models/chat/sellerCustomerModel";
+import adminSellerMessageModel from "../../models/chat/adminSellerMessage";
 import customerModel from "../../models/customerModel";
 import sellerModel from "../../models/sellerModel";
 import { responseReturn } from "../../utils/response";
@@ -275,6 +276,107 @@ class chatController {
     try {
       const sellers = await sellerModel.find({});
       responseReturn(res, 200, { sellers });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  seller_admin_message_insert = async (req, res) => {
+    const { senderId, receiverId, message, senderName } = req.body;
+
+    try {
+      const messageData = await adminSellerMessageModel.create({
+        senderId,
+        receiverId,
+        message,
+        senderName,
+      });
+      responseReturn(res, 200, { message: messageData });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  get_admin_message = async (req, res) => {
+    const { receiverId } = req.params;
+    const id = "";
+
+    try {
+      const messages = await adminSellerMessageModel.find({
+        $or: [
+          {
+            $and: [
+              {
+                receiverId: { $eq: receiverId },
+              },
+              {
+                senderId: {
+                  $eq: id,
+                },
+              },
+            ],
+          },
+          {
+            $and: [
+              {
+                receiverId: { $eq: id },
+              },
+              {
+                senderId: {
+                  $eq: receiverId,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      let currentSeller = {};
+      if (receiverId) {
+        currentSeller = await sellerModel.findById(receiverId);
+      }
+
+      responseReturn(res, 200, { currentSeller, messages });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  get_seller_message = async (req, res) => {
+    const receiverId = "";
+    const { id } = req;
+
+    try {
+      const messages = await adminSellerMessageModel.find({
+        $or: [
+          {
+            $and: [
+              {
+                receiverId: { $eq: receiverId },
+              },
+              {
+                senderId: {
+                  $eq: id,
+                },
+              },
+            ],
+          },
+          {
+            $and: [
+              {
+                receiverId: { $eq: id },
+              },
+              {
+                senderId: {
+                  $eq: receiverId,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      responseReturn(res, 200, { messages });
     } catch (error) {
       console.log(error.message);
     }
