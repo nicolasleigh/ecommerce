@@ -9,5 +9,6 @@ router.post("/seller-register", authControllers.seller_register);
 router.post("/seller-login", authControllers.seller_login);
 router.post("/profile-image-upload", authMiddleware, authControllers.profileImageUpload);
 router.post("/profile-info-add", authMiddleware, authControllers.profileInfoAdd);
+router.get("/logout", authMiddleware, authControllers.logout);
 
 export default router;

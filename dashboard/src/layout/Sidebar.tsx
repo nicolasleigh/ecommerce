@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getNav } from "../navigation";
 import { BiLogOutCircle } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
+import { api } from "../api";
+// import { logout } from "../store/reducers/authReducer";
 
 export default function Sidebar({ showSidebar, setShowSidebar }) {
   const [allNav, setAllNav] = useState([]);
@@ -10,6 +12,21 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
 
   const dispatch = useDispatch();
   const { role } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
+  const logout = async () => {
+    try {
+      const { data } = await api.get("/logout", { withCredentials: true });
+      localStorage.removeItem("accessToken");
+      if (role === "admin") {
+        navigate("/admin/login");
+      } else {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const navs = getNav(role);
@@ -52,7 +69,11 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
               </li>
             ))}
             <li>
-              <button className='text-[#030811] font-bold duration-200 px-[12px] py-[9px] rounded-sm flex justify-start items-center gap-[12px] hover:pl-4 transition-all w-full mb-1'>
+              <button
+                // onClick={() => dispatch(logout({ navigate, role }))}
+                onClick={logout}
+                className='text-[#030811] font-bold duration-200 px-[12px] py-[9px] rounded-sm flex justify-start items-center gap-[12px] hover:pl-4 transition-all w-full mb-1'
+              >
                 <span>
                   <BiLogOutCircle />
                 </span>
