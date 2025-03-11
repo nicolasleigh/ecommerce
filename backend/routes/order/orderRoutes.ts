@@ -14,5 +14,8 @@ router.get("/admin/order/:orderId", orderController.getAdminOrder);
 router.put("/admin/order-status/update/:orderId", orderController.adminOrderStatusUpdate);
 
 // Seller
+router.get("/seller/orders/:sellerId", orderController.getSellerOrders);
+router.get("/seller/order/:orderId", orderController.getSellerOrder);
+router.put("/seller/order-status/update/:orderId", orderController.sellerOrderStatusUpdate);
 
 export default router;

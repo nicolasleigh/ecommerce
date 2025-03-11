@@ -1,13 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Search from "../components/Search";
 import Pagination from "../Pagination";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getSellerOrders } from "../../store/reducers/orderReducer";
 
 export default function Orders() {
   const [parPage, setParPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
+  const dispatch = useDispatch();
+
+  const { myOrders, totalOrder } = useSelector((state) => state.order);
+  const { userInfo } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    const obj = {
+      parPage: parseInt(parPage),
+      page: parseInt(currentPage),
+      searchValue,
+      sellerId: userInfo._id,
+    };
+    dispatch(getSellerOrders(obj));
+  }, [searchValue, currentPage, parPage]);
+
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <h1 className='text-black mb-3 font-semibold text-lg'>Orders</h1>
@@ -30,6 +47,9 @@ export default function Orders() {
                 <th scope='col' className='py-3 px-4'>
                   Order Status
                 </th>
+                <th scope='col' className='py-3 px-4'>
+                  Date
+                </th>
 
                 <th scope='col' className='py-3 px-4'>
                   Action
@@ -37,26 +57,29 @@ export default function Orders() {
               </tr>
             </thead>
             <tbody>
-              {[1, 2, 3, 4, 5].map((data, index) => {
+              {myOrders.map((d, i) => {
                 return (
-                  <tr key={index}>
+                  <tr key={i}>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      #5455
+                      #{d._id}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      $455
+                      ${d.price}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      Pending
+                      {d.paymentStatus}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      Pending
+                      {d.deliveryStatus}
+                    </td>
+                    <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
+                      {d.date}
                     </td>
 
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
                       <div className='flex justify-start items-center gap-4'>
                         <Link
-                          to={`/seller/dashboard/order/details/1`}
+                          to={`/seller/dashboard/order/details/${d._id}`}
                           className='p-[6px] bg-green-500 rounded hover:shadow-lg hover:shadow-green-500/50'
                         >
                           <FaEye />
@@ -70,15 +93,19 @@ export default function Orders() {
           </table>
         </div>
 
-        <div className='w-full flex justify-end mt-4 '>
-          <Pagination
-            pageNumber={currentPage}
-            setPageNumber={setCurrentPage}
-            totalItem={50}
-            parPage={parPage}
-            showItem={3}
-          />
-        </div>
+        {totalOrder <= parPage ? (
+          ""
+        ) : (
+          <div className='w-full flex justify-end mt-4 '>
+            <Pagination
+              pageNumber={currentPage}
+              setPageNumber={setCurrentPage}
+              totalItem={totalOrder}
+              parPage={parPage}
+              showItem={3}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

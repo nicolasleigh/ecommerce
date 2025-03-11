@@ -236,6 +236,62 @@ class orderController {
       responseReturn(res, 500, { message: "error" });
     }
   };
+
+  getSellerOrders = async (req, res) => {
+    const { sellerId } = req.params;
+    let { page, searchValue, parPage } = req.query;
+    page = parseInt(page);
+    parPage = parseInt(parPage);
+    const skipPage = parPage * (page - 1);
+
+    try {
+      if (searchValue) {
+      } else {
+        const orders = await authOrderModel
+          .find({
+            sellerId,
+          })
+          .skip(skipPage)
+          .limit(parPage)
+          .sort({ createdAt: -1 });
+        const totalOrder = await authOrderModel
+          .find({
+            sellerId,
+          })
+          .countDocuments();
+        responseReturn(res, 200, { orders, totalOrder });
+      }
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { message: "error" });
+    }
+  };
+
+  getSellerOrder = async (req, res) => {
+    const { orderId } = req.params;
+    try {
+      const order = await authOrderModel.findById(orderId);
+      responseReturn(res, 200, { order });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { message: "error" });
+    }
+  };
+
+  sellerOrderStatusUpdate = async (req, res) => {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    try {
+      await authOrderModel.findByIdAndUpdate(orderId, {
+        deliveryStatus: status,
+      });
+      responseReturn(res, 200, { message: "order status changed" });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { message: "error" });
+    }
+  };
 }
 
 export default new orderController();

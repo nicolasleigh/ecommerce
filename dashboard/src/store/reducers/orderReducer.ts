@@ -43,6 +43,51 @@ export const adminOrderStatusUpdate = createAsyncThunk(
   }
 );
 
+export const getSellerOrders = createAsyncThunk(
+  "order/getSellerOrders",
+  async ({ parPage, page, searchValue, sellerId }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(
+        `/seller/orders/${sellerId}?page=${page}&searchValue=${searchValue}&parPage=${parPage}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getSellerOrder = createAsyncThunk(
+  "order/getSellerOrder",
+  async (orderId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/seller/order/${orderId}`, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const sellerOrderStatusUpdate = createAsyncThunk(
+  "order/sellerOrderStatusUpdate",
+  async ({ orderId, info }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.put(`/seller/order-status/update/${orderId}`, info, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const orderReducer = createSlice({
   name: "order",
   initialState: {
@@ -71,6 +116,19 @@ export const orderReducer = createSlice({
         state.errorMessage = payload.message;
       })
       .addCase(adminOrderStatusUpdate.fulfilled, (state, { payload }) => {
+        state.successMessage = payload.message;
+      })
+      .addCase(getSellerOrders.fulfilled, (state, { payload }) => {
+        state.myOrders = payload.orders;
+        state.totalOrder = payload.totalOrder;
+      })
+      .addCase(getSellerOrder.fulfilled, (state, { payload }) => {
+        state.order = payload.order;
+      })
+      .addCase(sellerOrderStatusUpdate.rejected, (state, { payload }) => {
+        state.errorMessage = payload.message;
+      })
+      .addCase(sellerOrderStatusUpdate.fulfilled, (state, { payload }) => {
         state.successMessage = payload.message;
       });
   },
