@@ -1,13 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pagination from "../Pagination";
 import { Link } from "react-router-dom";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { getActiveSellers } from "../../store/reducers/sellerReducer";
 
 export default function Sellers() {
   const [parPage, setParPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [show, setShow] = useState(false);
+  const { sellers, totalSeller } = useSelector((state) => state.seller);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const obj = {
+      parPage: parseInt(parPage),
+      page: parseInt(currentPage),
+      searchValue,
+    };
+    dispatch(getActiveSellers(obj));
+  }, [searchValue, currentPage, parPage]);
 
   return (
     <div className='px-2 lg:px-7 pt-5'>
@@ -25,6 +39,8 @@ export default function Sellers() {
             <option value='20'>20</option>
           </select>
           <input
+            onChange={(e) => setSearchValue(e.target.value)}
+            value={searchValue}
             type='text'
             placeholder='Search...'
             className='px-4 py-2 focus:border-indigo-500 outline-none bg-transparent border border-slate-700 rounded-md text-[#d0d2d6]'
@@ -54,7 +70,7 @@ export default function Sellers() {
                   Email
                 </th>
                 <th scope='col' className='py-3 px-4'>
-                  Division
+                  Status
                 </th>
                 <th scope='col' className='py-3 px-4'>
                   District
@@ -65,41 +81,40 @@ export default function Sellers() {
               </tr>
             </thead>
             <tbody>
-              {[1, 2, 3, 4, 5].map((data, index) => {
+              {sellers.map((data, index) => {
                 return (
                   <tr key={index}>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      {data}
+                      {index + 1}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      <img
-                        src={`http://localhost:5173/category/${data}.jpg`}
-                        alt='product image'
-                        className='w-[45px] h-[45px]'
-                      />
+                      <img src={data.image} alt='product image' className='w-[45px] h-[45px]' />
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      Nicolas Leigh
+                      {data.name}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      Easy Shop
+                      {data.shopInfo?.shopName}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      <span>Pending</span>
+                      <span>{data.payment}</span>
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      nicolas@e.com
+                      {data.email}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      Dhaka
+                      {data.status}
                     </td>
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                      Paltan
+                      {data?.shopInfo?.district}
                     </td>
 
                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
                       <div className='flex justify-start items-center gap-4'>
-                        <Link className='p-[6px] bg-green-500 rounded hover:shadow-lg hover:shadow-green-500/50'>
+                        <Link
+                          to={`/admin/dashboard/seller/details/${data._id}`}
+                          className='p-[6px] bg-green-500 rounded hover:shadow-lg hover:shadow-green-500/50'
+                        >
                           <FaEye />
                         </Link>
                       </div>
@@ -111,15 +126,19 @@ export default function Sellers() {
           </table>
         </div>
 
-        <div className='w-full flex justify-end mt-4 '>
-          <Pagination
-            pageNumber={currentPage}
-            setPageNumber={setCurrentPage}
-            totalItem={50}
-            parPage={parPage}
-            showItem={3}
-          />
-        </div>
+        {totalSeller <= parPage ? (
+          <div className='w-full flex justify-end mt-4 '>
+            <Pagination
+              pageNumber={currentPage}
+              setPageNumber={setCurrentPage}
+              totalItem={totalSeller}
+              parPage={parPage}
+              showItem={3}
+            />
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

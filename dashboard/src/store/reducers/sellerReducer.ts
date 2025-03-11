@@ -23,7 +23,7 @@ export const getSeller = createAsyncThunk(
       const { data } = await api.get(`/get-seller/${sellerId}`, {
         withCredentials: true,
       });
-      console.log(data);
+      // console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -38,6 +38,38 @@ export const sellerStatusUpdate = createAsyncThunk(
       const { data } = await api.post(`/seller-status-update`, info, {
         withCredentials: true,
       });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getActiveSellers = createAsyncThunk(
+  "seller/getActiveSellers",
+  async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/get-sellers?page=${page}&searchValue=${searchValue}&parPage=${parPage}`, {
+        withCredentials: true,
+      });
+      // console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getDeactiveSellers = createAsyncThunk(
+  "seller/getDeactiveSellers",
+  async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(
+        `/get-deactive-sellers?page=${page}&searchValue=${searchValue}&parPage=${parPage}`,
+        {
+          withCredentials: true,
+        }
+      );
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -72,6 +104,14 @@ export const sellerReducer = createSlice({
       .addCase(sellerStatusUpdate.fulfilled, (state, { payload }) => {
         state.seller = payload.seller;
         state.successMessage = payload.message;
+      })
+      .addCase(getActiveSellers.fulfilled, (state, { payload }) => {
+        state.sellers = payload.sellers;
+        state.totalSeller = payload.totalSeller;
+      })
+      .addCase(getDeactiveSellers.fulfilled, (state, { payload }) => {
+        state.sellers = payload.sellers;
+        state.totalSeller = payload.totalSeller;
       });
   },
 });
