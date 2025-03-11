@@ -1,14 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowCircleDown } from "react-icons/fa";
 import { LuArrowDownSquare } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import Pagination from "../Pagination";
+import { useDispatch, useSelector } from "react-redux";
+import { getAdminOrders } from "../../store/reducers/orderReducer";
 
 export default function Orders() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [parPage, setParPage] = useState(5);
   const [show, setShow] = useState(false);
+
+  const { myOrders, totalOrder } = useSelector((state) => state.order);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const obj = {
+      parPage: parseInt(parPage),
+      page: parseInt(currentPage),
+      searchValue,
+    };
+    dispatch(getAdminOrders(obj));
+  }, [searchValue, currentPage, parPage]);
 
   return (
     <div className='px-2 lg:px-7 pt-5'>
@@ -25,6 +40,8 @@ export default function Orders() {
             <option value='20'>20</option>
           </select>
           <input
+            onChange={(e) => setSearchValue(e.target.value)}
+            value={searchValue}
             type='text'
             placeholder='Search...'
             className='px-4 py-2 focus:border-indigo-500 outline-none bg-transparent border border-slate-700 rounded-md text-[#d0d2d6]'
@@ -45,48 +62,48 @@ export default function Orders() {
                 </div>
               </div>
             </div>
-
-            <div className='text-[#d0d2d6] '>
-              <div className='flex justify-between items-start border-b border-slate-700'>
-                <div className='py-3 w-[25%] font-medium whitespace-nowrap'>#34343</div>
-                <div className='py-3 w-[13%] font-medium'>$654</div>
-                <div className='py-3 w-[18%] font-medium'>Pending</div>
-                <div className='py-3 w-[18%] font-medium'>Pending</div>
-                <div className='py-3 w-[18%] font-medium'>
-                  <Link to='/admin/dashboard/order/details/3'>View</Link>
+            {myOrders.map((o, i) => (
+              <div className='text-[#d0d2d6] '>
+                <div className='flex justify-between items-start border-b border-slate-700'>
+                  <div className='py-3 w-[25%] font-medium whitespace-nowrap'>#{o._id}</div>
+                  <div className='py-3 w-[13%] font-medium'>${o.price}</div>
+                  <div className='py-3 w-[18%] font-medium'>{o.paymentStatus}</div>
+                  <div className='py-3 w-[18%] font-medium'>{o.deliveryStatus}</div>
+                  <div className='py-3 w-[18%] font-medium'>
+                    <Link to={`/admin/dashboard/order/details/${o._id}`}>View</Link>
+                  </div>
+                  <div onClick={(e) => setShow(o._id)} className='py-3 w-[8%] font-medium'>
+                    <LuArrowDownSquare />
+                  </div>
                 </div>
-                <div onClick={(e) => setShow(!show)} className='py-3 w-[8%] font-medium'>
-                  <LuArrowDownSquare />
+
+                <div className={show === o._id ? "block border-b border-slate-700 bg-[#8288ed]" : "hidden"}>
+                  {o.suborder.map((so, i) => (
+                    <div className='flex justify-start items-start  border-slate-700'>
+                      <div className='py-3 w-[25%] font-medium whitespace-nowrap pl-3'>#{so._id}</div>
+                      <div className='py-3 w-[13%] font-medium'>${so.price}</div>
+                      <div className='py-3 w-[18%] font-medium'>{so.paymentStatus}</div>
+                      <div className='py-3 w-[18%] font-medium'>{so.deliveryStatus}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
-
-              <div className={show ? "block border-b border-slate-700 bg-[#8288ed]" : "hidden"}>
-                <div className='flex justify-start items-start border-b  border-slate-700'>
-                  <div className='py-3 w-[25%] font-medium whitespace-nowrap pl-3'>#34343</div>
-                  <div className='py-3 w-[13%] font-medium'>$64</div>
-                  <div className='py-3 w-[18%] font-medium'>Pending</div>
-                  <div className='py-3 w-[18%] font-medium'>Pending</div>
-                </div>
-                <div className='flex justify-start items-start  border-slate-700'>
-                  <div className='py-3 w-[25%] font-medium whitespace-nowrap pl-3'>#34343</div>
-                  <div className='py-3 w-[13%] font-medium'>$64</div>
-                  <div className='py-3 w-[18%] font-medium'>Pending</div>
-                  <div className='py-3 w-[18%] font-medium'>Pending</div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
-
-        <div className='w-full flex justify-end mt-4 '>
-          <Pagination
-            pageNumber={currentPage}
-            setPageNumber={setCurrentPage}
-            totalItem={50}
-            parPage={parPage}
-            showItem={3}
-          />
-        </div>
+        {totalOrder <= parPage ? (
+          ""
+        ) : (
+          <div className='w-full flex justify-end mt-4 '>
+            <Pagination
+              pageNumber={currentPage}
+              setPageNumber={setCurrentPage}
+              totalItem={totalOrder}
+              parPage={parPage}
+              showItem={4}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
