@@ -15,6 +15,34 @@ export const getAdminOrders = createAsyncThunk(
   }
 );
 
+export const getAdminOrder = createAsyncThunk(
+  "order/getAdminOrder",
+  async (orderId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/admin/order/${orderId}`, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const adminOrderStatusUpdate = createAsyncThunk(
+  "order/adminOrderStatusUpdate",
+  async ({ orderId, info }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.put(`/admin/order-status/update/${orderId}`, info, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const orderReducer = createSlice({
   name: "order",
   initialState: {
@@ -31,10 +59,20 @@ export const orderReducer = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getAdminOrders.fulfilled, (state, { payload }) => {
-      state.myOrders = payload.orders;
-      state.totalOrder = payload.totalOrder;
-    });
+    builder
+      .addCase(getAdminOrders.fulfilled, (state, { payload }) => {
+        state.myOrders = payload.orders;
+        state.totalOrder = payload.totalOrder;
+      })
+      .addCase(getAdminOrder.fulfilled, (state, { payload }) => {
+        state.order = payload.order;
+      })
+      .addCase(adminOrderStatusUpdate.rejected, (state, { payload }) => {
+        state.errorMessage = payload.message;
+      })
+      .addCase(adminOrderStatusUpdate.fulfilled, (state, { payload }) => {
+        state.successMessage = payload.message;
+      });
   },
 });
 

@@ -4,7 +4,7 @@ import authOrderModel from "../../models/authOrderModel";
 import cardModel from "../../models/cardModel";
 import { responseReturn } from "../../utils/response";
 import customerOrderModel from "../../models/customerOrderModel";
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 
 class orderController {
   paymentCheck = async (id) => {
@@ -197,6 +197,43 @@ class orderController {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  getAdminOrder = async (req, res) => {
+    const { orderId } = req.params;
+    try {
+      const order = await customerOrder.aggregate([
+        {
+          $match: { _id: new mongoose.Types.ObjectId(orderId) },
+        },
+        {
+          $lookup: {
+            from: "authororders",
+            localField: "_id",
+            foreignField: "orderId",
+            as: "suborder",
+          },
+        },
+      ]);
+      responseReturn(res, 200, { order: order[0] });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  adminOrderStatusUpdate = async (req, res) => {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    try {
+      await customerOrder.findByIdAndUpdate(orderId, {
+        deliveryStatus: status,
+      });
+      responseReturn(res, 200, { message: "order status changed" });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { message: "error" });
     }
   };
 }

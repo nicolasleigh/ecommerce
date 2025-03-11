@@ -10,6 +10,8 @@ router.get("/home/customer/get-order-details/:orderId", orderController.getOrder
 
 // Admin
 router.get("/admin/orders", orderController.getAdminOrders);
+router.get("/admin/order/:orderId", orderController.getAdminOrder);
+router.put("/admin/order-status/update/:orderId", orderController.adminOrderStatusUpdate);
 
 // Seller
 
