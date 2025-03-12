@@ -5,6 +5,7 @@ import { profileImageUpload, messageClear, profileInfoAdd } from "../../store/re
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { overrideStyle } from "../../utils/utils";
+import { createStripeConnectAccount } from "../../store/reducers/sellerReducer";
 
 export default function Profile() {
   const [state, setState] = useState({
@@ -108,12 +109,15 @@ export default function Profile() {
                 <div className='flex gap-2'>
                   <span>Payment Account:</span>
                   <p>
-                    {status === "active" ? (
+                    {userInfo.payment === "active" ? (
                       <span className='bg-red-500 text-white text-xs cursor-pointer font-normal ml-2 px-2 py-0.5 rounded'>
                         {userInfo.payment}
                       </span>
                     ) : (
-                      <span className='bg-blue-500 text-white text-xs cursor-pointer font-normal ml-2 px-2 py-0.5 rounded'>
+                      <span
+                        onClick={() => dispatch(createStripeConnectAccount())}
+                        className='bg-blue-500 text-white text-xs cursor-pointer font-normal ml-2 px-2 py-0.5 rounded'
+                      >
                         Click Active
                       </span>
                     )}

@@ -16,6 +16,7 @@ import orderRoutes from "./routes/order/orderRoutes";
 import chatRoutes from "./routes/chatRoutes";
 import customerAuthRoutes from "./routes/home/customerAuthRoutes";
 import dbConnect from "./utils/db";
+import paymentRoutes from "./routes/paymentRoutes";
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -127,6 +128,7 @@ app.use("/api", customerAuthRoutes);
 app.use("/api", cardRoutes);
 app.use("/api", orderRoutes);
 app.use("/api", chatRoutes);
+app.use("/api", paymentRoutes);
 
 dbConnect();
 
