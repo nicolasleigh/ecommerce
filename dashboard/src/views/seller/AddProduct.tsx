@@ -7,6 +7,24 @@ import { messageClear, productAdd } from "../../store/reducers/productReducer";
 import { PropagateLoader } from "react-spinners";
 import { overrideStyle } from "../../utils/utils";
 import toast from "react-hot-toast";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import CategorySelector from "./CategorySelector";
+import { Textarea } from "@/components/ui/textarea";
+
+const formSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  discount: z.number(),
+  price: z.number(),
+  brand: z.string(),
+  stock: z.number(),
+  category: z.string(),
+});
 
 export default function AddProduct() {
   const dispatch = useDispatch();
@@ -38,6 +56,21 @@ export default function AddProduct() {
   const [searchValue, setSearchValue] = useState("");
   const [images, setImages] = useState([]);
   const [imageShow, setImageShow] = useState([]);
+  const [categoryVal, setCategoryVal] = useState("");
+  const [categorySelectedObj, setCategorySelectedObj] = useState("");
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      discount: "",
+      price: "",
+      brand: "",
+      stock: "",
+      category: "",
+    },
+  });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -111,6 +144,8 @@ export default function AddProduct() {
     setAllCategory(categories);
   }, [categories]);
 
+  console.log(categories);
+
   useEffect(() => {
     if (successMessage) {
       toast.success(successMessage);
@@ -134,9 +169,9 @@ export default function AddProduct() {
   }, [successMessage, errorMessage]);
 
   return (
-    <div className='px-2 lg:px-7 pt-5'>
-      <div className='w-full p-4 bg-[#6a5fdf] rounded-md'>
-        <div className='flex justify-between items-center pb-4'>
+    <div className='px-2 lg:px-7 pt-5 '>
+      <div className='w-full p-4  rounded-md'>
+        {/* <div className='flex justify-between items-center pb-4'>
           <h1 className='text-[#d0d2d6] text-xl font-semibold'>Add Product</h1>
           <Link
             to='/seller/dashboard/products'
@@ -144,41 +179,77 @@ export default function AddProduct() {
           >
             All Product
           </Link>
-        </div>
-        <div>
-          <form onSubmit={handleSubmit}>
+        </div> */}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)}>
             {/* first row */}
-            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]'>
-              <div className='flex flex-col w-full gap-1'>
-                <label htmlFor='name'>Product Name</label>
-                <input
-                  value={state.name}
-                  onChange={handleChange}
-                  type='text'
-                  name='name'
-                  id='name'
-                  placeholder='Product Name'
-                  className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                />
-              </div>
-
-              <div className='flex flex-col w-full gap-1'>
-                <label htmlFor='brand'>Product Brand</label>
-                <input
-                  value={state.brand}
-                  onChange={handleChange}
-                  type='text'
-                  name='brand'
-                  id='brand'
-                  placeholder='Brand Name'
-                  className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                />
-              </div>
+            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full '>
+              <FormField
+                control={form.control}
+                name='name'
+                render={({ field }) => (
+                  <FormItem className='w-1/2'>
+                    <FormLabel>Product Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='brand'
+                render={({ field }) => (
+                  <FormItem className='w-1/2'>
+                    <FormLabel>Product Brand</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             {/* second row */}
-            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]'>
-              <div className='flex flex-col w-full gap-1 relative'>
+            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full '>
+              <FormField
+                control={form.control}
+                name='category'
+                render={({ field }) => (
+                  <FormItem className='w-1/2'>
+                    <FormLabel>Category</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value || ""}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder='Select Category' />
+                        </SelectTrigger>
+                        {/* <CategorySelector
+                        value={categoryVal}
+                        setValue={setCategoryVal}
+                        onSelect={(value) => {
+                          setCategoryVal(value);
+                          field.value = value;
+                          field.onChange(value);
+                        }}
+                        onSelectObj={setCategorySelectedObj}
+                        selectedObj={categorySelectedObj}
+                      /> */}
+                      </FormControl>
+                      <SelectContent>
+                        {categories.map((c, i) => (
+                          <SelectItem key={i} value={c._id}>
+                            {c.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+
+              {/* <div className='flex flex-col w-full gap-1 relative'>
                 <label htmlFor='category'>Category</label>
                 <input
                   value={category}
@@ -224,9 +295,23 @@ export default function AddProduct() {
                     ))}
                   </div>
                 </div>
-              </div>
+              </div> */}
 
-              <div className='flex flex-col w-full gap-1'>
+              <FormField
+                control={form.control}
+                name='stock'
+                render={({ field }) => (
+                  <FormItem className='w-1/2'>
+                    <FormLabel>Product Stock</FormLabel>
+                    <FormControl>
+                      <Input {...field} type='number' min={0} max={100} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* <div className='flex flex-col w-full gap-1'>
                 <label htmlFor='stock'>Product Stock</label>
                 <input
                   value={state.stock}
@@ -237,12 +322,25 @@ export default function AddProduct() {
                   placeholder='Stock'
                   className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
                 />
-              </div>
+              </div> */}
             </div>
 
             {/* third row */}
-            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]'>
-              <div className='flex flex-col w-full gap-1'>
+            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full'>
+              <FormField
+                control={form.control}
+                name='price'
+                render={({ field }) => (
+                  <FormItem className='w-1/2'>
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <Input {...field} type='number' min={0} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* <div className='flex flex-col w-full gap-1'>
                 <label htmlFor='price'>Price</label>
                 <input
                   value={state.price}
@@ -253,8 +351,22 @@ export default function AddProduct() {
                   placeholder='price'
                   className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
                 />
-              </div>
+              </div> */}
 
+              <FormField
+                control={form.control}
+                name='discount'
+                render={({ field }) => (
+                  <FormItem className='w-1/2'>
+                    <FormLabel>Discount</FormLabel>
+                    <FormControl>
+                      <Input {...field} type='number' />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* 
               <div className='flex flex-col w-full gap-1'>
                 <label htmlFor='discount'>Discount</label>
                 <input
@@ -266,11 +378,25 @@ export default function AddProduct() {
                   placeholder='Discount by %'
                   className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
                 />
-              </div>
+              </div> */}
             </div>
 
             {/* fourth row */}
-            <div className='flex flex-col w-full gap-1 mb-5'>
+
+            <FormField
+              control={form.control}
+              name='description'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} className='h-40' />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* <div className='flex flex-col w-full gap-1 mb-5'>
               <label htmlFor='description' className='text-[#d0d2d6]'>
                 Description
               </label>
@@ -284,7 +410,7 @@ export default function AddProduct() {
                 cols='10'
                 rows='4'
               ></textarea>
-            </div>
+            </div> */}
 
             <div className='grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 gap-3 w-full text-[#d0d2d6] mb-4'>
               {imageShow.map((image, i) => (
@@ -322,7 +448,7 @@ export default function AddProduct() {
               </button>
             </div>
           </form>
-        </div>
+        </Form>
       </div>
     </div>
   );

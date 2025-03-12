@@ -3,6 +3,8 @@ import { FaCartShopping } from "react-icons/fa6";
 import Chart from "react-apexcharts";
 import { MdCurrencyExchange, MdProductionQuantityLimits } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { CircleDollarSign, Wallet } from "lucide-react";
 
 export default function SellerDashboard() {
   const state = {
@@ -70,45 +72,53 @@ export default function SellerDashboard() {
   return (
     <div className='px-2 md:px-7 py-5'>
       <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-7'>
-        <div className='flex justify-between items-center p-5 bg-[#fae8e8] rounded-md gap-3'>
-          <div className='flex flex-col justify-start items-start text-[#5c5a5a]'>
-            <h2 className='text-3xl font-bold'>$3456</h2>
-            <span className='font-medium'>Total Sale</span>
+        <Card className='flex items-center justify-between rounded-md bg-red-50 border-none'>
+          <div>
+            <CardHeader className='text-3xl font-bold pb-0'>$3456</CardHeader>
+            <CardContent>Total Sale</CardContent>
           </div>
-          <div className='w-[40px] h-[47px] rounded-full bg-[#fa0305] flex justify-center items-center text-xl'>
-            <MdCurrencyExchange className='text-[#fae8e8] shadow-lg' />
-          </div>
-        </div>
+          <CardFooter className='p-0 pr-6'>
+            <div className='w-[40px] h-[40px] rounded-full bg-[#fa0305] flex justify-center items-center text-xl'>
+              <CircleDollarSign className='text-[#fae8e8] shadow-lg' />
+            </div>
+          </CardFooter>
+        </Card>
 
-        <div className='flex justify-between items-center p-5 bg-[#fde2ff] rounded-md gap-3'>
-          <div className='flex flex-col justify-start items-start text-[#5c5a5a]'>
-            <h2 className='text-3xl font-bold'>50</h2>
-            <span className='font-medium'>Products</span>
+        <Card className='flex items-center justify-between rounded-md bg-blue-50 border-none'>
+          <div>
+            <CardHeader className='text-3xl font-bold pb-0'>50</CardHeader>
+            <CardContent>Products</CardContent>
           </div>
-          <div className='w-[40px] h-[47px] rounded-full bg-[#760077] flex justify-center items-center text-xl'>
-            <MdProductionQuantityLimits className='text-[#fae8e8] shadow-lg' />
-          </div>
-        </div>
+          <CardFooter className='p-0 pr-6'>
+            <div className='w-[40px] h-[40px] rounded-full bg-[#760077] flex justify-center items-center text-xl'>
+              <MdCurrencyExchange className='text-[#fae8e8] shadow-lg' />
+            </div>
+          </CardFooter>
+        </Card>
 
-        <div className='flex justify-between items-center p-5 bg-[#e9feea] rounded-md gap-3'>
-          <div className='flex flex-col justify-start items-start text-[#5c5a5a]'>
-            <h2 className='text-3xl font-bold'>10</h2>
-            <span className='font-medium'>Orders</span>
+        <Card className='flex items-center justify-between rounded-md bg-green-50 border-none'>
+          <div>
+            <CardHeader className='text-3xl font-bold pb-0'>10</CardHeader>
+            <CardContent>Orders</CardContent>
           </div>
-          <div className='w-[40px] h-[47px] rounded-full bg-[#038000] flex justify-center items-center text-xl'>
-            <FaCartShopping className='text-[#fae8e8] shadow-lg' />
-          </div>
-        </div>
+          <CardFooter className='p-0 pr-6'>
+            <div className='w-[40px] h-[40px] rounded-full bg-[#038000] flex justify-center items-center text-xl'>
+              <Wallet className='text-[#fae8e8] shadow-lg' />
+            </div>
+          </CardFooter>
+        </Card>
 
-        <div className='flex justify-between items-center p-5 bg-[#ecebff] rounded-md gap-3'>
-          <div className='flex flex-col justify-start items-start text-[#5c5a5a]'>
-            <h2 className='text-3xl font-bold'>1</h2>
-            <span className='font-medium'>Pending Orders</span>
+        <Card className='flex items-center justify-between rounded-md bg-yellow-50 border-none'>
+          <div>
+            <CardHeader className='text-3xl font-bold pb-0'>1</CardHeader>
+            <CardContent>Pending Orders</CardContent>
           </div>
-          <div className='w-[40px] h-[47px] rounded-full bg-[#0200f8] flex justify-center items-center text-xl'>
-            <FaCartShopping className='text-[#fae8e8] shadow-lg' />
-          </div>
-        </div>
+          <CardFooter className='p-0 pr-6'>
+            <div className='w-[40px] h-[40px] rounded-full bg-[#0200f8] flex justify-center items-center text-xl'>
+              <FaCartShopping className='text-[#fae8e8] shadow-lg' />
+            </div>
+          </CardFooter>
+        </Card>
       </div>
 
       <div className='w-full flex flex-wrap mt-7'>
