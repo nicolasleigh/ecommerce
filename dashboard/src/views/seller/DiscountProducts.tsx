@@ -12,7 +12,7 @@ export default function DiscountProducts() {
     <div className='px-2 lg:px-7 pt-5'>
       <h1 className='text-black mb-3 font-semibold text-lg'>Discount Products</h1>
       <div className='w-full p-4 bg-[#6a5fdf] rounded-md'>
-        <Search setPerPage={setPerPage} setSearchValue={setSearchValue} searchValue={searchValue} />
+        {/* <Search setPerPage={setPerPage} setSearchValue={setSearchValue} searchValue={searchValue} /> */}
 
         <div className='relative overflow-x-auto mt-5'>
           <table className='w-full text-sm text-left text-[#d0d2d6]'>

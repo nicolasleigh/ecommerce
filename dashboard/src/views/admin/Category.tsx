@@ -87,6 +87,8 @@ export default function Category() {
     const obj = {
       // perPage: parseInt(perPage),
       // page: parseInt(currentPage),
+      perPage: "",
+      page: "",
       searchValue,
     };
     dispatch(getCategory(obj));

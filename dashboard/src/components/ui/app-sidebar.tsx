@@ -85,11 +85,11 @@ export const items = [
     icon: <MdViewList />,
     url: "/seller/dashboard/products",
   },
-  {
-    title: "Discount Product",
-    icon: <TbBasketDiscount />,
-    url: "/seller/dashboard/discount-product",
-  },
+  // {
+  //   title: "Discount Product",
+  //   icon: <TbBasketDiscount />,
+  //   url: "/seller/dashboard/discount-product",
+  // },
   {
     title: "Orders",
     icon: <BsCartCheck />,

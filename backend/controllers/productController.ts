@@ -64,7 +64,8 @@ class productController {
       }
       if (searchValue) {
         const products = await productModel
-          .find({ $text: { $search: searchValue }, sellerId: id })
+          // .find({ $text: { $search: searchValue }, sellerId: id })
+          .find({ $text: { $search: searchValue } })
           .skip(skipPage)
           .limit(perPage)
           .sort({ createdAt: -1 });
@@ -72,13 +73,14 @@ class productController {
         const totalProduct = await productModel
           .find({
             $text: { $search: searchValue },
-            sellerId: id,
+            // sellerId: id,
           })
           .countDocuments();
         responseReturn(res, 200, { products, totalProduct });
       } else {
         const products = await productModel
-          .find({ sellerId: id })
+          // .find({ sellerId: id })
+          .find({})
           .skip(skipPage)
           .limit(perPage)
           .sort({ createdAt: -1 });
