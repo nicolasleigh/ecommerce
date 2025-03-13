@@ -1,3 +1,4 @@
+import Category from "@/views/admin/Category";
 import { lazy } from "react";
 const SellerDashboard = lazy(() => import("../../views/seller/SellerDashboard"));
 const AddProduct = lazy(() => import("../../views/seller/AddProduct"));
@@ -29,6 +30,11 @@ export const sellerRoutes = [
     element: <SellerDashboard />,
     role: "seller",
     status: "active",
+  },
+  {
+    path: "/seller/dashboard/category",
+    element: <Category />,
+    role: "seller",
   },
   {
     path: "/seller/dashboard/add-product",

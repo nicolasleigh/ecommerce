@@ -71,6 +71,11 @@ export const items = [
     url: "/seller/dashboard",
   },
   {
+    title: "Category",
+    icon: <BiCategory />,
+    url: "/seller/dashboard/category",
+  },
+  {
     title: "Add Product",
     icon: <IoMdAdd />,
     url: "/seller/dashboard/add-product",

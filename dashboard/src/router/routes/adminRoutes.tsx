@@ -21,11 +21,11 @@ export const adminRoutes = [
     element: <Orders />,
     role: "admin",
   },
-  {
-    path: "/admin/dashboard/category",
-    element: <Category />,
-    role: "admin",
-  },
+  // {
+  //   path: "/admin/dashboard/category",
+  //   element: <Category />,
+  //   role: "admin",
+  // },
   {
     path: "/admin/dashboard/sellers",
     element: <Sellers />,
