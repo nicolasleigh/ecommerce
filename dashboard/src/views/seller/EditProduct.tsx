@@ -20,7 +20,7 @@ export default function EditProduct() {
       getCategory({
         searchValue: "",
         page: "",
-        parPage: "",
+        perPage: "",
       })
     );
   }, []);

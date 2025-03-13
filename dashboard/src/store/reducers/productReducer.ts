@@ -16,9 +16,9 @@ export const productAdd = createAsyncThunk(
 
 export const getProducts = createAsyncThunk(
   "product/getProducts",
-  async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
+  async ({ perPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const { data } = await api.get(`/products-get?page=${page}&searchValue=${searchValue}&parPage=${parPage}`, {
+      const { data } = await api.get(`/products-get?page=${page}&searchValue=${searchValue}&perPage=${perPage}`, {
         withCredentials: true,
       });
       // console.log(data);

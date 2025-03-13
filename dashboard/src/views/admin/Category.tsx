@@ -15,6 +15,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { DataTable } from "@/components/tables/DataTable";
+import { columns } from "@/components/tables/CategoryColumn";
 
 const formSchema = z.object({
   name: z.string().nonempty(),
@@ -22,8 +24,8 @@ const formSchema = z.object({
 });
 
 export default function Category() {
-  const [parPage, setParPage] = useState(5);
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [perPage, setPerPage] = useState(5);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [show, setShow] = useState(false);
   const [imageShow, setImageShow] = useState("");
@@ -83,12 +85,12 @@ export default function Category() {
 
   useEffect(() => {
     const obj = {
-      parPage: parseInt(parPage),
-      page: parseInt(currentPage),
+      // perPage: parseInt(perPage),
+      // page: parseInt(currentPage),
       searchValue,
     };
     dispatch(getCategory(obj));
-  }, [searchValue, currentPage, parPage]);
+  }, [searchValue]);
 
   return (
     <div className='px-2 lg:px-7 pt-5'>
@@ -104,10 +106,17 @@ export default function Category() {
       <div className='flex flex-wrap w-full'>
         <div className='w-full lg:w-7/12'>
           <div className='w-full p-4 border rounded-md'>
-            <Search setParPage={setParPage} setSearchValue={setSearchValue} searchValue={searchValue} />
+            {/* <Search setPerPage={setPerPage} setSearchValue={setSearchValue} searchValue={searchValue} /> */}
 
-            <div className='relative overflow-x-auto'>
-              <table className='w-full text-sm text-left '>
+            <div className='relative overflow-x-auto mt-4'>
+              <DataTable
+                columns={columns}
+                data={categories}
+                searchValue={searchValue}
+                // setPerPage={setPerPage}
+                setSearchValue={setSearchValue}
+              />
+              {/* <table className='w-full text-sm text-left '>
                 <thead className='text-sm  uppercase border-b border-slate-700'>
                   <tr>
                     <th scope='col' className='py-3 px-4'>
@@ -152,24 +161,24 @@ export default function Category() {
                     );
                   })}
                 </tbody>
-              </table>
+              </table> */}
             </div>
 
-            <div className='w-full flex justify-end mt-4 '>
+            {/* <div className='w-full flex justify-end mt-4 '>
               <Pagination
                 pageNumber={currentPage}
                 setPageNumber={setCurrentPage}
                 totalItem={50}
-                parPage={parPage}
+                perPage={perPage}
                 showItem={3}
               />
-            </div>
+            </div> */}
           </div>
         </div>
         <div
-          className={`w-[320px] lg:w-5/12 lg:relative lg:right-0 fixed ${
+          className={`w-[320px] lg:w-5/12 lg:relative backdrop-blur-3xl lg:right-0 fixed ${
             show ? "right-0" : "-right-[340px]"
-          } z-[100] top-0 transition-all duration-500`}
+          } z-10 top-0 transition-all duration-500`}
         >
           <div className='w-full pl-5'>
             <div className='border h-screen lg:h-auto px-3 py-2 lg:rounded-md '>

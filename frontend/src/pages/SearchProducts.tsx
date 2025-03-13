@@ -24,7 +24,7 @@ export default function SearchProducts() {
   const [pageNumber, setPageNumber] = useState(1);
   const [sortPrice, setSortPrice] = useState("");
 
-  const { products, categories, priceRange, latestProduct, totalProduct, parPage } = useSelector((state) => state.home);
+  const { products, categories, priceRange, latestProduct, totalProduct, perPage } = useSelector((state) => state.home);
   const [state, setState] = useState({ values: [priceRange.low, priceRange.high] });
   const dispatch = useDispatch();
 
@@ -298,13 +298,13 @@ export default function SearchProducts() {
                 </div>
 
                 <div>
-                  {totalProduct > parPage && (
+                  {totalProduct > perPage && (
                     <Pagination
                       pageNumber={pageNumber}
                       setPageNumber={setPageNumber}
                       totalItem={totalProduct}
-                      parPage={parPage}
-                      showItem={Math.floor(totalProduct / parPage)}
+                      perPage={perPage}
+                      showItem={Math.floor(totalProduct / perPage)}
                     />
                   )}
                 </div>

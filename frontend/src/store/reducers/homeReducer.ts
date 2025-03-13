@@ -86,7 +86,7 @@ export const homeReducer = createSlice({
     categories: [],
     products: [],
     totalProduct: 0,
-    parPage: 3,
+    perPage: 3,
     latestProduct: [],
     topRatedProduct: [],
     discountProduct: [],
@@ -127,7 +127,7 @@ export const homeReducer = createSlice({
       .addCase(query_products.fulfilled, (state, { payload }) => {
         state.products = payload.products;
         state.totalProduct = payload.totalProduct;
-        state.parPage = payload.parPage;
+        state.perPage = payload.perPage;
       })
       .addCase(product_details.fulfilled, (state, { payload }) => {
         state.product = payload.product;

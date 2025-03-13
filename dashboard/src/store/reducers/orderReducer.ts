@@ -3,9 +3,9 @@ import { api } from "../../api";
 
 export const getAdminOrders = createAsyncThunk(
   "order/getAdminOrders",
-  async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
+  async ({ perPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const { data } = await api.get(`/admin/orders?page=${page}&searchValue=${searchValue}&parPage=${parPage}`, {
+      const { data } = await api.get(`/admin/orders?page=${page}&searchValue=${searchValue}&perPage=${perPage}`, {
         withCredentials: true,
       });
       return fulfillWithValue(data);
@@ -45,10 +45,10 @@ export const adminOrderStatusUpdate = createAsyncThunk(
 
 export const getSellerOrders = createAsyncThunk(
   "order/getSellerOrders",
-  async ({ parPage, page, searchValue, sellerId }, { rejectWithValue, fulfillWithValue }) => {
+  async ({ perPage, page, searchValue, sellerId }, { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.get(
-        `/seller/orders/${sellerId}?page=${page}&searchValue=${searchValue}&parPage=${parPage}`,
+        `/seller/orders/${sellerId}?page=${page}&searchValue=${searchValue}&perPage=${perPage}`,
         {
           withCredentials: true,
         }

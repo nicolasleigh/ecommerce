@@ -159,10 +159,10 @@ class orderController {
   };
 
   getAdminOrders = async (req, res) => {
-    let { page, searchValue, parPage } = req.query;
+    let { page, searchValue, perPage } = req.query;
     page = parseInt(page);
-    parPage = parseInt(parPage);
-    const skipPage = parPage * (page - 1);
+    perPage = parseInt(perPage);
+    const skipPage = perPage * (page - 1);
 
     try {
       if (searchValue) {
@@ -179,7 +179,7 @@ class orderController {
             },
           ])
           .skip(skipPage)
-          .limit(parPage)
+          .limit(perPage)
           .sort({ createdAt: -1 });
 
         const totalOrder = await customerOrderModel.aggregate([
@@ -239,10 +239,10 @@ class orderController {
 
   getSellerOrders = async (req, res) => {
     const { sellerId } = req.params;
-    let { page, searchValue, parPage } = req.query;
+    let { page, searchValue, perPage } = req.query;
     page = parseInt(page);
-    parPage = parseInt(parPage);
-    const skipPage = parPage * (page - 1);
+    perPage = parseInt(perPage);
+    const skipPage = perPage * (page - 1);
 
     try {
       if (searchValue) {
@@ -252,7 +252,7 @@ class orderController {
             sellerId,
           })
           .skip(skipPage)
-          .limit(parPage)
+          .limit(perPage)
           .sort({ createdAt: -1 });
         const totalOrder = await authOrderModel
           .find({

@@ -10,7 +10,7 @@ import { customer_review, get_reviews, messageClear, product_details } from "../
 import toast from "react-hot-toast";
 
 export default function Reviews({ product }) {
-  const [parPage, setParPage] = useState(10);
+  const [perPage, setPerPage] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [rate, setRate] = useState("");
   const [review, setReview] = useState("");
@@ -171,7 +171,7 @@ export default function Reviews({ product }) {
               pageNumber={pageNumber}
               setPageNumber={setPageNumber}
               totalItem={totalReview}
-              parPage={parPage}
+              perPage={perPage}
               showItem={Math.floor(totalReview / 3)}
             />
           )}

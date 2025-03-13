@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../../store/reducers/productReducer";
 
 export default function Products() {
-  const [parPage, setParPage] = useState(5);
+  const [perPage, setPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
 
@@ -16,18 +16,18 @@ export default function Products() {
 
   useEffect(() => {
     const obj = {
-      parPage: parseInt(parPage),
+      perPage: parseInt(perPage),
       page: parseInt(currentPage),
       searchValue,
     };
     dispatch(getProducts(obj));
-  }, [searchValue, currentPage, parPage]);
+  }, [searchValue, currentPage, perPage]);
 
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <h1 className='text-black mb-3 font-semibold text-lg'>All Products</h1>
       <div className='w-full p-4 bg-[#6a5fdf] rounded-md'>
-        <Search setParPage={setParPage} setSearchValue={setSearchValue} searchValue={searchValue} />
+        <Search setPerPage={setPerPage} setSearchValue={setSearchValue} searchValue={searchValue} />
 
         <div className='relative overflow-x-auto mt-5'>
           <table className='w-full text-sm text-left text-[#d0d2d6]'>
@@ -114,7 +114,7 @@ export default function Products() {
           </table>
         </div>
 
-        {totalProduct <= parPage ? (
+        {totalProduct <= perPage ? (
           ""
         ) : (
           <div className='w-full flex justify-end mt-4 '>
@@ -122,7 +122,7 @@ export default function Products() {
               pageNumber={currentPage}
               setPageNumber={setCurrentPage}
               totalItem={50}
-              parPage={parPage}
+              perPage={perPage}
               showItem={3}
             />
           </div>

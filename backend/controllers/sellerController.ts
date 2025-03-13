@@ -3,12 +3,12 @@ import { responseReturn } from "../utils/response";
 
 class sellerController {
   getSellerRequest = async (req, res) => {
-    const { page, searchValue, parPage } = req.query;
+    const { page, searchValue, perPage } = req.query;
 
     try {
       let skipPage = 0;
-      if (parPage && page) {
-        skipPage = parseInt(parPage) * (parseInt(page) - 1);
+      if (perPage && page) {
+        skipPage = parseInt(perPage) * (parseInt(page) - 1);
       }
 
       if (searchValue) {
@@ -16,7 +16,7 @@ class sellerController {
         const sellers = await sellerModel
           .find({ status: "pending" })
           .skip(skipPage)
-          .limit(parPage)
+          .limit(perPage)
           .sort({ createdAt: -1 });
 
         const totalSeller = await sellerModel.find({ status: "pending" }).countDocuments();
@@ -52,11 +52,11 @@ class sellerController {
   };
 
   getActiveSellers = async (req, res) => {
-    let { page, searchValue, parPage } = req.query;
+    let { page, searchValue, perPage } = req.query;
     page = parseInt(page);
-    parPage = parseInt(parPage);
+    perPage = parseInt(perPage);
 
-    const skipPage = parPage * (page - 1);
+    const skipPage = perPage * (page - 1);
 
     try {
       if (searchValue) {
@@ -66,7 +66,7 @@ class sellerController {
             status: "active",
           })
           .skip(skipPage)
-          .limit(parPage)
+          .limit(perPage)
           .sort({ createdAt: -1 });
         const totalSeller = await sellerModel
           .find({
@@ -81,7 +81,7 @@ class sellerController {
             status: "active",
           })
           .skip(skipPage)
-          .limit(parPage)
+          .limit(perPage)
           .sort({ createdAt: -1 });
         const totalSeller = await sellerModel
           .find({
@@ -96,11 +96,11 @@ class sellerController {
   };
 
   getDeactiveSellers = async (req, res) => {
-    let { page, searchValue, parPage } = req.query;
+    let { page, searchValue, perPage } = req.query;
     page = parseInt(page);
-    parPage = parseInt(parPage);
+    perPage = parseInt(perPage);
 
-    const skipPage = parPage * (page - 1);
+    const skipPage = perPage * (page - 1);
 
     try {
       if (searchValue) {
@@ -110,7 +110,7 @@ class sellerController {
             status: "deactive",
           })
           .skip(skipPage)
-          .limit(parPage)
+          .limit(perPage)
           .sort({ createdAt: -1 });
         const totalSeller = await sellerModel
           .find({
@@ -125,7 +125,7 @@ class sellerController {
             status: "deactive",
           })
           .skip(skipPage)
-          .limit(parPage)
+          .limit(perPage)
           .sort({ createdAt: -1 });
         const totalSeller = await sellerModel
           .find({

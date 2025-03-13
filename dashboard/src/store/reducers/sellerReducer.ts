@@ -3,9 +3,9 @@ import { api } from "../../api";
 
 export const getSellerRequest = createAsyncThunk(
   "seller/getSellerRequest",
-  async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
+  async ({ perPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const { data } = await api.get(`/request-seller-get?page=${page}&searchValue=${searchValue}&parPage=${parPage}`, {
+      const { data } = await api.get(`/request-seller-get?page=${page}&searchValue=${searchValue}&perPage=${perPage}`, {
         withCredentials: true,
       });
       // console.log(data);
@@ -47,9 +47,9 @@ export const sellerStatusUpdate = createAsyncThunk(
 
 export const getActiveSellers = createAsyncThunk(
   "seller/getActiveSellers",
-  async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
+  async ({ perPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const { data } = await api.get(`/get-sellers?page=${page}&searchValue=${searchValue}&parPage=${parPage}`, {
+      const { data } = await api.get(`/get-sellers?page=${page}&searchValue=${searchValue}&perPage=${perPage}`, {
         withCredentials: true,
       });
       // console.log(data);
@@ -62,10 +62,10 @@ export const getActiveSellers = createAsyncThunk(
 
 export const getDeactiveSellers = createAsyncThunk(
   "seller/getDeactiveSellers",
-  async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
+  async ({ perPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.get(
-        `/get-deactive-sellers?page=${page}&searchValue=${searchValue}&parPage=${parPage}`,
+        `/get-deactive-sellers?page=${page}&searchValue=${searchValue}&perPage=${perPage}`,
         {
           withCredentials: true,
         }

@@ -39,7 +39,7 @@ export default function AddProduct() {
       getCategory({
         searchValue: "",
         page: "",
-        parPage: "",
+        perPage: "",
       })
     );
   }, []);

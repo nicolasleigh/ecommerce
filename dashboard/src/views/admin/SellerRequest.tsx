@@ -7,7 +7,7 @@ import Search from "../components/Search";
 import { getSellerRequest } from "../../store/reducers/sellerReducer";
 
 export default function SellerRequest() {
-  const [parPage, setParPage] = useState(5);
+  const [perPage, setPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [show, setShow] = useState(false);
@@ -18,18 +18,18 @@ export default function SellerRequest() {
   useEffect(() => {
     dispatch(
       getSellerRequest({
-        parPage,
+        perPage,
         searchValue,
         page: currentPage,
       })
     );
-  }, [parPage, searchValue, currentPage]);
+  }, [perPage, searchValue, currentPage]);
 
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <h1 className='text-lg font-bold mb-3'>Seller Request</h1>
       <div className='w-full p-4 bg-[#6a5fdf] rounded-md'>
-        <Search setParPage={setParPage} setSearchValue={setSearchValue} searchValue={searchValue} />
+        <Search setPerPage={setPerPage} setSearchValue={setSearchValue} searchValue={searchValue} />
 
         <div className='relative overflow-x-auto'>
           <table className='w-full text-sm text-left text-[#d0d2d6]'>
@@ -96,7 +96,7 @@ export default function SellerRequest() {
             pageNumber={currentPage}
             setPageNumber={setCurrentPage}
             totalItem={50}
-            parPage={parPage}
+            perPage={perPage}
             showItem={3}
           />
         </div>
