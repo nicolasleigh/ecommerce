@@ -247,16 +247,16 @@ class orderController {
     try {
       if (searchValue) {
       } else {
-        const orders = await authOrderModel
+        const orders = await customerOrderModel
           .find({
-            sellerId,
+            // sellerId,
           })
           .skip(skipPage)
           .limit(perPage)
           .sort({ createdAt: -1 });
-        const totalOrder = await authOrderModel
+        const totalOrder = await customerOrderModel
           .find({
-            sellerId,
+            // sellerId,
           })
           .countDocuments();
         responseReturn(res, 200, { orders, totalOrder });

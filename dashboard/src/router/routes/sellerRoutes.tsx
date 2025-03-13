@@ -1,4 +1,4 @@
-import Category from "@/views/admin/Category";
+import Category from "@/views/seller/Category";
 import { lazy } from "react";
 const SellerDashboard = lazy(() => import("../../views/seller/SellerDashboard"));
 const AddProduct = lazy(() => import("../../views/seller/AddProduct"));
