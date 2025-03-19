@@ -91,7 +91,8 @@ export const columns: ColumnDef<Order>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      return <OrderColumnAction orderId={row.original._id} />;
+      const isProduct = row.depth === 1;
+      return <OrderColumnAction orderId={row.original._id} isProduct={isProduct} />;
     },
   },
 ];

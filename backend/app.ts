@@ -69,7 +69,7 @@ io.on("connection", (socket) => {
   console.log("socket server running...");
   socket.on("add_user", (customerId, userInfo) => {
     addUser(customerId, socket.id, userInfo);
-    io.emit("activeSeller", allSeller);
+    io.emit("activeCustomer", allCustomer);
     // console.log(allCustomer);
   });
   socket.on("add_seller", (sellerId, userInfo) => {

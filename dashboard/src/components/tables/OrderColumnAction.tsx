@@ -24,7 +24,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import DialogItem from "./DialogItem";
 
-export default function OrderColumnAction({ orderId }) {
+export default function OrderColumnAction({ orderId, isProduct }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   // const [hasOpenDialog, setHasOpenDialog] = useState(false);
   const dropdownTriggerRef = useRef(null);
@@ -34,6 +34,7 @@ export default function OrderColumnAction({ orderId }) {
   const [busy, setBusy] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  // console.log(isProduct);
 
   // useEffect(() => {
   //   fetchLatestUploads();
@@ -100,7 +101,12 @@ export default function OrderColumnAction({ orderId }) {
         <DropdownMenuItem>
           <div
             className='w-full flex  items-center gap-3'
-            onClick={() => navigate(`/seller/dashboard/order/details/${orderId}`)}
+            onClick={() => {
+              if (isProduct) {
+                return navigate(`/seller/dashboard/product/details/${orderId}`);
+              }
+              navigate(`/seller/dashboard/order/details/${orderId}`);
+            }}
           >
             <Eye strokeWidth={0.9} size={20} />
             <span>{t("Details")}</span>
