@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { IoMdCloseCircle, IoMdImages } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getCategory } from "../../store/reducers/categoryReducer";
 import { getProduct, messageClear, updateProduct, productImageUpdate } from "../../store/reducers/productReducer";
 import { PropagateLoader } from "react-spinners";
@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 export default function EditProduct() {
   const { productId } = useParams();
@@ -60,6 +61,7 @@ export default function EditProduct() {
   const [searchValue, setSearchValue] = useState("");
   const [images, setImages] = useState([]);
   const [imageShow, setImageShow] = useState([]);
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -130,9 +132,12 @@ export default function EditProduct() {
       <div className='w-full p-4  rounded-md'>
         <div className='flex justify-between items-center pb-4'>
           <h1 className=' text-xl font-semibold'>Edit Product</h1>
-          <Link to='/seller/dashboard/products' className=' underline hover:no-underline  rounded-sm '>
+          {/* <Link to='/seller/dashboard/products' className=' underline hover:no-underline text-sm rounded-sm '>
             All Product
-          </Link>
+          </Link> */}
+          <Button variant='link' onClick={() => navigate(-1)} className='p-0 underline hover:no-underline'>
+            &larr; Go back
+          </Button>
         </div>
         <div>
           <form onSubmit={handleSubmit}>

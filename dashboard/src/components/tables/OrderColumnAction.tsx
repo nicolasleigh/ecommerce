@@ -121,7 +121,7 @@ export default function OrderColumnAction({ orderId }) {
         >
           <DialogHeader>
             <DialogTitle>{t("Are you sure?")}</DialogTitle>
-            <DialogDescription>{t("This action will remove this movie permanently!")}</DialogDescription>
+            <DialogDescription>{t("This action will remove this order permanently!")}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button

@@ -4,6 +4,8 @@ import i18n from "@/utils/i18n";
 import OrderColumnAction from "./OrderColumnAction";
 import { Button } from "../ui/button";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { getShortObjectID } from "@/utils/utils";
+import { Badge } from "../ui/badge";
 
 export type Order = {
   id: string;
@@ -13,10 +15,19 @@ export type Order = {
 
 export const columns: ColumnDef<Order>[] = [
   {
+    accessorKey: "number",
+    header: "NO.",
+    cell: ({ row }) => {
+      return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{row.index + 1}</div>;
+    },
+  },
+  {
     accessorKey: "id",
     header: "ID",
     cell: ({ row }) => {
-      return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{row.index + 1}</div>;
+      const value = row.original._id;
+      const id = getShortObjectID(value);
+      return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>#{id}</div>;
     },
   },
   {
@@ -53,7 +64,8 @@ export const columns: ColumnDef<Order>[] = [
     header: "Status",
     cell: ({ row }) => {
       const value = row.getValue("paymentStatus") as string;
-      return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{value}</div>;
+      if (!value) return null;
+      return <Badge className='uppercase font-light'>{value}</Badge>;
     },
   },
   {

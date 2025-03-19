@@ -1,4 +1,5 @@
 import Category from "@/views/seller/Category";
+import ProductDetails from "@/views/seller/ProductDetails";
 import { lazy } from "react";
 const SellerDashboard = lazy(() => import("../../views/seller/SellerDashboard"));
 const AddProduct = lazy(() => import("../../views/seller/AddProduct"));
@@ -69,6 +70,12 @@ export const sellerRoutes = [
   {
     path: "/seller/dashboard/order/details/:orderId",
     element: <OrderDetails />,
+    role: "seller",
+    visibility: ["active", "deactive"],
+  },
+  {
+    path: "/seller/dashboard/product/details/:productId",
+    element: <ProductDetails />,
     role: "seller",
     visibility: ["active", "deactive"],
   },

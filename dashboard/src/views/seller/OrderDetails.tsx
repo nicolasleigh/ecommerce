@@ -1,27 +1,25 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getSellerOrder, messageClear, sellerOrderStatusUpdate } from "../../store/reducers/orderReducer";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
+import { getShortObjectID } from "@/utils/utils";
+import { Button } from "@/components/ui/button";
 
 export default function OrderDetails() {
   const { orderId } = useParams();
   const dispatch = useDispatch();
   const [status, setStatus] = useState("");
+  const navigate = useNavigate();
 
   const { order, successMessage, errorMessage } = useSelector((state) => state.order);
   console.log(order);
   const statusUpdate = (value) => {
     dispatch(sellerOrderStatusUpdate({ orderId, info: { status: value } }));
     setStatus(value);
-  };
-
-  const getShortObjectID = (id: string) => {
-    const len = id?.length;
-    return id?.substring(len - 5, len).toUpperCase();
   };
 
   useEffect(() => {
@@ -47,18 +45,23 @@ export default function OrderDetails() {
       <div className='w-full p-4 border rounded-md'>
         <div className='flex justify-between items-center p-4'>
           <h2 className='text-xl font-semibold'>Order Details</h2>
-          <Select value={status} onValueChange={statusUpdate}>
-            <SelectTrigger className='w-[180px]'>
-              <SelectValue placeholder='' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='pending'>Pending</SelectItem>
-              <SelectItem value='processing'>Processing</SelectItem>
-              <SelectItem value='warehouse'>Warehouse</SelectItem>
-              <SelectItem value='placed'>Placed</SelectItem>
-              <SelectItem value='cancelled'>Cancelled</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className='flex gap-6 items-center'>
+            <Button variant='link' onClick={() => navigate(-1)} className='p-0 underline hover:no-underline'>
+              &larr; Go back
+            </Button>
+            <Select value={status} onValueChange={statusUpdate}>
+              <SelectTrigger className='w-[140px]'>
+                <SelectValue placeholder='' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='pending'>Pending</SelectItem>
+                <SelectItem value='processing'>Processing</SelectItem>
+                <SelectItem value='warehouse'>Warehouse</SelectItem>
+                <SelectItem value='placed'>Placed</SelectItem>
+                <SelectItem value='cancelled'>Cancelled</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         <div className='p-4 space-y-3'>
@@ -80,15 +83,15 @@ export default function OrderDetails() {
           </div>
           <div className='flex items-center gap-4  '>
             <Label>Payment Status: </Label>
-            <Badge>{order.paymentStatus}</Badge>
+            <Badge className='uppercase font-light'>{order.paymentStatus}</Badge>
           </div>
           <div className='flex items-center gap-4  '>
             <Label>Price: </Label>
             <span>{order.price} ¥</span>
           </div>
-          <div className='flex items-center gap-4  '>
+          <div className='flex flex-col  gap-4  '>
             <Label>Products: </Label>
-            <div className='flex flex-wrap gap-2'>
+            <div className='flex flex-wrap gap-2 ml-4'>
               {order?.products?.map((p, i) => (
                 <div key={i} className='border py-2 px-3  rounded-md'>
                   <div className='flex gap-5 items-center'>

@@ -2,6 +2,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import CategoryColumnAction from "./CategoryColumnAction";
 import i18n from "@/utils/i18n";
 import ProductColumnAction from "./ProductColumnAction";
+import { getShortObjectID } from "@/utils/utils";
+import { Badge } from "../ui/badge";
 
 export type Product = {
   id: string;
@@ -11,24 +13,32 @@ export type Product = {
 
 export const columns: ColumnDef<Product>[] = [
   {
-    accessorKey: "id",
-    header: "ID",
+    accessorKey: "number",
+    header: "NO.",
     cell: ({ row }) => {
       return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{row.index + 1}</div>;
     },
   },
   {
-    accessorKey: "images",
-    header: "Image",
+    accessorKey: "id",
+    header: "ID",
     cell: ({ row }) => {
-      const value = row.getValue("images");
-      return (
-        <div className='w-20 sm:w-28'>
-          <img src={value} alt='category image' className='w-full rounded' />
-        </div>
-      );
+      const id = row.original._id;
+      return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>#{getShortObjectID(id)}</div>;
     },
   },
+  // {
+  //   accessorKey: "images",
+  //   header: "Image",
+  //   cell: ({ row }) => {
+  //     const value = row.getValue("images");
+  //     return (
+  //       <div className='w-20 sm:w-28'>
+  //         <img src={value} alt='category image' className='w-full rounded' />
+  //       </div>
+  //     );
+  //   },
+  // },
   {
     accessorKey: "name",
     header: "Name",
@@ -42,7 +52,7 @@ export const columns: ColumnDef<Product>[] = [
     header: "Category",
     cell: ({ row }) => {
       const value = row.getValue("category") as string;
-      return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{value}</div>;
+      return <Badge className='uppercase font-light'>{value}</Badge>;
     },
   },
   {

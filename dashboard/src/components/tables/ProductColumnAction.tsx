@@ -99,7 +99,7 @@ export default function ProductColumnAction({ productId }) {
       >
         <DropdownMenuItem className='p-0'>
           <div
-            onClick={() => navigate(`/seller/dashboard/edit-product/${productId}`)}
+            onClick={() => navigate(`/seller/dashboard/product/details/${productId}`)}
             className='flex items-center gap-3 w-full py-[6px] px-2'
           >
             <Eye strokeWidth={0.9} size={20} />
