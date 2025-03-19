@@ -270,7 +270,8 @@ class orderController {
   getSellerOrder = async (req, res) => {
     const { orderId } = req.params;
     try {
-      const order = await authOrderModel.findById(orderId);
+      const order = await customerOrderModel.findById(orderId);
+      // console.log(order);
       responseReturn(res, 200, { order });
     } catch (error) {
       console.log(error);
@@ -283,7 +284,7 @@ class orderController {
     const { status } = req.body;
 
     try {
-      await authOrderModel.findByIdAndUpdate(orderId, {
+      await customerOrderModel.findByIdAndUpdate(orderId, {
         deliveryStatus: status,
       });
       responseReturn(res, 200, { message: "order status changed" });

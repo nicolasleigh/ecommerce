@@ -21,7 +21,8 @@ import {
 } from "../ui/dialog";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import DialogItem from "./DialogItem";
 
 export default function OrderColumnAction({ orderId }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -32,6 +33,7 @@ export default function OrderColumnAction({ orderId }) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [busy, setBusy] = useState(false);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   fetchLatestUploads();
@@ -86,7 +88,7 @@ export default function OrderColumnAction({ orderId }) {
       <DropdownMenuContent
         align='end'
         // hidden={hasOpenDialog}
-        hidden={openEditDialog || openDeleteDialog}
+        // hidden={openEditDialog || openDeleteDialog}
         // onCloseAutoFocus={(event) => {
         //   if (focusRef.current) {
         //     focusRef.current.focus();
@@ -96,22 +98,19 @@ export default function OrderColumnAction({ orderId }) {
         // }}
       >
         <DropdownMenuItem>
-          <Link to={`#`} className='flex items-center gap-3'>
+          <div
+            className='w-full flex  items-center gap-3'
+            onClick={() => navigate(`/seller/dashboard/order/details/${orderId}`)}
+          >
             <Eye strokeWidth={0.9} size={20} />
             <span>{t("Details")}</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          {/* <Link to={`/seller/dashboard/edit-product/${productId}`} className='flex items-center gap-3'>
-            <Pencil strokeWidth={0.9} size={20} />
-            <span>{t("Edit")}</span>
-          </Link> */}
+          </div>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
         <DialogItem
           triggerChildren={
-            <div className='flex items-center gap-3'>
+            <div className='flex items-center gap-3 '>
               <Trash2 strokeWidth={0.9} size={20} />
               <span>{t("Delete")}</span>
             </div>
@@ -127,7 +126,14 @@ export default function OrderColumnAction({ orderId }) {
             <DialogDescription>{t("This action will remove this movie permanently!")}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button disabled={busy} onClick={() => setOpenDeleteDialog(false)} variant='secondary'>
+            <Button
+              disabled={busy}
+              onClick={() => {
+                setOpenDeleteDialog(false);
+                setDropdownOpen(false);
+              }}
+              variant='secondary'
+            >
               {t("Cancel")}
             </Button>
             <Button
@@ -147,33 +153,3 @@ export default function OrderColumnAction({ orderId }) {
     </DropdownMenu>
   );
 }
-
-const DialogItem = forwardRef((props, forwardedRef) => {
-  const { triggerChildren, children, onSelect, onOpenChange, open, className, ...itemProps } = props;
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <DropdownMenuItem
-          {...itemProps}
-          // ref={forwardedRef}
-          onSelect={(event) => {
-            event.preventDefault();
-            onSelect && onSelect();
-          }}
-        >
-          {triggerChildren}
-        </DropdownMenuItem>
-      </DialogTrigger>
-      <DialogPortal>
-        <DialogContent
-          className={className}
-          onInteractOutside={(e) => {
-            e.preventDefault();
-          }}
-        >
-          {children}
-        </DialogContent>
-      </DialogPortal>
-    </Dialog>
-  );
-});

@@ -12,6 +12,7 @@ import Search from "@/views/components/Search";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DataTablePagination } from "./Pagination";
+import { cn } from "@/lib/utils";
 // import useWindowSize from "@/hooks/useWindowSize";
 
 interface DataTableProps<TData, TValue> {
@@ -79,9 +80,8 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow key={row.id} className={cn(row.getCanExpand() && "bg-secondary hover:bg-secondary")}>
                   {row.getVisibleCells().map((cell) => {
-                    // console.log(row.getIsExpanded());
                     return (
                       <TableCell key={cell.id} className='pt-2 pb-2 px-1 first-of-type:pl-1 sm:first-of-type:pl-4'>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}

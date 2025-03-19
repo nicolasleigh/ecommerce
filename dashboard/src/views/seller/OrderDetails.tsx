@@ -3,6 +3,9 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getSellerOrder, messageClear, sellerOrderStatusUpdate } from "../../store/reducers/orderReducer";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
 
 export default function OrderDetails() {
   const { orderId } = useParams();
@@ -10,9 +13,15 @@ export default function OrderDetails() {
   const [status, setStatus] = useState("");
 
   const { order, successMessage, errorMessage } = useSelector((state) => state.order);
-  const statusUpdate = (e) => {
-    dispatch(sellerOrderStatusUpdate({ orderId, info: { status: e.target.value } }));
-    setStatus(e.target.value);
+  console.log(order);
+  const statusUpdate = (value) => {
+    dispatch(sellerOrderStatusUpdate({ orderId, info: { status: value } }));
+    setStatus(value);
+  };
+
+  const getShortObjectID = (id: string) => {
+    const len = id?.length;
+    return id?.substring(len - 5, len).toUpperCase();
   };
 
   useEffect(() => {
@@ -35,44 +44,84 @@ export default function OrderDetails() {
   }, [order]);
   return (
     <div className='px-2 lg:px-7 pt-5'>
-      <div className='w-full p-4 bg-[#6a5fdf] rounded-md'>
+      <div className='w-full p-4 border rounded-md'>
         <div className='flex justify-between items-center p-4'>
-          <h2 className='text-xl text-[#d0d2d6]'>Order Details</h2>
-          <select
-            value={status}
-            onChange={statusUpdate}
-            name=''
-            id=''
-            className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#475569] border border-slate-700 rounded-md text-[#d0d2d6]'
-          >
-            <option value='pending'>pending</option>
-            <option value='processing'>processing</option>
-            <option value='warehouse'>warehouse</option>
-            <option value='placed'>placed</option>
-            <option value='cancelled'>cancelled</option>
-          </select>
+          <h2 className='text-xl font-semibold'>Order Details</h2>
+          <Select value={status} onValueChange={statusUpdate}>
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue placeholder='' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='pending'>Pending</SelectItem>
+              <SelectItem value='processing'>Processing</SelectItem>
+              <SelectItem value='warehouse'>Warehouse</SelectItem>
+              <SelectItem value='placed'>Placed</SelectItem>
+              <SelectItem value='cancelled'>Cancelled</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
-        <div className='p-4 '>
-          <div className='flex gap-2 text-lg text-[#d0d2d6]'>
-            <h2>#{order._id}</h2>
+        <div className='p-4 space-y-3'>
+          <div className='flex items-center gap-4 '>
+            <Label>Order ID: </Label>
+            <span className=''>#{getShortObjectID(order._id)}</span>
+          </div>
+          <div className='flex items-center gap-4  '>
+            <Label>Order Creation Time: </Label>
             <span>{order.date}</span>
+          </div>
+          <div className='flex items-center gap-4  '>
+            <Label>Customer Name: </Label>
+            <span>{order.shippingInfo?.name}</span>
+          </div>
+          <div className='flex items-center gap-4  '>
+            <Label>Customer Phone Number: </Label>
+            <span>{order.shippingInfo?.phone}</span>
+          </div>
+          <div className='flex items-center gap-4  '>
+            <Label>Payment Status: </Label>
+            <Badge>{order.paymentStatus}</Badge>
+          </div>
+          <div className='flex items-center gap-4  '>
+            <Label>Price: </Label>
+            <span>{order.price} ¥</span>
+          </div>
+          <div className='flex items-center gap-4  '>
+            <Label>Products: </Label>
+            <div className='flex gap-2'>
+              {order?.products?.map((p, i) => (
+                <div key={i} className='border py-2 px-3  rounded-md'>
+                  <div className='flex gap-5 items-center'>
+                    <img src={p.images[0]} alt='produce image' className='w-28 h-28 ' />
+                    <div>
+                      <div className='space-x-2'>
+                        <Label>Product ID:</Label>
+                        <span className='capitalize text-sm'>#{getShortObjectID(p._id)}</span>
+                      </div>
+                      <div className='space-x-2'>
+                        <Label>Category:</Label>
+                        <span className='capitalize text-sm'>{p.category}</span>
+                      </div>
+                      <div className='space-x-2'>
+                        <Label>Name:</Label>
+                        <span className='capitalize text-sm'>{p.name}</span>
+                      </div>
+                      <div className='space-x-2'>
+                        <Label>Quantity:</Label>
+                        <span className='capitalize text-sm'>{p.quantity}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
           <div className='flex flex-wrap'>
             <div className='w-[30%]'>
-              <div className='pr-3 text-[#d0d2d6] text-lg'>
-                <div className='flex flex-col gap-1'>
-                  <h2 className='pb-2 font-semibold'>Deliver to: {order.shippingInfo}</h2>
-                </div>
-                <div className='flex justify-start items-center gap-3'>
-                  <h2>Payment Status</h2>
-                  <span className='text-base'>{order.paymentStatus}</span>
-                </div>
-                <span>Price: ${order.price}</span>
-
-                {order?.products?.map((p, i) => (
-                  <div className='mt-4 flex flex-col gap-4 bg-[#8288ed] rounded-md'>
-                    <div className='text-[#d0d2d6]'>
+              <div className='pr-3  text-lg'>
+                {/* {order?.products?.map((p, i) => (
+                  <div key={i} className='mt-4 flex flex-col gap-4 border rounded-md'>
+                    <div className=''>
                       <div className='flex gap-3'>
                         <img src={p.images[0]} alt='produce image' className='w-[50px] h-[50px]' />
                         <div>
@@ -86,7 +135,7 @@ export default function OrderDetails() {
                       </div>
                     </div>
                   </div>
-                ))}
+                ))} */}
               </div>
             </div>
           </div>
