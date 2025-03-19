@@ -235,17 +235,6 @@ export default function AddProduct() {
                         <SelectTrigger className='capitalize'>
                           <SelectValue placeholder='Select Category' />
                         </SelectTrigger>
-                        {/* <CategorySelector
-                        value={categoryVal}
-                        setValue={setCategoryVal}
-                        onSelect={(value) => {
-                          setCategoryVal(value);
-                          field.value = value;
-                          field.onChange(value);
-                        }}
-                        onSelectObj={setCategorySelectedObj}
-                        selectedObj={categorySelectedObj}
-                      /> */}
                       </FormControl>
                       <SelectContent>
                         {categories.map((c, i) => (

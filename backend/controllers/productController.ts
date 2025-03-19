@@ -103,12 +103,21 @@ class productController {
   };
 
   productUpdate = async (req, res) => {
-    let { name, description, stock, price, discount, brand, productId } = req.body;
+    let { name, description, stock, price, discount, brand, productId, category } = req.body;
     name = name.trim().toLowerCase();
     const slug = name.split(" ").join("-");
 
     try {
-      await productModel.findByIdAndUpdate(productId, { name, description, stock, price, discount, brand, productId });
+      await productModel.findByIdAndUpdate(productId, {
+        name,
+        description,
+        stock,
+        price,
+        discount,
+        brand,
+        productId,
+        category,
+      });
       const product = await productModel.findById(productId);
       responseReturn(res, 200, { product, message: "Product updated." });
     } catch (error) {

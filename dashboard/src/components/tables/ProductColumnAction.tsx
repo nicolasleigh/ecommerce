@@ -21,7 +21,8 @@ import {
 } from "../ui/dialog";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import DialogItem from "./DialogItem";
 
 export default function ProductColumnAction({ productId }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -32,6 +33,7 @@ export default function ProductColumnAction({ productId }) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [busy, setBusy] = useState(false);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   fetchLatestUploads();
@@ -86,7 +88,7 @@ export default function ProductColumnAction({ productId }) {
       <DropdownMenuContent
         align='end'
         // hidden={hasOpenDialog}
-        hidden={openEditDialog || openDeleteDialog}
+        // hidden={openEditDialog || openDeleteDialog}
         // onCloseAutoFocus={(event) => {
         //   if (focusRef.current) {
         //     focusRef.current.focus();
@@ -95,17 +97,23 @@ export default function ProductColumnAction({ productId }) {
         //   }
         // }}
       >
-        <DropdownMenuItem>
-          <Link to={`#`} className='flex items-center gap-3'>
+        <DropdownMenuItem className='p-0'>
+          <div
+            onClick={() => navigate(`/seller/dashboard/edit-product/${productId}`)}
+            className='flex items-center gap-3 w-full py-[6px] px-2'
+          >
             <Eye strokeWidth={0.9} size={20} />
             <span>{t("Details")}</span>
-          </Link>
+          </div>
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Link to={`/seller/dashboard/edit-product/${productId}`} className='flex items-center gap-3'>
+        <DropdownMenuItem className='p-0'>
+          <div
+            onClick={() => navigate(`/seller/dashboard/edit-product/${productId}`)}
+            className='flex items-center gap-3 w-full py-[6px] px-2'
+          >
             <Pencil strokeWidth={0.9} size={20} />
             <span>{t("Edit")}</span>
-          </Link>
+          </div>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
@@ -116,10 +124,8 @@ export default function ProductColumnAction({ productId }) {
               <span>{t("Delete")}</span>
             </div>
           }
-          // onSelect={handleDialogItemSelect}
           onOpenChange={handleOpenDelete}
           open={openDeleteDialog}
-          // open={hasOpenDialog}
           className='w-[500px]'
         >
           <DialogHeader>
@@ -127,7 +133,14 @@ export default function ProductColumnAction({ productId }) {
             <DialogDescription>{t("This action will remove this movie permanently!")}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button disabled={busy} onClick={() => setOpenDeleteDialog(false)} variant='secondary'>
+            <Button
+              disabled={busy}
+              onClick={() => {
+                setOpenDeleteDialog(false);
+                setDropdownOpen(false);
+              }}
+              variant='secondary'
+            >
               {t("Cancel")}
             </Button>
             <Button
@@ -147,33 +160,3 @@ export default function ProductColumnAction({ productId }) {
     </DropdownMenu>
   );
 }
-
-const DialogItem = forwardRef((props, forwardedRef) => {
-  const { triggerChildren, children, onSelect, onOpenChange, open, className, ...itemProps } = props;
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <DropdownMenuItem
-          {...itemProps}
-          // ref={forwardedRef}
-          onSelect={(event) => {
-            event.preventDefault();
-            onSelect && onSelect();
-          }}
-        >
-          {triggerChildren}
-        </DropdownMenuItem>
-      </DialogTrigger>
-      <DialogPortal>
-        <DialogContent
-          className={className}
-          onInteractOutside={(e) => {
-            e.preventDefault();
-          }}
-        >
-          {children}
-        </DialogContent>
-      </DialogPortal>
-    </Dialog>
-  );
-});

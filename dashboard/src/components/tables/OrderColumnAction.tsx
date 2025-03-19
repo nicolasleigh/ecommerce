@@ -115,10 +115,8 @@ export default function OrderColumnAction({ orderId }) {
               <span>{t("Delete")}</span>
             </div>
           }
-          // onSelect={handleDialogItemSelect}
           onOpenChange={handleOpenDelete}
           open={openDeleteDialog}
-          // open={hasOpenDialog}
           className='w-[500px]'
         >
           <DialogHeader>

@@ -15,6 +15,7 @@ export default function Products() {
 
   const dispatch = useDispatch();
   const { products, totalProduct } = useSelector((state) => state.product);
+  console.log(products);
 
   useEffect(() => {
     const obj = {

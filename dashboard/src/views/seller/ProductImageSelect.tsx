@@ -19,7 +19,7 @@ export default function ProductImageSelect({ imageShow, imageHandle, removeImage
       ))}
       <label
         htmlFor='image'
-        className='flex justify-center items-center flex-col h-[180px] cursor-pointer border border-dashed hover:border-red-500 w-full text-[#d0d2d6]'
+        className='flex justify-center rounded-md items-center flex-col h-[180px] cursor-pointer border  hover:border-red-400 w-full text-muted-foreground'
       >
         <span>
           <IoMdImages />

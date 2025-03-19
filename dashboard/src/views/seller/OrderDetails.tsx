@@ -88,7 +88,7 @@ export default function OrderDetails() {
           </div>
           <div className='flex items-center gap-4  '>
             <Label>Products: </Label>
-            <div className='flex gap-2'>
+            <div className='flex flex-wrap gap-2'>
               {order?.products?.map((p, i) => (
                 <div key={i} className='border py-2 px-3  rounded-md'>
                   <div className='flex gap-5 items-center'>
@@ -114,29 +114,6 @@ export default function OrderDetails() {
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-          <div className='flex flex-wrap'>
-            <div className='w-[30%]'>
-              <div className='pr-3  text-lg'>
-                {/* {order?.products?.map((p, i) => (
-                  <div key={i} className='mt-4 flex flex-col gap-4 border rounded-md'>
-                    <div className=''>
-                      <div className='flex gap-3'>
-                        <img src={p.images[0]} alt='produce image' className='w-[50px] h-[50px]' />
-                        <div>
-                          <h2>{p.name}</h2>
-                          <p>
-                            <span>Brand: </span>
-                            <span>{p.brand} </span>
-                            <span className='text-lg'>Quantity: {p.quantity}</span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))} */}
-              </div>
             </div>
           </div>
         </div>
