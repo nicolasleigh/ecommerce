@@ -85,6 +85,20 @@ export const getSellerOrder = createAsyncThunk(
   }
 );
 
+export const getPaymentStats = createAsyncThunk(
+  "order/getPaymentStats",
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/seller/order-stats`, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const sellerOrderStatusUpdate = createAsyncThunk(
   "order/sellerOrderStatusUpdate",
   async ({ orderId, info }, { rejectWithValue, fulfillWithValue }) => {
@@ -108,6 +122,12 @@ export const orderReducer = createSlice({
     order: {},
     myOrders: [],
     allOrders: [],
+    paymentStats: {
+      unpaidStats: 0,
+      paidStats: 0,
+      refundStats: 0,
+      refundRate: 0,
+    },
   },
   reducers: {
     messageClear: (state, _) => {
@@ -139,6 +159,12 @@ export const orderReducer = createSlice({
       })
       .addCase(getSellerOrder.fulfilled, (state, { payload }) => {
         state.order = payload.order;
+      })
+      .addCase(getPaymentStats.fulfilled, (state, { payload }) => {
+        state.paymentStats.unpaidStats = payload.unpaidStats;
+        state.paymentStats.paidStats = payload.paidStats;
+        state.paymentStats.refundStats = payload.refundStats;
+        state.paymentStats.refundRate = payload.refundRate;
       })
       .addCase(sellerOrderStatusUpdate.rejected, (state, { payload }) => {
         state.errorMessage = payload.message;

@@ -289,6 +289,43 @@ class orderController {
     }
   };
 
+  getPaymentStats = async (req, res) => {
+    try {
+      const unpaidAmount = await customerOrderModel.find(
+        {
+          paymentStatus: "unpaid",
+        },
+        { price: 1, _id: 0 }
+      );
+      const paidAmount = await customerOrderModel.find(
+        {
+          paymentStatus: "paid",
+        },
+        { price: 1, _id: 0 }
+      );
+      const refundAmount = await customerOrderModel.find(
+        {
+          paymentStatus: "refund",
+        },
+        { price: 1, _id: 0 }
+      );
+      const paidCount = await customerOrderModel.countDocuments({
+        paymentStatus: "paid",
+      });
+      const refundCount = await customerOrderModel.countDocuments({
+        paymentStatus: "refund",
+      });
+      const unpaidStats = unpaidAmount.reduce((acc, cur) => cur.price + acc, 0);
+      const paidStats = paidAmount.reduce((acc, cur) => cur.price + acc, 0);
+      const refundStats = refundAmount.reduce((acc, cur) => cur.price + acc, 0);
+      const refundRate = Math.round((refundCount / paidCount) * 100);
+      responseReturn(res, 200, { unpaidStats, paidStats, refundStats, refundRate });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { message: "error" });
+    }
+  };
+
   sellerOrderStatusUpdate = async (req, res) => {
     const { orderId } = req.params;
     const { status } = req.body;
