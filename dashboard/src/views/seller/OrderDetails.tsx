@@ -38,7 +38,7 @@ export default function OrderDetails() {
   }, [successMessage, errorMessage]);
 
   useEffect(() => {
-    setStatus(order.deliveryStatus);
+    setStatus(order.paymentStatus);
   }, [order]);
   return (
     <div className='px-2 lg:px-7 pt-5'>
@@ -54,10 +54,9 @@ export default function OrderDetails() {
                 <SelectValue placeholder='' />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='pending'>Pending</SelectItem>
-                <SelectItem value='processing'>Processing</SelectItem>
-                <SelectItem value='warehouse'>Warehouse</SelectItem>
-                <SelectItem value='placed'>Placed</SelectItem>
+                <SelectItem value='unpaid'>Unpaid</SelectItem>
+                <SelectItem value='paid'>Paid</SelectItem>
+                <SelectItem value='refund'>Refund</SelectItem>
                 <SelectItem value='cancelled'>Cancelled</SelectItem>
               </SelectContent>
             </Select>

@@ -60,6 +60,17 @@ export const getSellerOrders = createAsyncThunk(
   }
 );
 
+export const getAllOrders = createAsyncThunk("order/getAllOrders", async (_, { rejectWithValue, fulfillWithValue }) => {
+  try {
+    const { data } = await api.get(`/seller/all-orders`, {
+      withCredentials: true,
+    });
+    return fulfillWithValue(data);
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});
+
 export const getSellerOrder = createAsyncThunk(
   "order/getSellerOrder",
   async (orderId, { rejectWithValue, fulfillWithValue }) => {
@@ -96,6 +107,7 @@ export const orderReducer = createSlice({
     totalOrder: 0,
     order: {},
     myOrders: [],
+    allOrders: [],
   },
   reducers: {
     messageClear: (state, _) => {
@@ -121,6 +133,9 @@ export const orderReducer = createSlice({
       .addCase(getSellerOrders.fulfilled, (state, { payload }) => {
         state.myOrders = payload.orders;
         state.totalOrder = payload.totalOrder;
+      })
+      .addCase(getAllOrders.fulfilled, (state, { payload }) => {
+        state.allOrders = payload.orders;
       })
       .addCase(getSellerOrder.fulfilled, (state, { payload }) => {
         state.order = payload.order;

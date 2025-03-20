@@ -267,6 +267,16 @@ class orderController {
     }
   };
 
+  getAllOrders = async (req, res) => {
+    try {
+      const allOrders = await customerOrderModel.find({}).sort({ createdAt: -1 });
+      responseReturn(res, 200, { orders: allOrders });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { message: "error" });
+    }
+  };
+
   getSellerOrder = async (req, res) => {
     const { orderId } = req.params;
     try {
@@ -282,10 +292,11 @@ class orderController {
   sellerOrderStatusUpdate = async (req, res) => {
     const { orderId } = req.params;
     const { status } = req.body;
+    // console.log(orderId);
 
     try {
       await customerOrderModel.findByIdAndUpdate(orderId, {
-        deliveryStatus: status,
+        paymentStatus: status,
       });
       responseReturn(res, 200, { message: "order status changed" });
     } catch (error) {
