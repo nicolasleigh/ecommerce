@@ -131,20 +131,46 @@ class authControllers {
   };
 
   profileInfoAdd = async (req, res) => {
-    const { division, district, shopName, subDistrict } = req.body;
+    const { division, district, shopName, subDistrict, sellerName } = req.body;
     const { id } = req;
 
     try {
-      await sellerModel.findByIdAndUpdate(id, {
-        shopInfo: {
-          shopName,
-          division,
-          district,
-          subDistrict,
+      const userInfo = await sellerModel.findByIdAndUpdate(
+        id,
+        {
+          name: sellerName,
         },
-      });
-      const userInfo = await sellerModel.findById(id);
-      responseReturn(res, 201, { message: "Profile info added successfully", userInfo });
+        { new: true }
+      );
+      // const userInfo = await sellerModel.findById(id);
+      responseReturn(res, 201, { message: "Profile info updated successfully", userInfo });
+    } catch (error) {
+      responseReturn(res, 500, { message: error.message });
+    }
+  };
+
+  updatePassword = async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    const { id } = req;
+
+    try {
+      const seller = await sellerModel.findById(id).select("+password");
+      if (seller) {
+        const matched = await bcrypt.compare(oldPassword, seller.password);
+        if (matched) {
+          await sellerModel.findByIdAndUpdate(id, { password: await bcrypt.hash(newPassword, 10) });
+          const token = await createToken({
+            id: seller.id,
+            role: seller.role,
+          });
+          res.cookie("accessToken", token, { expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) });
+          responseReturn(res, 200, { token, message: "Password reset successfully" });
+        } else {
+          responseReturn(res, 404, { error: "Password wrong" });
+        }
+      } else {
+        responseReturn(res, 404, { error: "Seller not found" });
+      }
     } catch (error) {
       responseReturn(res, 500, { message: error.message });
     }
