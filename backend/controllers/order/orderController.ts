@@ -1,5 +1,4 @@
 import moment from "moment";
-import customerOrder from "../../models/customerOrderModel";
 import authOrderModel from "../../models/authOrderModel";
 import cardModel from "../../models/cardModel";
 import { responseReturn } from "../../utils/response";
@@ -11,9 +10,9 @@ import customerModel from "../../models/customerModel";
 class orderController {
   paymentCheck = async (id) => {
     try {
-      const order = await customerOrder.findById(id);
+      const order = await customerOrderModel.findById(id);
       if (order?.paymentStatus === "unpaid") {
-        await customerOrder.findByIdAndUpdate(id, {
+        await customerOrderModel.findByIdAndUpdate(id, {
           deliveryStatus: "cancelled",
         });
         await authOrderModel.updateMany(
@@ -50,7 +49,7 @@ class orderController {
     }
 
     try {
-      const order = await customerOrder.create({
+      const order = await customerOrderModel.create({
         customerId: userId,
         shippingInfo,
         products: customerOrderProduct,
@@ -153,7 +152,7 @@ class orderController {
     const { orderId } = req.params;
 
     try {
-      const order = await customerOrder.findById(orderId);
+      const order = await customerOrderModel.findById(orderId);
       responseReturn(res, 200, { order });
     } catch (error) {
       console.log(error.message);
@@ -205,7 +204,7 @@ class orderController {
   getAdminOrder = async (req, res) => {
     const { orderId } = req.params;
     try {
-      const order = await customerOrder.aggregate([
+      const order = await customerOrderModel.aggregate([
         {
           $match: { _id: new mongoose.Types.ObjectId(orderId) },
         },
@@ -229,7 +228,7 @@ class orderController {
     const { status } = req.body;
 
     try {
-      await customerOrder.findByIdAndUpdate(orderId, {
+      await customerOrderModel.findByIdAndUpdate(orderId, {
         deliveryStatus: status,
       });
       responseReturn(res, 200, { message: "order status changed" });
@@ -355,7 +354,7 @@ class orderController {
       );
       const productCount = await productModel.countDocuments({});
       const customerCount = await customerModel.countDocuments({});
-      const orderCount = await authOrderModel.countDocuments({});
+      const orderCount = await customerOrderModel.countDocuments({});
       // console.log(productCount, customerCount, orderCount);
 
       const unpaidStats = unpaidAmount.reduce((acc, cur) => cur.price + acc, 0);
