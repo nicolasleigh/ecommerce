@@ -27,7 +27,7 @@ export const columns: ColumnDef<Order>[] = [
     cell: ({ row }) => {
       const value = row.original._id;
       const id = getShortObjectID(value);
-      return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>#{id}</div>;
+      return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{id}</div>;
     },
   },
   {

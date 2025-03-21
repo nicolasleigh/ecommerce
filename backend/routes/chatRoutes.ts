@@ -7,6 +7,7 @@ router.post("/chat/customer/add-customer-friend", chatController.addCustomerFrie
 router.post("/chat/customer/send-message-to-seller", chatController.AddCustomerMessage);
 router.get("/chat/seller/get-customers/:sellerId", chatController.getCustomers);
 router.get("/chat/seller/get-customer-message/:customerId", authMiddleware, chatController.getCustomersSellerMessage);
+router.get("/chat/seller/get-latest-message/:limit", authMiddleware, chatController.getLatestMessage);
 router.post("/chat/seller/send-message-to-customer", authMiddleware, chatController.addSellerMessage);
 router.get("/chat/admin/get-sellers", authMiddleware, chatController.getSellers);
 router.post("/chat/message-send-seller-admin", authMiddleware, chatController.seller_admin_message_insert);

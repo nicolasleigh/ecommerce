@@ -4,7 +4,22 @@ import Chart from "react-apexcharts";
 import { MdCurrencyExchange, MdProductionQuantityLimits } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { CircleDollarSign, Wallet } from "lucide-react";
+import {
+  Banknote,
+  Book,
+  CircleDollarSign,
+  ShoppingCart,
+  SquareArrowOutUpRight,
+  SquareLibrary,
+  SquareUserRound,
+  Wallet,
+} from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getDashboardStats, getLatestOrders } from "@/store/reducers/orderReducer";
+import { getShortObjectID } from "@/utils/utils";
+import { Badge } from "@/components/ui/badge";
+import { getLatestMessage } from "@/store/reducers/chatReducer";
 
 export default function SellerDashboard() {
   const state = {
@@ -69,53 +84,67 @@ export default function SellerDashboard() {
     },
   };
 
+  const { latestOrders, dashboardStats } = useSelector((state) => state.order);
+  const { latestMessages } = useSelector((state) => state.chat);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getLatestOrders(5));
+    dispatch(getDashboardStats());
+    dispatch(getLatestMessage(3));
+  }, []);
+  console.log(latestMessages);
+
   return (
     <div className='px-2 md:px-7 py-5'>
       <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-7'>
-        <Card className='flex items-center justify-between rounded-md bg-red-50 border-none'>
+        <Card className='flex items-center justify-between rounded-md shadow-sm'>
           <div>
-            <CardHeader className='text-3xl font-bold pb-0'>$3456</CardHeader>
-            <CardContent>Total Sale</CardContent>
+            <CardHeader className='text-2xl font-bold pb-0'>
+              {dashboardStats.unpaidStats + dashboardStats.paidStats} ¥
+            </CardHeader>
+            <CardContent className='text-sm font-bold'>Total Sale</CardContent>
           </div>
           <CardFooter className='p-0 pr-6'>
-            <div className='w-[40px] h-[40px] rounded-full bg-[#fa0305] flex justify-center items-center text-xl'>
-              <CircleDollarSign className='text-[#fae8e8] shadow-lg' />
+            <div className='w-[40px] h-[40px] rounded-full  flex justify-center items-center text-xl'>
+              <Banknote className=' ' size={40} strokeWidth={1} />
             </div>
           </CardFooter>
         </Card>
 
-        <Card className='flex items-center justify-between rounded-md bg-blue-50 border-none'>
+        <Card className='flex items-center justify-between rounded-md shadow-sm'>
           <div>
-            <CardHeader className='text-3xl font-bold pb-0'>50</CardHeader>
-            <CardContent>Products</CardContent>
+            <CardHeader className='text-2xl font-bold pb-0'>{dashboardStats.productCount}</CardHeader>
+            <CardContent className='text-sm font-bold'>Products</CardContent>
           </div>
           <CardFooter className='p-0 pr-6'>
-            <div className='w-[40px] h-[40px] rounded-full bg-[#760077] flex justify-center items-center text-xl'>
-              <MdCurrencyExchange className='text-[#fae8e8] shadow-lg' />
+            <div className='w-[40px] h-[40px] rounded-full  flex justify-center items-center text-xl'>
+              <ShoppingCart className='' size={40} strokeWidth={1} />
             </div>
           </CardFooter>
         </Card>
 
-        <Card className='flex items-center justify-between rounded-md bg-green-50 border-none'>
+        <Card className='flex items-center justify-between rounded-md shadow-sm'>
           <div>
-            <CardHeader className='text-3xl font-bold pb-0'>10</CardHeader>
-            <CardContent>Orders</CardContent>
+            <CardHeader className='text-2xl font-bold pb-0'>{dashboardStats.orderCount}</CardHeader>
+            <CardContent className='text-sm font-bold'>Orders</CardContent>
           </div>
           <CardFooter className='p-0 pr-6'>
-            <div className='w-[40px] h-[40px] rounded-full bg-[#038000] flex justify-center items-center text-xl'>
-              <Wallet className='text-[#fae8e8] shadow-lg' />
+            <div className='w-[40px] h-[40px] rounded-full  flex justify-center items-center text-xl'>
+              <SquareLibrary className='' size={40} strokeWidth={1} />
             </div>
           </CardFooter>
         </Card>
 
-        <Card className='flex items-center justify-between rounded-md bg-yellow-50 border-none'>
+        <Card className='flex items-center justify-between rounded-md shadow-sm'>
           <div>
-            <CardHeader className='text-3xl font-bold pb-0'>1</CardHeader>
-            <CardContent>Pending Orders</CardContent>
+            <CardHeader className='text-2xl font-bold pb-0'>{dashboardStats.customerCount}</CardHeader>
+            <CardContent className='text-sm font-bold'>Customers</CardContent>
           </div>
           <CardFooter className='p-0 pr-6'>
-            <div className='w-[40px] h-[40px] rounded-full bg-[#0200f8] flex justify-center items-center text-xl'>
-              <FaCartShopping className='text-[#fae8e8] shadow-lg' />
+            <div className='w-[40px] h-[40px] rounded-full flex justify-center items-center text-xl'>
+              <SquareUserRound className='' size={40} strokeWidth={1} />
             </div>
           </CardFooter>
         </Card>
@@ -127,127 +156,111 @@ export default function SellerDashboard() {
             <Chart options={state.options} series={state.series} type='bar' height={350} />
           </div>
         </div>
+
         <div className='w-full lg:w-5/12 lg:pl-4 mt-6 lg:mt-0'>
-          <div className='w-full bg-[#6a5fdf] p-4 rounded-md text-[#d0d2d6]'>
+          <div className='w-full border p-4 rounded-md '>
             <div className='flex justify-between items-center'>
-              <h2 className='font-semibold text-lg text-[#d0d2d6] pb-3'>Recent Customer Message</h2>
-              <Link className='font-semibold text-sm text-[#d0d2d6]'>View All</Link>
+              <h2 className='font-semibold text-lg  pb-3'>Recent Customer Message</h2>
+              <Link to={`/seller/dashboard/chat-customer`} className='font-semibold text-sm '>
+                View All
+              </Link>
             </div>
 
-            <div className='flex flex-col gap-2 pt-6 text-[#d0d2d6]'>
+            <div className='flex flex-col gap-2 pt-6 '>
               <ol className='relative  border-slate-600 ml-4'>
-                <li className='mb-3 ml-6'>
-                  <div className='flex absolute -left-5 shadow-lg justify-center items-center w-10 h-10 p-[6px] bg-[#4c7fe2] rounded-full z-20'>
-                    <img
-                      src='http://localhost:5173/admin.jpg'
-                      alt='admin image'
-                      className='w-full rounded-full h-full shadow-lg'
-                    />
-                  </div>
-                  <div className='p-3 bg-slate-800 rounded-lg border border-slate-600 shadow-sm'>
-                    <div className='flex justify-between items-center mb-2'>
-                      <Link className='font-normal'>Seller</Link>
-                      <time className='mb-1 text-sm font-normal sm:order-last sm:mb-0'> 2 days ago</time>
-                    </div>
-                    <div className='p-2 text-xs font-normal bg-slate-700 rounded-lg border border-slate-800'>
-                      How Are you
-                    </div>
-                  </div>
-                </li>
+                {latestMessages &&
+                  latestMessages.length !== 0 &&
+                  latestMessages.map((item, i) => {
+                    const createdAt = new Date(item.createdAt).getTime();
+                    const nowTime = Date.now();
+                    const diff = new Date(nowTime - createdAt);
+                    const day = diff.getUTCDate();
 
-                <li className='mb-3 ml-6'>
-                  <div className='flex absolute -left-5 shadow-lg justify-center items-center w-10 h-10 p-[6px] bg-[#4c7fe2] rounded-full z-20'>
-                    <img
-                      src='http://localhost:5173/admin.jpg'
-                      alt='admin image'
-                      className='w-full rounded-full h-full shadow-lg'
-                    />
-                  </div>
-                  <div className='p-3 bg-slate-800 rounded-lg border border-slate-600 shadow-sm'>
-                    <div className='flex justify-between items-center mb-2'>
-                      <Link className='font-normal'>Admin</Link>
-                      <time className='mb-1 text-sm font-normal sm:order-last sm:mb-0'> 2 days ago</time>
-                    </div>
-                    <div className='p-2 text-xs font-normal bg-slate-700 rounded-lg border border-slate-800'>
-                      How Are you
-                    </div>
-                  </div>
-                </li>
-
-                <li className='mb-3 ml-6'>
-                  <div className='flex absolute -left-5 shadow-lg justify-center items-center w-10 h-10 p-[6px] bg-[#4c7fe2] rounded-full z-20'>
-                    <img
-                      src='http://localhost:5173/admin.jpg'
-                      alt='admin image'
-                      className='w-full rounded-full h-full shadow-lg'
-                    />
-                  </div>
-                  <div className='p-3 bg-slate-800 rounded-lg border border-slate-600 shadow-sm'>
-                    <div className='flex justify-between items-center mb-2'>
-                      <Link className='font-normal'>Customer</Link>
-                      <time className='mb-1 text-sm font-normal sm:order-last sm:mb-0'> 2 days ago</time>
-                    </div>
-                    <div className='p-2 text-xs font-normal bg-slate-700 rounded-lg border border-slate-800'>
-                      How Are you
-                    </div>
-                  </div>
-                </li>
+                    return (
+                      <li key={i} className='mb-3 ml-6'>
+                        <div className='flex absolute -left-5  justify-center items-center w-10 h-10 p-[6px] bg-gray-100 rounded-full z-20'>
+                          <img
+                            src='/customerDefaultAvatar.jpg'
+                            alt='customer default avatar'
+                            className='w-full rounded-full h-full shadow-lg'
+                          />
+                        </div>
+                        <div className='p-3  rounded-lg border border-slate-600 shadow-sm'>
+                          <div className='flex justify-between items-center mb-2'>
+                            <Link to={`/seller/dashboard/chat-customer/${item.senderId}`} className='font-normal'>
+                              {item.senderName}
+                            </Link>
+                            <time className='mb-1 text-sm font-normal sm:order-last sm:mb-0'> {day} days ago</time>
+                          </div>
+                          <div className='p-2 text-xs font-normal  rounded-lg border border-slate-400'>
+                            {item.message}
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })}
               </ol>
             </div>
           </div>
         </div>
       </div>
 
-      <div className='w-full p-4 bg-[#6a5fdf] rounded-md mt-6'>
+      <div className='w-full p-4 border rounded-md mt-6'>
         <div className='flex justify-between items-center'>
-          <h2 className='font-semibold text-lg text-[#d0d2d6] pb-3'>Recent Orders</h2>
-          <Link className='font-semibold text-sm text-[#d0d2d6]'>View All</Link>
+          <h2 className='font-semibold text-lg  pb-3'>Recent Orders</h2>
+          <Link to='/seller/dashboard/orders' className='font-semibold text-sm '>
+            View All
+          </Link>
         </div>
 
         <div className='relative overflow-x-auto'>
-          <table className='w-full text-sm text-left text-[#d0d2d6]'>
-            <thead className='text-sm text-[#d0d2d6] uppercase border-b border-slate-700'>
+          <table className='w-full text-sm text-left '>
+            <thead className='text-sm  uppercase border-b border-slate-700'>
               <tr>
                 <th scope='col' className='py-3 px-4'>
-                  Order Id
+                  Order ID
                 </th>
                 <th scope='col' className='py-3 px-4'>
                   Price
                 </th>
                 <th scope='col' className='py-3 px-4'>
+                  Customer
+                </th>
+                <th scope='col' className='py-3 px-4'>
                   Payment Status
                 </th>
                 <th scope='col' className='py-3 px-4'>
-                  Order Status
-                </th>
-                <th scope='col' className='py-3 px-4'>
-                  Active
+                  Detail
                 </th>
               </tr>
             </thead>
 
             <tbody>
-              {new Array(5).fill(0).map((data, index) => {
-                return (
-                  <tr key={index}>
-                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>
-                      #45455
-                    </td>
-                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>
-                      $454
-                    </td>
-                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>
-                      Pending
-                    </td>
-                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>
-                      Pending
-                    </td>
-                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>
-                      <Link>View</Link>
-                    </td>
-                  </tr>
-                );
-              })}
+              {latestOrders &&
+                latestOrders.length !== 0 &&
+                latestOrders.map((item, i) => {
+                  return (
+                    <tr key={i}>
+                      <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>
+                        {getShortObjectID(item._id)}
+                      </td>
+                      <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>
+                        {item.price} ¥
+                      </td>
+                      <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>
+                        {item?.shippingInfo?.name}
+                      </td>
+                      <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>
+                        <Badge className='uppercase font-light'>{item.paymentStatus}</Badge>
+                      </td>
+                      <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>
+                        <Link to={`/seller/dashboard/order/details/${item._id}`}>
+                          <SquareArrowOutUpRight strokeWidth={1.3} size={20} />
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </div>

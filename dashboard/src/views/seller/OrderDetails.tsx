@@ -66,7 +66,7 @@ export default function OrderDetails() {
         <div className='p-4 space-y-3'>
           <div className='flex items-center gap-4 '>
             <Label>Order ID: </Label>
-            <span className=''>#{getShortObjectID(order._id)}</span>
+            <span className=''>{getShortObjectID(order._id)}</span>
           </div>
           <div className='flex items-center gap-4  '>
             <Label>Order Creation Time: </Label>
@@ -98,7 +98,7 @@ export default function OrderDetails() {
                     <div>
                       <div className='space-x-2'>
                         <Label>Product ID:</Label>
-                        <span className='capitalize text-sm'>#{getShortObjectID(p._id)}</span>
+                        <span className='capitalize text-sm'>{getShortObjectID(p._id)}</span>
                       </div>
                       <div className='space-x-2'>
                         <Label>Category:</Label>

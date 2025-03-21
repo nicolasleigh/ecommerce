@@ -221,6 +221,24 @@ class chatController {
     }
   };
 
+  getLatestMessage = async (req, res) => {
+    const { id } = req;
+    const { limit } = req.params;
+
+    try {
+      const messages = await sellerCustomerMessageModel
+        .find({
+          receiverId: { $eq: id },
+        })
+        .sort({ createdAt: -1 })
+        .limit(limit);
+
+      responseReturn(res, 200, { messages });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   addSellerMessage = async (req, res) => {
     const { senderId, receiverId, text, name } = req.body;
     try {

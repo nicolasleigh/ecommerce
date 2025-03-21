@@ -71,6 +71,34 @@ export const getAllOrders = createAsyncThunk("order/getAllOrders", async (_, { r
   }
 });
 
+export const getLatestOrders = createAsyncThunk(
+  "order/getLatestOrders",
+  async (limit, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/seller/latest-orders/${limit}`, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getDashboardStats = createAsyncThunk(
+  "order/getDashboardStats",
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/seller/dashboard-stats`, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const getSellerOrder = createAsyncThunk(
   "order/getSellerOrder",
   async (orderId, { rejectWithValue, fulfillWithValue }) => {
@@ -122,11 +150,19 @@ export const orderReducer = createSlice({
     order: {},
     myOrders: [],
     allOrders: [],
+    latestOrders: [],
     paymentStats: {
       unpaidStats: 0,
       paidStats: 0,
       refundStats: 0,
       refundRate: 0,
+    },
+    dashboardStats: {
+      unpaidStats: 0,
+      paidStats: 0,
+      productCount: 0,
+      customerCount: 0,
+      orderCount: 0,
     },
   },
   reducers: {
@@ -160,12 +196,23 @@ export const orderReducer = createSlice({
       .addCase(getSellerOrder.fulfilled, (state, { payload }) => {
         state.order = payload.order;
       })
+      .addCase(getLatestOrders.fulfilled, (state, { payload }) => {
+        state.latestOrders = payload.latestOrders;
+      })
       .addCase(getPaymentStats.fulfilled, (state, { payload }) => {
         state.paymentStats.unpaidStats = payload.unpaidStats;
         state.paymentStats.paidStats = payload.paidStats;
         state.paymentStats.refundStats = payload.refundStats;
         state.paymentStats.refundRate = payload.refundRate;
       })
+      .addCase(getDashboardStats.fulfilled, (state, { payload }) => {
+        state.dashboardStats.unpaidStats = payload.unpaidStats;
+        state.dashboardStats.paidStats = payload.paidStats;
+        state.dashboardStats.productCount = payload.productCount;
+        state.dashboardStats.customerCount = payload.customerCount;
+        state.dashboardStats.orderCount = payload.orderCount;
+      })
+
       .addCase(sellerOrderStatusUpdate.rejected, (state, { payload }) => {
         state.errorMessage = payload.message;
       })

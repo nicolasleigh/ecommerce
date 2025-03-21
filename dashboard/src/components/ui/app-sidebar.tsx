@@ -105,11 +105,11 @@ export const items = [
     icon: <IoChatbubbles />,
     url: "/seller/dashboard/chat-customer",
   },
-  {
-    title: "Chat-Support",
-    icon: <BsFillChatQuoteFill />,
-    url: "/seller/dashboard/chat-support",
-  },
+  // {
+  //   title: "Chat-Support",
+  //   icon: <BsFillChatQuoteFill />,
+  //   url: "/seller/dashboard/chat-support",
+  // },
   {
     title: "Profile",
     icon: <CgProfile />,

@@ -5,6 +5,8 @@ import cardModel from "../../models/cardModel";
 import { responseReturn } from "../../utils/response";
 import customerOrderModel from "../../models/customerOrderModel";
 import mongoose, { ObjectId } from "mongoose";
+import productModel from "../../models/productModel";
+import customerModel from "../../models/customerModel";
 
 class orderController {
   paymentCheck = async (id) => {
@@ -267,6 +269,17 @@ class orderController {
     }
   };
 
+  getLatestOrders = async (req, res) => {
+    const { limit } = req.params;
+    try {
+      const orders = await customerOrderModel.find({}).sort({ createdAt: -1 }).limit(limit);
+      responseReturn(res, 200, { latestOrders: orders });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { message: "error" });
+    }
+  };
+
   getAllOrders = async (req, res) => {
     try {
       const allOrders = await customerOrderModel.find({}).sort({ createdAt: -1 });
@@ -320,6 +333,35 @@ class orderController {
       const refundStats = refundAmount.reduce((acc, cur) => cur.price + acc, 0);
       const refundRate = Math.round((refundCount / paidCount) * 100);
       responseReturn(res, 200, { unpaidStats, paidStats, refundStats, refundRate });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { message: "error" });
+    }
+  };
+
+  getDashboardStats = async (req, res) => {
+    try {
+      const unpaidAmount = await customerOrderModel.find(
+        {
+          paymentStatus: "unpaid",
+        },
+        { price: 1, _id: 0 }
+      );
+      const paidAmount = await customerOrderModel.find(
+        {
+          paymentStatus: "paid",
+        },
+        { price: 1, _id: 0 }
+      );
+      const productCount = await productModel.countDocuments({});
+      const customerCount = await customerModel.countDocuments({});
+      const orderCount = await authOrderModel.countDocuments({});
+      // console.log(productCount, customerCount, orderCount);
+
+      const unpaidStats = unpaidAmount.reduce((acc, cur) => cur.price + acc, 0);
+      const paidStats = paidAmount.reduce((acc, cur) => cur.price + acc, 0);
+
+      responseReturn(res, 200, { unpaidStats, paidStats, productCount, customerCount, orderCount });
     } catch (error) {
       console.log(error);
       responseReturn(res, 500, { message: "error" });
