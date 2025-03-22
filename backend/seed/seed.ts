@@ -2,6 +2,14 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import customerModel from "../models/customerModel";
 import { customers } from "./data/customers";
+import adminModel from "../models/adminModel";
+import { admin } from "./data/admin";
+import sellerModel from "../models/sellerModel";
+import { seller } from "./data/seller";
+import { categories } from "./data/categories";
+import categoryModel from "../models/categoryModel";
+import { products } from "./data/products";
+import productModel from "../models/productModel";
 
 const dsn = "mongodb://user:pass@localhost:27017/ecommerce?authSource=admin";
 
@@ -28,15 +36,121 @@ async function seedCustomer() {
   }
 }
 
+async function seedAdmin() {
+  await mongoose.connect(dsn);
+
+  const exist = await adminModel.exists({ email: "admin@email.com" });
+
+  if (!exist) {
+    await adminModel.create(admin);
+    console.log("Admin created successfully");
+  } else {
+    console.log("Admin already exists");
+  }
+
+  await mongoose.disconnect();
+}
+
+async function seedSeller() {
+  await mongoose.connect(dsn);
+
+  const exist = await sellerModel.exists({ email: "seller@email.com" });
+
+  if (!exist) {
+    await sellerModel.create(seller);
+    console.log("Seller created successfully");
+  } else {
+    console.log("Seller already exists");
+  }
+
+  await mongoose.disconnect();
+}
+
+async function seedCategory() {
+  await mongoose.connect(dsn);
+
+  for (let i = 0; i < categories.length; i++) {
+    const category = categories[i];
+
+    await categoryModel.create(category);
+
+    if (i < customers.length - 1) {
+      await delay(1000);
+    }
+  }
+}
+
+async function seedProduct() {
+  await mongoose.connect(dsn);
+
+  for (let i = 0; i < products.length; i++) {
+    const product = products[i];
+    const seller = await sellerModel.findOne({ email: "seller@email.com" });
+    if (!seller) {
+      console.log("Error: 'seller@email.com' does not exist");
+      return;
+    }
+
+    product.sellerId = seller._id;
+
+    await productModel.create(product);
+    console.log(`Inserted product: ${product.name}`);
+
+    if (i < customers.length - 1) {
+      await delay(1000);
+    }
+  }
+}
+
 function main() {
-  seedCustomer()
+  // seedCustomer()
+  //   .then(async () => {
+  //     console.log("Customer seeding completed");
+  //     await mongoose.disconnect();
+  //     process.exit(0);
+  //   })
+  //   .catch(async (err) => {
+  //     console.error("Error seeding customer:", err);
+  //     await mongoose.disconnect();
+  //     process.exit(1);
+  //   });
+  // seedAdmin()
+  //   .then(() => {
+  //     console.log("Admin seeding completed");
+  //     process.exit(0);
+  //   })
+  //   .catch((err) => {
+  //     console.error("Error seeding admin:", err);
+  //     process.exit(1);
+  //   });
+  // seedSeller()
+  //   .then(() => {
+  //     console.log("Seller seeding completed");
+  //     process.exit(0);
+  //   })
+  //   .catch((err) => {
+  //     console.error("Error seeding seller:", err);
+  //     process.exit(1);
+  //   });
+  // seedCategory()
+  //   .then(async () => {
+  //     console.log("Category seeding completed");
+  //     await mongoose.disconnect();
+  //     process.exit(0);
+  //   })
+  //   .catch(async (err) => {
+  //     console.error("Error seeding category:", err);
+  //     await mongoose.disconnect();
+  //     process.exit(1);
+  //   });
+  seedProduct()
     .then(async () => {
-      console.log("Customer seeding completed");
+      console.log("Seeding completed");
       await mongoose.disconnect();
       process.exit(0);
     })
     .catch(async (err) => {
-      console.error("Error seeding customer:", err);
+      console.error("Error:", err);
       await mongoose.disconnect();
       process.exit(1);
     });

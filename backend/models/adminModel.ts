@@ -7,6 +7,7 @@ const adminSchema = new Schema({
   },
   email: {
     type: String,
+    unique:true,
     required: true,
   },
   password: {
@@ -15,7 +16,7 @@ const adminSchema = new Schema({
   },
   image: {
     type: String,
-    required: true,
+    default: "",
   },
   role: {
     type: String,
