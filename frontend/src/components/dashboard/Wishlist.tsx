@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import Rating from "../Rating";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { get_wishlist_products, messageClear, remove_wishlist } from "../../store/reducers/cardReducer";
+import { get_wishlist_products, messageClear, remove_wishlist } from "../../store/reducers/cartReducer";
 import toast from "react-hot-toast";
 
 export default function Wishlist() {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
-  const { successMessage, wishlist } = useSelector((state) => state.card);
+  const { successMessage, wishlist } = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(get_wishlist_products(userInfo.id));

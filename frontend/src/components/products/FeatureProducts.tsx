@@ -3,7 +3,7 @@ import { RiShoppingCartLine } from "react-icons/ri";
 import Rating from "../Rating";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { add_to_card, add_to_wishlist, messageClear } from "../../store/reducers/cardReducer";
+import { add_to_cart, add_to_wishlist, messageClear } from "../../store/reducers/cartReducer";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
@@ -11,11 +11,11 @@ export default function FeatureProducts({ products }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
-  const { errorMessage, successMessage } = useSelector((state) => state.card);
+  const { errorMessage, successMessage } = useSelector((state) => state.cart);
   const handleClick = (id) => {
     if (userInfo) {
       dispatch(
-        add_to_card({
+        add_to_cart({
           userId: userInfo.id,
           quantity: 1,
           productId: id,

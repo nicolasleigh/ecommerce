@@ -65,7 +65,7 @@ export default function Shipping() {
                 <span className='pt-1'>
                   <IoIosArrowForward />
                 </span>
-                <span>Card</span>
+                <span>Cart</span>
               </div>
             </div>
           </div>

@@ -1,14 +1,14 @@
 import mongoose, { mongo } from "mongoose";
-import cardModel from "../../models/cardModel";
+import cartModel from "../../models/cartModel";
 import { responseReturn } from "../../utils/response";
 import wishlistModel from "../../models/wishlistModel";
 
-class cardController {
-  addToCard = async (req, res) => {
+class cartController {
+  addToCart = async (req, res) => {
     const { userId, productId, quantity } = req.body;
 
     try {
-      const product = await cardModel.findOne({
+      const product = await cartModel.findOne({
         $and: [
           {
             productId: {
@@ -26,7 +26,7 @@ class cardController {
       if (product) {
         responseReturn(res, 404, { error: "Product already added to cart" });
       } else {
-        const product = await cardModel.create({
+        const product = await cartModel.create({
           userId,
           productId,
           quantity,
@@ -38,11 +38,11 @@ class cardController {
     }
   };
 
-  getCardProducts = async (req, res) => {
+  getCartProducts = async (req, res) => {
     const commission = 5;
     const { userId } = req.params;
     try {
-      const cardProducts = await cardModel.aggregate([
+      const cartProducts = await cartModel.aggregate([
         {
           $match: {
             userId: {
@@ -61,16 +61,16 @@ class cardController {
       ]);
       let buyProductItem = 0;
       let calculatePrice = 0;
-      let cardProductCount = 0;
-      const outOfStockProducts = cardProducts.filter((p) => p.products[0].stock < p.quantity);
+      let cartProductCount = 0;
+      const outOfStockProducts = cartProducts.filter((p) => p.products[0].stock < p.quantity);
       for (let i = 0; i < outOfStockProducts.length; i++) {
-        cardProductCount = cardProductCount + outOfStockProducts[i].quantity;
+        cartProductCount = cartProductCount + outOfStockProducts[i].quantity;
       }
 
-      const stockProduct = cardProducts.filter((p) => p.products[0].stock >= p.quantity);
+      const stockProduct = cartProducts.filter((p) => p.products[0].stock >= p.quantity);
       for (let i = 0; i < stockProduct.length; i++) {
         const { quantity } = stockProduct[i];
-        cardProductCount = buyProductItem + quantity;
+        cartProductCount = buyProductItem + quantity;
         buyProductItem = buyProductItem + quantity;
         const { price, discount } = stockProduct[i].products[0];
         if (discount !== 0) {
@@ -119,9 +119,9 @@ class cardController {
         }
       }
       responseReturn(res, 200, {
-        cardProducts: p,
+        cartProducts: p,
         price: calculatePrice,
-        cardProductCount,
+        cartProductCount,
         shippingFee: 20 * p.length,
         outOfStockProducts,
         buyProductItem,
@@ -131,10 +131,10 @@ class cardController {
     }
   };
 
-  deleteCardProduct = async (req, res) => {
+  deleteCartProduct = async (req, res) => {
     const { id } = req.params;
     try {
-      await cardModel.findByIdAndDelete(id);
+      await cartModel.findByIdAndDelete(id);
       responseReturn(res, 200, { message: "Product removed successfully" });
     } catch (error) {
       console.log(error.message);
@@ -144,9 +144,9 @@ class cardController {
   quantityIncrement = async (req, res) => {
     const { id } = req.params;
     try {
-      const product = await cardModel.findById(id);
+      const product = await cartModel.findById(id);
       const { quantity } = product;
-      await cardModel.findByIdAndUpdate(id, { quantity: quantity + 1 });
+      await cartModel.findByIdAndUpdate(id, { quantity: quantity + 1 });
       responseReturn(res, 200, { message: "Quantity updated" });
     } catch (error) {
       console.log(error.message);
@@ -156,9 +156,9 @@ class cardController {
   quantityDecrement = async (req, res) => {
     const { id } = req.params;
     try {
-      const product = await cardModel.findById(id);
+      const product = await cartModel.findById(id);
       const { quantity } = product;
-      await cardModel.findByIdAndUpdate(id, { quantity: quantity - 1 });
+      await cartModel.findByIdAndUpdate(id, { quantity: quantity - 1 });
       responseReturn(res, 200, { message: "Quantity updated" });
     } catch (error) {
       console.log(error.message);
@@ -203,4 +203,4 @@ class cardController {
   };
 }
 
-export default new cardController();
+export default new cartController();

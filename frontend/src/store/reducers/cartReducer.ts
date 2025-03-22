@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../api";
 
-export const add_to_card = createAsyncThunk("card/add_to_card", async (info, { rejectWithValue, fulfillWithValue }) => {
+export const add_to_cart = createAsyncThunk("cart/add_to_cart", async (info, { rejectWithValue, fulfillWithValue }) => {
   try {
-    const { data } = await api.post("/home/product/add-to-card", info);
+    const { data } = await api.post("/home/product/add-to-cart", info);
     console.log(data);
     return fulfillWithValue(data);
   } catch (error) {
@@ -11,11 +11,11 @@ export const add_to_card = createAsyncThunk("card/add_to_card", async (info, { r
   }
 });
 
-export const get_card_products = createAsyncThunk(
-  "card/get_card_products",
+export const get_cart_products = createAsyncThunk(
+  "cart/get_cart_products",
   async (userId, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const { data } = await api.get(`/home/product/get-card-product/${userId}`);
+      const { data } = await api.get(`/home/product/get-cart-product/${userId}`);
       console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
@@ -24,11 +24,11 @@ export const get_card_products = createAsyncThunk(
   }
 );
 
-export const delete_card_product = createAsyncThunk(
-  "card/delete_card_product",
+export const delete_cart_product = createAsyncThunk(
+  "cart/delete_cart_product",
   async (id, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const { data } = await api.delete(`/home/product/delete-card-product/${id}`);
+      const { data } = await api.delete(`/home/product/delete-cart-product/${id}`);
       // console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
@@ -38,7 +38,7 @@ export const delete_card_product = createAsyncThunk(
 );
 
 export const quantity_increment = createAsyncThunk(
-  "card/quantity_increment",
+  "cart/quantity_increment",
   async (id, { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.put(`/home/product/quantity-increment/${id}`);
@@ -51,7 +51,7 @@ export const quantity_increment = createAsyncThunk(
 );
 
 export const quantity_decrement = createAsyncThunk(
-  "card/quantity_decrement",
+  "cart/quantity_decrement",
   async (id, { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.put(`/home/product/quantity-decrement/${id}`);
@@ -102,11 +102,11 @@ export const remove_wishlist = createAsyncThunk(
   }
 );
 
-export const cardReducer = createSlice({
-  name: "card",
+export const cartReducer = createSlice({
+  name: "cart",
   initialState: {
-    cardProducts: [],
-    cardProductCount: 0,
+    cartProducts: [],
+    cartProductCount: 0,
     wishlistCount: 0,
     wishlist: [],
     price: 0,
@@ -122,28 +122,28 @@ export const cardReducer = createSlice({
       state.successMessage = "";
     },
     resetCount: (state, _) => {
-      state.cardProductCount = 0;
+      state.cartProductCount = 0;
       state.wishlistCount = 0;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(add_to_card.rejected, (state, { payload }) => {
+      .addCase(add_to_cart.rejected, (state, { payload }) => {
         state.errorMessage = payload.error;
       })
-      .addCase(add_to_card.fulfilled, (state, { payload }) => {
+      .addCase(add_to_cart.fulfilled, (state, { payload }) => {
         state.successMessage = payload.message;
-        state.cardProductCount = state.cardProductCount + 1;
+        state.cartProductCount = state.cartProductCount + 1;
       })
-      .addCase(get_card_products.fulfilled, (state, { payload }) => {
-        state.cardProducts = payload.cardProducts;
+      .addCase(get_cart_products.fulfilled, (state, { payload }) => {
+        state.cartProducts = payload.cartProducts;
         state.price = payload.price;
-        state.cardProductCount = payload.cardProductCount;
+        state.cartProductCount = payload.cartProductCount;
         state.shippingFee = payload.shippingFee;
         state.outOfStockProducts = payload.outOfStockProducts;
         state.buyProductItem = payload.buyProductItem;
       })
-      .addCase(delete_card_product.fulfilled, (state, { payload }) => {
+      .addCase(delete_cart_product.fulfilled, (state, { payload }) => {
         state.successMessage = payload.message;
       })
       .addCase(quantity_increment.fulfilled, (state, { payload }) => {
@@ -171,5 +171,5 @@ export const cardReducer = createSlice({
   },
 });
 
-export const { messageClear, resetCount } = cardReducer.actions;
-export default cardReducer.reducer;
+export const { messageClear, resetCount } = cartReducer.actions;
+export default cartReducer.reducer;

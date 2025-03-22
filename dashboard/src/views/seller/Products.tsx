@@ -9,7 +9,7 @@ import { DataTable } from "@/components/tables/DataTable";
 import { columns } from "@/components/tables/ProductColumn";
 
 export default function Products() {
-  const [perPage, setPerPage] = useState(5);
+  const [perPage, setPerPage] = useState(100);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
 

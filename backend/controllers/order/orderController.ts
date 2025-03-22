@@ -1,6 +1,6 @@
 import moment from "moment";
 import authOrderModel from "../../models/authOrderModel";
-import cardModel from "../../models/cardModel";
+import cartModel from "../../models/cartModel";
 import { responseReturn } from "../../utils/response";
 import customerOrderModel from "../../models/customerOrderModel";
 import mongoose, { ObjectId } from "mongoose";
@@ -32,7 +32,7 @@ class orderController {
   placeOrder = async (req, res) => {
     const { price, products, shippingFee, shippingInfo, userId } = req.body;
     let authorOrderData = [];
-    let cardId = [];
+    let cartId = [];
     const tempDate = moment(Date.now()).format("LLL");
 
     let customerOrderProduct = [];
@@ -43,7 +43,7 @@ class orderController {
         tempCusPro.quantity = pro[j].quantity;
         customerOrderProduct.push(tempCusPro);
         if (pro[j]._id) {
-          cardId.push(pro[j]._id);
+          cartId.push(pro[j]._id);
         }
       }
     }
@@ -80,8 +80,8 @@ class orderController {
         });
       }
       await authOrderModel.insertMany(authorOrderData);
-      for (let i = 0; i < cardId.length; i++) {
-        await cardModel.findByIdAndDelete(cardId[i]);
+      for (let i = 0; i < cartId.length; i++) {
+        await cartModel.findByIdAndDelete(cartId[i]);
       }
 
       setTimeout(() => {

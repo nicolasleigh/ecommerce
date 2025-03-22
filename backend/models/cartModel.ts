@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const cardSchema = new Schema(
+const cartSchema = new Schema(
   {
     userId: {
       type: Schema.ObjectId,
@@ -18,4 +18,4 @@ const cardSchema = new Schema(
   { timestamps: true }
 );
 
-export default model("cardProducts", cardSchema);
+export default model("cartProducts", cartSchema);

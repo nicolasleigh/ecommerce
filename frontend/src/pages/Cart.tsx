@@ -5,29 +5,29 @@ import { IoIosArrowForward } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
-  get_card_products,
-  delete_card_product,
+  get_cart_products,
+  delete_cart_product,
   messageClear,
   quantity_increment,
   quantity_decrement,
-} from "../store/reducers/cardReducer";
+} from "../store/reducers/cartReducer";
 import toast from "react-hot-toast";
 
-export default function Card() {
+export default function Cart() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
-  const { cardProducts, successMessage, price, buyProductItem, shippingFee, outOfStockProducts } = useSelector(
-    (state) => state.card
+  const { cartProducts, successMessage, price, buyProductItem, shippingFee, outOfStockProducts } = useSelector(
+    (state) => state.cart
   );
 
-  // const cardProducts = [1, 2];
+  // const cartProducts = [1, 2];
   // const outOfStockProducts = [1, 2];
 
   const redirect = () => {
     navigate("/shipping", {
       state: {
-        products: cardProducts,
+        products: cartProducts,
         price: price,
         shippingFee: shippingFee,
         items: buyProductItem,
@@ -54,14 +54,14 @@ export default function Card() {
   };
 
   useEffect(() => {
-    dispatch(get_card_products(userInfo.id));
+    dispatch(get_cart_products(userInfo.id));
   }, []);
 
   useEffect(() => {
     if (successMessage) {
       toast.success(successMessage);
       dispatch(messageClear());
-      dispatch(get_card_products(userInfo.id));
+      dispatch(get_cart_products(userInfo.id));
     }
   }, [successMessage]);
   return (
@@ -74,11 +74,11 @@ export default function Card() {
             <div className='flex flex-col justify-center gap-1 items-center h-full w-full text-white'>
               <h2 className='text-3xl font-bold'>Shop Page</h2>
               <div className='flex justify-center items-center gap-2 text-2xl w-full'>
-                <Link to='/'>Card Page</Link>
+                <Link to='/'>Cart Page</Link>
                 <span className='pt-1'>
                   <IoIosArrowForward />
                 </span>
-                <span>Card</span>
+                <span>Cart</span>
               </div>
             </div>
           </div>
@@ -87,16 +87,16 @@ export default function Card() {
 
       <section className='bg-[#eee]'>
         <div className='w-[85%] lg:w-[90%] md:w-[90%] sm:w-[90%] mx-auto py-16'>
-          {cardProducts?.length || outOfStockProducts?.length ? (
+          {cartProducts?.length || outOfStockProducts?.length ? (
             <div className='flex flex-wrap'>
               <div className='w-[67%] md-lg:w-full'>
                 <div className='pr-3 md-lg:pr-0'>
                   <div className='flex flex-col gap-3'>
                     <div className='bg-white p-4'>
-                      <h2 className=' text-green-500 font-semibold'>Stock Products {cardProducts.length}</h2>
+                      <h2 className=' text-green-500 font-semibold'>Stock Products {cartProducts.length}</h2>
                     </div>
 
-                    {cardProducts.map((p, i) => (
+                    {cartProducts.map((p, i) => (
                       <div key={i} className='flex bg-white p-4 flex-col gap-2'>
                         <div className='flex justify-start items-center'>
                           <h2 className='text-slate-600 font-bold'>{p.shopName}</h2>
@@ -138,7 +138,7 @@ export default function Card() {
                                   </div>
                                 </div>
                                 <button
-                                  onClick={() => dispatch(delete_card_product(pt._id))}
+                                  onClick={() => dispatch(delete_cart_product(pt._id))}
                                   className='px-5 py-[3px] bg-red-500 text-white'
                                 >
                                   Delete
@@ -186,7 +186,7 @@ export default function Card() {
                                     <div className='px-3 cursor-pointer'>+</div>
                                   </div>
                                   <button
-                                    onClick={() => dispatch(delete_card_product(p._id))}
+                                    onClick={() => dispatch(delete_cart_product(p._id))}
                                     className='px-5 py-[3px] bg-red-500 text-white'
                                   >
                                     Delete
@@ -204,7 +204,7 @@ export default function Card() {
 
               <div className='w-[33%] md-lg:w-full'>
                 <div className='pl-3 md-lg:pl-0 md-lg:mt-5'>
-                  {cardProducts.length && (
+                  {cartProducts.length && (
                     <div className='bg-white p-3 text-slate-600 flex flex-col gap-3'>
                       <h2 className='text-xl font-bold'>Order Summary</h2>
                       <div className='flex justify-between items-center'>

@@ -20,7 +20,7 @@ export default function Header() {
   const navigate = useNavigate();
   const { categories } = useSelector((state) => state.home);
   const { userInfo } = useSelector((state) => state.auth);
-  const { cardProductCount, wishlistCount } = useSelector((state) => state.card);
+  const { cartProductCount, wishlistCount } = useSelector((state) => state.cart);
   const { pathname } = useLocation();
   const [showSidebar, setShowSidebar] = useState(true);
   const [showCategory, setShowCategory] = useState(true);
@@ -43,7 +43,7 @@ export default function Header() {
 
   const redirectCartPage = () => {
     if (userInfo) {
-      navigate("/card");
+      navigate("/cart");
     } else {
       navigate("/login");
     }
@@ -55,31 +55,16 @@ export default function Header() {
         <div className='w-[85%] lg:w-[90%] mx-auto'>
           <div className='flex w-full justify-between items-center h-[50px] text-slate-500'>
             <ul className='flex justify-start items-center gap-8 font-semibold text-black'>
-              <li className='flex relative justify-center items-center gap-2 text-sm after:absolute after:h-[18px] after:w-[1px] after:bg-[#afafaf] after:-right-[16px]'>
+              <li className='flex relative justify-center items-center gap-2 text-sm '>
                 <span>
                   <MdEmail />
                 </span>
-                <span>suport@e.com</span>
-              </li>
-              <li className='flex relative justify-center items-center gap-2 text-sm after:absolute '>
-                <span>
-                  <IoMdPhonePortrait />
-                </span>
-                <span>+(123) 1423 452 </span>
+                <span>nicolas.leigh@qq.com</span>
               </li>
             </ul>
             <div>
               <div className='flex justify-center items-center gap-10'>
                 <div className='flex justify-center items-center gap-4 text-black'>
-                  <a href='#'>
-                    <FaFacebookF />
-                  </a>
-                  <a href='#'>
-                    <FaTwitter />
-                  </a>
-                  <a href='#'>
-                    <FaLinkedin />
-                  </a>
                   <a href='#'>
                     <FaGithub />
                   </a>
@@ -192,9 +177,9 @@ export default function Header() {
                       <span className='text-xl text-green-500'>
                         <FaCartShopping />
                       </span>
-                      {cardProductCount !== 0 && (
+                      {cartProductCount !== 0 && (
                         <div className='w-[20px] h-[20px] absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] '>
-                          {cardProductCount}
+                          {cartProductCount}
                         </div>
                       )}
                     </div>

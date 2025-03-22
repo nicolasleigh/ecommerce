@@ -14,7 +14,7 @@ import Reviews from "../components/Reviews";
 import { useDispatch, useSelector } from "react-redux";
 import { product_details } from "../store/reducers/homeReducer";
 import toast from "react-hot-toast";
-import { add_to_card, add_to_wishlist, messageClear } from "../store/reducers/cardReducer";
+import { add_to_cart, add_to_wishlist, messageClear } from "../store/reducers/cartReducer";
 
 export default function Details() {
   const [image, setImage] = useState("");
@@ -26,7 +26,7 @@ export default function Details() {
   const dispatch = useDispatch();
   const { product, relatedProducts, moreProducts } = useSelector((state) => state.home);
   const { userInfo } = useSelector((state) => state.auth);
-  const { errorMessage, successMessage } = useSelector((state) => state.card);
+  const { errorMessage, successMessage } = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const responsive = {
     superLargeDesktop: {
@@ -95,7 +95,7 @@ export default function Details() {
   const addCart = () => {
     if (userInfo) {
       dispatch(
-        add_to_card({
+        add_to_cart({
           userId: userInfo.id,
           quantity,
           productId: product._id,
