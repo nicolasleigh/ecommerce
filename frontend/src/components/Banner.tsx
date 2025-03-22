@@ -28,7 +28,14 @@ export default function Banner() {
         <div className='w-full flex flex-wrap md-lg:gap-8'>
           <div className='w-full'>
             <div className='my-8'>
-              <Carousel autoPlay={true} infinite={true} arrows={true} showDots={true} responsive={responsive}>
+              <Carousel
+                autoPlay={true}
+                infinite={true}
+                arrows={true}
+                showDots={true}
+                responsive={responsive}
+                removeArrowOnDeviceType={["tablet", "mobile"]}
+              >
                 {[1, 2, 3, 4, 5, 6].map((img, i) => (
                   <Link key={i} to='#'>
                     <img src={`/images/banner/${img}.jpg`} alt='banner images' />

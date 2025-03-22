@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^2.1.6",
+    "@radix-ui/react-select": "^2.1.6",
+    "@radix-ui/react-slot": "^1.1.2",
     "@reduxjs/toolkit": "^2.2.5",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.1",
@@ -19,6 +22,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
+    "react-i18next": "^15.4.1",
     "react-icons": "^5.2.1",
     "react-multi-carousel": "^2.8.5",
     "react-range": "^1.8.14",
