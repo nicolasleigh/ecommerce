@@ -78,7 +78,7 @@ export default function Reviews({ product }) {
             <div className='w-[200px] h-[14px] bg-slate-200 relative'>
               <div
                 style={{ width: `${Math.floor((100 * (ratingReview[0]?.sum || 0)) / totalReview)}%` }}
-                className='h-full bg-[#edbb0e] '
+                className='h-full bg-[#059473] '
               ></div>
             </div>
             <p className='text-sm text-slate-600 w-[0%]'>{ratingReview[0]?.sum}</p>
@@ -91,7 +91,7 @@ export default function Reviews({ product }) {
             <div className='w-[200px] h-[14px] bg-slate-200 relative'>
               <div
                 style={{ width: `${Math.floor((100 * (ratingReview[1]?.sum || 0)) / totalReview)}%` }}
-                className='h-full bg-[#edbb0e] '
+                className='h-full bg-[#059473] '
               ></div>
             </div>
             <p className='text-sm text-slate-600 w-[0%]'>{ratingReview[1]?.sum}</p>
@@ -104,7 +104,7 @@ export default function Reviews({ product }) {
             <div className='w-[200px] h-[14px] bg-slate-200 relative'>
               <div
                 style={{ width: `${Math.floor((100 * (ratingReview[2]?.sum || 0)) / totalReview)}%` }}
-                className='h-full bg-[#edbb0e]'
+                className='h-full bg-[#059473]'
               ></div>
             </div>
             <p className='text-sm text-slate-600 w-[0%]'>{ratingReview[2]?.sum}</p>
@@ -117,7 +117,7 @@ export default function Reviews({ product }) {
             <div className='w-[200px] h-[14px] bg-slate-200 relative'>
               <div
                 style={{ width: `${Math.floor((100 * (ratingReview[3]?.sum || 0)) / totalReview)}%` }}
-                className='h-full bg-[#edbb0e]'
+                className='h-full bg-[#059473]'
               ></div>
             </div>
             <p className='text-sm text-slate-600 w-[0%]'>{ratingReview[3]?.sum}</p>
@@ -130,7 +130,7 @@ export default function Reviews({ product }) {
             <div className='w-[200px] h-[14px] bg-slate-200 relative'>
               <div
                 style={{ width: `${Math.floor((100 * (ratingReview[4]?.sum || 0)) / totalReview)}%` }}
-                className='h-full bg-[#edbb0e]'
+                className='h-full bg-[#059473]'
               ></div>
             </div>
             <p className='text-sm text-slate-600 w-[0%]'>{ratingReview[4]?.sum}</p>
@@ -141,7 +141,7 @@ export default function Reviews({ product }) {
               <RatingTemp rating={0} />
             </div>
             <div className='w-[200px] h-[14px] bg-slate-200 relative'>
-              <div className='h-full bg-[#edbb0e] w-[0%]'></div>
+              <div className='h-full bg-[#059473] w-[0%]'></div>
             </div>
             <p className='text-sm text-slate-600 w-[0%]'>0</p>
           </div>
@@ -159,7 +159,7 @@ export default function Reviews({ product }) {
                 </div>
                 <span className='text-slate-600'>{r.date}</span>
               </div>
-              <span className='text-slate-600'>{r.name}</span>
+              <span className='text-slate-600 font-semibold'>{r.name}</span>
               <p className='text-slate-600 text-sm'>{r.review}</p>
             </div>
           );
@@ -186,12 +186,12 @@ export default function Reviews({ product }) {
                 onChange={(e) => setRate(e)}
                 initialRating={rate}
                 emptySymbol={
-                  <span className='text-[#edbb03] text-4xl'>
+                  <span className='text-[#059473] text-4xl'>
                     <FaRegStar />
                   </span>
                 }
                 fullSymbol={
-                  <span className='text-[#edbb03] text-4xl'>
+                  <span className='text-[#059473] text-4xl'>
                     <FaStar />
                   </span>
                 }
@@ -209,7 +209,7 @@ export default function Reviews({ product }) {
                 className='border outline-0 p-3 w-full'
               ></textarea>
               <div className='mt-2'>
-                <button className='py-1 px-5 bg-indigo-500 text-white rounded-sm'>Submit</button>
+                <button className='py-1 px-5 bg-[#059473] text-white rounded-sm'>Submit</button>
               </div>
             </form>
           </div>

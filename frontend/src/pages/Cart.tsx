@@ -29,11 +29,12 @@ export default function Cart() {
       state: {
         products: cartProducts,
         price: price,
-        shippingFee: shippingFee,
+        shippingFee: 0,
         items: buyProductItem,
       },
     });
   };
+  console.log(cartProducts);
 
   const increment = (quantity, stock, id) => {
     {
@@ -43,6 +44,8 @@ export default function Cart() {
       }
     }
   };
+
+  // console.log(cartProducts);
 
   const decrement = (quantity, id) => {
     {
@@ -68,7 +71,7 @@ export default function Cart() {
     <div>
       <Header />
 
-      <section className="bg-[url('/images/banner/shop.png')] h-[220px] mt-6 bg-cover bg-no-repeat relative bg-left">
+      <section className="bg-[url('/images/banner/shop.webp')] h-[220px] mt-6 bg-cover bg-no-repeat relative bg-left">
         <div className='absolute left-0 top-0 w-full h-full bg-[#2422228a]'>
           <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto'>
             <div className='flex flex-col justify-center gap-1 items-center h-full w-full text-white'>
@@ -85,61 +88,72 @@ export default function Cart() {
         </div>
       </section>
 
-      <section className='bg-[#eee]'>
+      <section className='bg-[#eee] '>
         <div className='w-[85%] lg:w-[90%] md:w-[90%] sm:w-[90%] mx-auto py-16'>
           {cartProducts?.length || outOfStockProducts?.length ? (
             <div className='flex flex-wrap'>
               <div className='w-[67%] md-lg:w-full'>
                 <div className='pr-3 md-lg:pr-0'>
                   <div className='flex flex-col gap-3'>
-                    <div className='bg-white p-4'>
-                      <h2 className=' text-green-500 font-semibold'>Stock Products {cartProducts.length}</h2>
+                    <div className='bg-white p-4 rounded-sm'>
+                      <h2 className=' text-[#059473] font-semibold'>
+                        {cartProducts[0].products.length} {cartProducts[0].products.length > 1 ? "Products" : "Product"}{" "}
+                        in cart
+                      </h2>
                     </div>
 
                     {cartProducts.map((p, i) => (
-                      <div key={i} className='flex bg-white p-4 flex-col gap-2'>
-                        <div className='flex justify-start items-center'>
-                          <h2 className='text-slate-600 font-bold'>{p.shopName}</h2>
-                        </div>
-
+                      <div key={i} className='flex bg-white rounded-sm p-4 flex-col gap-2'>
                         {p.products.map((pt, i) => (
                           <div key={i} className='w-full flex flex-wrap'>
                             <div className='flex sm:w-full gap-2 w-7/12'>
                               <div className='flex gap-2 justify-start items-center'>
                                 <img src={pt.productInfo.images[0]} alt='products' className='w-[80px] h-[80px]' />
                                 <div className='pr-4 text-slate-600'>
-                                  <h2 className='font-semibold'>{pt.productInfo.name}</h2>
-                                  <span className='text-sm'>Brand: {pt.productInfo.brand}</span>
+                                  <h2 className='font-semibold capitalize'>{pt.productInfo.name}</h2>
+                                  <span className='text-sm capitalize'>Category: {pt.productInfo.category}</span>
                                 </div>
                               </div>
                             </div>
 
                             <div className='flex justify-between w-5/12 sm:w-full sm:mt-3'>
-                              <div className='pl-4 sm:pl-0'>
-                                <h2 className='text-lg text-orange-500'>
-                                  $
-                                  {pt.productInfo.price -
-                                    Math.floor((pt.productInfo.price * pt.productInfo.discount) / 100)}
-                                </h2>
-                                <p className='line-through'>${pt.productInfo.price}</p>
-                                <p>-{pt.productInfo.discount}%</p>
+                              <div className='pl-4 sm:pl-0 flex flex-col justify-center'>
+                                {pt.productInfo.discount ? (
+                                  <>
+                                    <h2 className='text-lg text-[#059473]'>
+                                      {pt.productInfo.price -
+                                        Math.floor((pt.productInfo.price * pt.productInfo.discount) / 100)}
+                                      ¥
+                                    </h2>
+                                    <p className='line-through text-muted-foreground'>{pt.productInfo.price}¥</p>
+
+                                    <p className='text-muted-foreground'>-{pt.productInfo.discount}%</p>
+                                  </>
+                                ) : (
+                                  <h2 className='text-lg text-[#059473] '>{pt.productInfo.price}¥</h2>
+                                )}
                               </div>
                               <div className='flex gap-2 flex-col'>
-                                <div className='flex bg-slate-200 h-[30px] justify-center items-center text-xl'>
-                                  <div onClick={() => decrement(pt.quantity, pt._id)} className='px-3 cursor-pointer'>
+                                <div className='flex bg-slate-200 rounded-sm h-[30px] justify-center items-center text-xl'>
+                                  <button
+                                    onClick={() => decrement(pt.quantity, pt._id)}
+                                    disabled={pt.quantity === 1}
+                                    className='px-3 disabled:cursor-not-allowed'
+                                  >
                                     -
-                                  </div>
-                                  <div className='px-3'>{pt.quantity}</div>
-                                  <div
+                                  </button>
+                                  <div className='px-3 w-9 flex items-center justify-center'>{pt.quantity}</div>
+                                  <button
                                     onClick={() => increment(pt.quantity, pt.productInfo.stock, pt._id)}
-                                    className='px-3 cursor-pointer'
+                                    disabled={pt.quantity === pt.productInfo.stock}
+                                    className='px-3 disabled:cursor-not-allowed'
                                   >
                                     +
-                                  </div>
+                                  </button>
                                 </div>
                                 <button
                                   onClick={() => dispatch(delete_cart_product(pt._id))}
-                                  className='px-5 py-[3px] bg-red-500 text-white'
+                                  className='px-5 py-[3px] bg-red-500 rounded-sm text-white'
                                 >
                                   Delete
                                 </button>
@@ -161,24 +175,31 @@ export default function Cart() {
                                 <div className='flex gap-2 justify-start items-center'>
                                   <img src={p.products[0].images[0]} alt='products' className='w-[80px] h-[80px]' />
                                   <div className='pr-4 text-slate-600'>
-                                    <h2 className='font-semibold'>{p.products[0].name}</h2>
-                                    <span className='text-sm'>Brand: {p.products[0].brand}</span>
+                                    <h2 className='font-semibold capitalize'>{p.products[0].name}</h2>
+                                    <span className='text-sm'>Category: {p.products[0].category}</span>
                                   </div>
                                 </div>
                               </div>
 
                               <div className='flex justify-between w-5/12 sm:w-full sm:mt-3'>
                                 <div className='pl-4 sm:pl-0'>
-                                  <h2 className='text-lg text-orange-500'>
-                                    $
-                                    {p.products[0].price -
-                                      Math.floor((p.products[0].price * p.products[0].discount) / 100)}
-                                  </h2>
-                                  <p className='line-through'>${p.products[0].price}</p>
-                                  <p>-{p.products[0].discount}%</p>
+                                  {p.products[0].discount ? (
+                                    <>
+                                      <h2 className='text-lg text-[#059473]'>
+                                        {p.products[0].price -
+                                          Math.floor((p.products[0].price * p.products[0].discount) / 100)}
+                                        ¥
+                                      </h2>
+                                      <p className='line-through text-muted-foreground'>{p.products[0].price}¥</p>
+
+                                      <p className='text-muted-foreground'>-{p.products[0].discount}%</p>
+                                    </>
+                                  ) : (
+                                    <h2 className='text-lg text-[#059473] '>{p.products[0].price}¥</h2>
+                                  )}
                                 </div>
                                 <div className='flex gap-2 flex-col'>
-                                  <div className='flex bg-slate-200 h-[30px] justify-center items-center text-xl'>
+                                  <div className='flex bg-slate-200 rounded-sm h-[30px] justify-center items-center text-xl'>
                                     <div onClick={() => decrement(p.quantity, p._id)} className='px-3 cursor-pointer'>
                                       -
                                     </div>
@@ -187,7 +208,7 @@ export default function Cart() {
                                   </div>
                                   <button
                                     onClick={() => dispatch(delete_cart_product(p._id))}
-                                    className='px-5 py-[3px] bg-red-500 text-white'
+                                    className='px-5 py-[3px] bg-red-500 rounded-sm text-white'
                                   >
                                     Delete
                                   </button>
@@ -209,30 +230,30 @@ export default function Cart() {
                       <h2 className='text-xl font-bold'>Order Summary</h2>
                       <div className='flex justify-between items-center'>
                         <span>{buyProductItem} Items</span>
-                        <span>${price}</span>
+                        <span>{price}¥</span>
                       </div>
-                      <div className='flex justify-between items-center'>
-                        <span>Shipping Fee</span>
-                        <span>${shippingFee}</span>
-                      </div>
+
                       <div className='flex gap-2'>
                         <input
                           type='text'
                           placeholder='Input Coupon'
                           className='w-full px-3 py-2 border border-slate-200 outline-0 focus:border-green-500 rounded-sm'
                         />
-                        <button className='px-5 py-[1px] bg-[#059473] text-white rounded-sm uppercase text-sm'>
+                        <button
+                          onClick={() => toast.error("Invalid coupon code")}
+                          className='px-5 py-[1px] bg-[#059473] text-white rounded-sm uppercase text-sm'
+                        >
                           Apply
                         </button>
                       </div>
 
                       <div className='flex justify-between items-center'>
                         <span>Total</span>
-                        <span className='text-lg text-[#059473]'>${price + shippingFee}</span>
+                        <span className='text-lg text-[#059473]'>{price}¥</span>
                       </div>
                       <button
                         onClick={redirect}
-                        className='px-5 py-[6px] rounded-sm hover:shadow-red-500/50 hover:shadow-lg bg-red-500 text-sm text-white uppercase'
+                        className='px-5 py-[6px] rounded-sm  bg-red-500 hover:bg-red-600 text-sm text-white uppercase'
                       >
                         Process to Checkout
                       </button>
@@ -242,9 +263,10 @@ export default function Cart() {
               </div>
             </div>
           ) : (
-            <div>
-              <Link to='/shop' className='px-4 py-1 bg-indigo-500 text-white'>
-                Shop Now
+            <div className='text-center text-2xl'>
+              <span className='text-muted-foreground'> Your cart is empty, </span>
+              <Link to='/shop' className='text-[#059473] hover:text-[#237461]'>
+                click here to go back to shop
               </Link>
             </div>
           )}

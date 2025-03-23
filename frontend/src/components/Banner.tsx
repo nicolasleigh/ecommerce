@@ -65,7 +65,7 @@ export default function Banner() {
               >
                 {bannerImage.map((item, i) => (
                   <Link key={i} to={item.to}>
-                    <img className='h-[570px] w-full object-center' src={item.src} alt='banner images' />
+                    <img className='h-[570px] w-full ' src={item.src} alt='banner images' />
                   </Link>
                 ))}
               </Carousel>

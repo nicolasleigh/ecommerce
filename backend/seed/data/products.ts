@@ -33,7 +33,7 @@ export const products = [
     shopName: "Petify",
     images: [
       "https://res.cloudinary.com/dzociog3r/image/upload/v1742618380/1_wbdoom.webp",
-      "https://res.cloudinary.com/dzociog3r/image/upload/v1742618380/1_wbdoom.webp",
+      "https://res.cloudinary.com/dzociog3r/image/upload/v1742618381/2_jllubh.webp",
       "https://res.cloudinary.com/dzociog3r/image/upload/v1742618379/3_kjduvj.webp",
       "https://res.cloudinary.com/dzociog3r/image/upload/v1742618379/4_amp017.webp",
       "https://res.cloudinary.com/dzociog3r/image/upload/v1742618380/5_hjbhxb.webp",
@@ -75,7 +75,7 @@ export const products = [
       "https://res.cloudinary.com/dzociog3r/image/upload/v1742628773/1_bgh15d.webp",
       "https://res.cloudinary.com/dzociog3r/image/upload/v1742628774/2_ozqgs8.webp",
       "https://res.cloudinary.com/dzociog3r/image/upload/v1742628774/3_iozkve.webp",
-      "https://res.cloudinary.com/dzociog3r/image/upload/v1742628774/3_iozkve.webp",
+      "https://res.cloudinary.com/dzociog3r/image/upload/v1742628775/4_rltaum.webp",
     ],
     rating: 4,
   },

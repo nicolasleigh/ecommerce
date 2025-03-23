@@ -12,6 +12,16 @@ export const categories = [
     slug: "kitten",
   },
   {
+    name: "dog",
+    image: "https://res.cloudinary.com/dzociog3r/image/upload/v1742699055/labrador-5762115_640_lkbb58.webp",
+    slug: "dog",
+  },
+  {
+    name: "cat",
+    image: "https://res.cloudinary.com/dzociog3r/image/upload/v1742699050/cat-111793_640_aky4zr.webp",
+    slug: "cat",
+  },
+  {
     name: "hamster",
     image: "https://res.cloudinary.com/dzociog3r/image/upload/v1742611222/zhaoli-jin-cgnDJkzWkTg-unsplash_dge26j.jpg",
     slug: "hamster",

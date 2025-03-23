@@ -7,11 +7,10 @@ export default function Footer() {
       <div className='w-[85%] flex flex-wrap mx-auto border-b py-16 md-lg:pb-10 sm:pb-6'>
         <div className='w-3/12 lg:w-4/12 sm:w-full'>
           <div className='flex flex-col gap-3'>
-            <img src={`/images/logo.png`} alt='logo' className='w-[190px] h-[70px]' />
+            <img src={`/logo.svg`} alt='logo' className='w-[190px] h-[70px]' />
             <ul className='flex flex-col gap-2 text-slate-600'>
               <li>Address: Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit, nisi.</li>
-              <li>Phone: +132-23132142</li>
-              <li>Email: support@email.com</li>
+              <li>Email: nicolas.leigh@qq.com</li>
             </ul>
           </div>
         </div>
@@ -65,13 +64,13 @@ export default function Footer() {
           <div className='w-full flex flex-col justify-start gap-5'>
             <h2 className='font-bold text-lg mb-2'>Join Our Shop</h2>
             <span>Get Email updates about our latest special offers</span>
-            <div className='h-[50px] w-full bg-white border relative'>
+            <div className='h-[50px] w-full bg-white rounded-sm border relative'>
               <input
                 type='text'
                 placeholder='Enter Your Email'
-                className='h-full bg-transparent w-full px-3 outline-0'
+                className='h-full bg-transparent w-full px-3 outline-0 rounded-l-sm'
               />
-              <button className='h-full absolute right-0 bg-[#059473] text-white uppercase px-4 font-bold text-sm'>
+              <button className='h-full absolute right-0 bg-[#059473] rounded-r-sm text-white uppercase px-4 font-bold text-sm'>
                 Subscribe
               </button>
             </div>
@@ -114,7 +113,7 @@ export default function Footer() {
       </div>
 
       <div className='w-[90%] flex flex-wrap justify-center items-center text-slate-600 mx-auto py-5 text-center'>
-        <span>Copyright &copy; 2024 All Rights Reserved</span>
+        <span>Copyright &copy; 2025 All Rights Reserved</span>
       </div>
     </footer>
   );
