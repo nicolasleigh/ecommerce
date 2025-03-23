@@ -330,7 +330,7 @@ export default function Header() {
                     type='text'
                     name=''
                     id=''
-                    placeholder='Enter Name'
+                    placeholder='ENTER PET NAME'
                     className='w-full border-l border-y   bg-transparent text-slate-500 outline-0 h-full px-3'
                   />
                   <button
