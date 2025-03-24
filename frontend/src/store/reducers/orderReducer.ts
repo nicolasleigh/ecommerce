@@ -3,7 +3,10 @@ import api from "../../api";
 
 export const place_order = createAsyncThunk(
   "order/place_order",
-  async ({ price, products, shippingFee, items, userId, navigate, shippingInfo }) => {
+  async (
+    { price, products, shippingFee, items, userId, navigate, shippingInfo },
+    { rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const { data } = await api.post("/home/order/place-order", {
         price,
@@ -14,16 +17,17 @@ export const place_order = createAsyncThunk(
         navigate,
         shippingInfo,
       });
-      navigate("/payment", {
-        state: {
-          price: price + shippingFee,
-          items,
-          orderId: data.orderId,
-        },
+      navigate(`/dashboard/order/details/${data.orderId}`, {
+        // state: {
+        //   price: price + shippingFee,
+        //   items,
+        //   orderId: data.orderId,
+        // },
       });
-      console.log(data);
+      // console.log(data);
+      return fulfillWithValue(data);
     } catch (error) {
-      console.log(error.response);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -75,6 +79,9 @@ export const orderReducer = createSlice({
       })
       .addCase(get_order_details.fulfilled, (state, { payload }) => {
         state.myOrder = payload.order;
+      })
+      .addCase(place_order.fulfilled, (state, { payload }) => {
+        state.successMessage = payload.message;
       });
   },
 });

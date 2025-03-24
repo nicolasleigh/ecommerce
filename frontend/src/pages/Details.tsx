@@ -134,7 +134,7 @@ export default function Details() {
       state: {
         products: obj,
         price: price * quantity,
-        shippingFee: 50,
+        shippingFee: 0,
         items: 1,
       },
     });
@@ -439,57 +439,61 @@ export default function Details() {
       <section>
         <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto'>
           <h2 className='text-xl pb-4 pt-8 text-slate-600 font-semibold'>Related Products</h2>
-          <div>
-            <Swiper
-              slidesPerView='auto'
-              breakpoints={{
-                1280: {
-                  slidesPerView: 3,
-                },
-                565: {
-                  slidesPerView: 2,
-                },
-              }}
-              spaceBetween={25}
-              loop={true}
-              pagination={{
-                clickable: true,
-                el: ".custom_bullet",
-              }}
-              modules={[Pagination]}
-              className='mySwiper'
-            >
-              {relatedProducts.map((p, i) => {
-                return (
-                  <SwiperSlide key={i}>
-                    <Link className='block border rounded-sm overflow-hidden'>
-                      <div className='relative h-[270px]'>
-                        <div className='w-full h-full'>
-                          <img src={p.images[0]} alt='products' className='w-full h-full rounded-t-sm' />
-                          <div className='absolute h-full w-full top-0 left-0 bg-[#000] opacity-10 hover:opacity-40 transition-all duration-500'></div>
-                        </div>
-                        {p.discount !== 0 && (
-                          <div className='flex justify-center items-center absolute text-white w-[38px] h-[38px] rounded-full bg-red-500 font-semibold text-xs left-2 top-2'>
-                            {p.discount}%
+          {relatedProducts.length !== 0 ? (
+            <div>
+              <Swiper
+                slidesPerView='auto'
+                breakpoints={{
+                  1280: {
+                    slidesPerView: 3,
+                  },
+                  565: {
+                    slidesPerView: 2,
+                  },
+                }}
+                spaceBetween={25}
+                loop={true}
+                pagination={{
+                  clickable: true,
+                  el: ".custom_bullet",
+                }}
+                modules={[Pagination]}
+                className='mySwiper'
+              >
+                {relatedProducts.map((p, i) => {
+                  return (
+                    <SwiperSlide key={i}>
+                      <Link className='block border rounded-sm overflow-hidden'>
+                        <div className='relative h-[270px]'>
+                          <div className='w-full h-full'>
+                            <img src={p.images[0]} alt='products' className='w-full h-full rounded-t-sm' />
+                            <div className='absolute h-full w-full top-0 left-0 bg-[#000] opacity-10 hover:opacity-40 transition-all duration-500'></div>
                           </div>
-                        )}
-                      </div>
+                          {p.discount !== 0 && (
+                            <div className='flex justify-center items-center absolute text-white w-[38px] h-[38px] rounded-full bg-red-500 font-semibold text-xs left-2 top-2'>
+                              {p.discount}%
+                            </div>
+                          )}
+                        </div>
 
-                      <div className='p-4 flex flex-col gap-1'>
-                        <h2 className='text-slate-600 text-lg font-semibold capitalize'>{p.name}</h2>
-                        <div className='flex justify-start items-center gap-4'>
-                          <h2 className='text-lg font-bold text-[#059473]'>{p.price}¥</h2>
-                          <div className='flex gap-1'>
-                            <Rating ratings={p.rating} />
+                        <div className='p-4 flex flex-col gap-1'>
+                          <h2 className='text-slate-600 text-lg font-semibold capitalize'>{p.name}</h2>
+                          <div className='flex justify-start items-center gap-4'>
+                            <h2 className='text-lg font-bold text-[#059473]'>{p.price}¥</h2>
+                            <div className='flex gap-1'>
+                              <Rating ratings={p.rating} />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Link>
-                  </SwiperSlide>
-                );
-              })}
-            </Swiper>
-          </div>
+                      </Link>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+            </div>
+          ) : (
+            <p className='text-muted-foreground'>No related products yet</p>
+          )}
 
           <div className='w-full flex justify-center items-center py-8 '>
             <div className='custom_bullet justify-center gap-3 !w-auto'></div>

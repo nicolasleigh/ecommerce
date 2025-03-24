@@ -74,7 +74,7 @@ class orderController {
           products: storePro,
           price: pri,
           paymentStatus: "unpaid",
-          shippingInfo: "Easy Main Warehouse",
+          shippingInfo: "Petify Main Warehouse",
           deliveryStatus: "pending",
           date: tempDate,
         });

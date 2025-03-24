@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { get_order_details } from "../../store/reducers/orderReducer";
+import { getShortObjectID } from "@/utils/helper";
 
 export default function OrderDetails() {
   const { orderId } = useParams();
@@ -13,71 +14,104 @@ export default function OrderDetails() {
     dispatch(get_order_details(orderId));
   }, [orderId]);
 
-  return (
-    <div className='bg-white p-5'>
-      <h2 className='text-slate-600 font-semibold'>
-        #{myOrder._id} , <span className='pl-1'>{myOrder.date}</span>
-      </h2>
-      <div className='grid grid-cols-2 gap-3'>
-        <div className='flex flex-col gap-1'>
-          <h2 className='text-slate-600 font-semibold'>Deliver To : {myOrder.shippingInfo?.name}</h2>
-          <p>
-            <span className='bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2 py-2 rounded'>Home</span>
-            <span className='text-slate-600 text-sm'>
-              {myOrder.shippingInfo?.address} {myOrder.shippingInfo?.province} {myOrder.shippingInfo?.city}
-            </span>
-          </p>
-          <p className='text-slate-600 font-semibold'>Email To {userInfo.email}</p>
-        </div>
+  // console.log(myOrder);
 
-        <div className='text-slate-600'>
-          <h2 className='font-mono'>Price : ${myOrder.price} Include Shipping</h2>
-          <p className='font-mono'>
-            Payment Status :{" "}
-            <span
-              className={`py-[1px] text-xs px-3 ${
-                myOrder.paymentStatus === "paid" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-              } rounded-md`}
-            >
-              {myOrder.paymentStatus}
-            </span>
-          </p>
-          <p className='font-mono'>
-            Order Status :{" "}
-            <span
-              className={`py-[1px] text-xs px-3 ${
-                myOrder.deliveryStatus === "paid" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-              } rounded-md`}
-            >
-              {myOrder.deliveryStatus}
-            </span>
-          </p>
-        </div>
+  return (
+    <div className='bg-white p-5 space-y-2 relative'>
+      <Link
+        to='/dashboard/my-orders'
+        className='absolute right-5 text-sm underline hover:no-underline underline-offset-2 hover:text-slate-600'
+      >
+        View All Orders
+      </Link>
+      <div className='space-x-2 text-sm'>
+        <span className='text-muted-foreground'>Order ID:</span>
+        <span className='font-semibold'>{getShortObjectID(myOrder._id)}</span>
+      </div>
+      <div className='space-x-2 text-sm'>
+        <span className='text-muted-foreground'>Order Created At:</span>
+        <span className='font-semibold'>{myOrder.date}</span>
+      </div>
+      <div className='space-x-2 text-sm'>
+        <span className='text-muted-foreground'>Customer Name:</span>
+        <span className='font-semibold'>{myOrder.shippingInfo?.name}</span>
+      </div>
+      <div className='space-x-2 text-sm'>
+        <span className='text-muted-foreground'>Order Price: </span>
+        <span className='font-semibold'>{myOrder.price}¥</span>
+      </div>
+      <div className='space-x-2 text-sm'>
+        <span className='text-muted-foreground'>Payment Status: </span>
+        <span
+          className={`py-[2px] font-semibold px-3 rounded-sm uppercase  ${
+            myOrder.paymentStatus === "paid" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+          } rounded-md`}
+        >
+          {myOrder.paymentStatus}
+        </span>
+      </div>
+      <div className='space-x-2 text-sm'>
+        <span className='text-muted-foreground'>Order Status: </span>
+        <span
+          className={`py-[2px] font-semibold px-3 rounded-sm uppercase ${
+            myOrder.deliveryStatus === "paid" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+          } `}
+        >
+          {myOrder.deliveryStatus}
+        </span>
       </div>
 
-      <div className='mt-4'>
-        <h2 className='text-slate-600 text-lg pb-2 font-bold'>Order Products</h2>
-        <div className='flex gap-5 flex-col'>
+      <div className='space-x-2 text-sm space-y-2'>
+        <h2 className='text-muted-foreground'>Order Products:</h2>
+        <div className='flex gap-2 flex-col'>
           {myOrder.products?.map((p, i) => (
-            <div key={i}>
-              <div className='flex gap-5 justify-start items-center text-slate-600'>
-                <div className='flex gap-2'>
+            <div key={i} className=''>
+              <div className='flex gap-2 justify-start items-center text-slate-600 '>
+                <div className='flex gap-2 border p-2 rounded-sm'>
                   <img src={p.images[0]} alt='product image' className='w-[55px] h-[55px]' />
                   <div className='flex text-sm flex-col justify-start items-start'>
-                    <Link>{p.name}</Link>
-                    <p>
-                      <span>Brand : {p.brand} </span>
+                    <p className='space-x-2'>
+                      <span className='text-muted-foreground '>Name:</span>
+                      <span className='capitalize'>{p.name}</span>
                     </p>
-                    <p>
-                      <span>Quantity : {p.quantity}</span>
+                    <p className='space-x-2'>
+                      <span className='text-muted-foreground '>Category:</span>
+                      <span className='capitalize'>{p.category}</span>
+                    </p>
+                    <p className='space-x-2'>
+                      <span className='text-muted-foreground '>Quantity:</span>
+                      <span>{p.quantity}</span>
+                    </p>
+                  </div>
+                  <div className='pl-2 flex flex-col  '>
+                    <h2 className='text-[#059473] text-sm flex gap-2 items-center'>
+                      <span>After Discount:</span>
+                      {p.price - Math.floor((p.price * p.discount) / 100)}¥
+                    </h2>
+                    <p className='text-muted-foreground text-sm flex gap-2 items-center'>
+                      <span className=''>Before Discount:</span>
+                      <span className='line-through text-muted-foreground'>{p.price}¥</span>
+                    </p>
+                    <p className='text-muted-foreground text-sm flex gap-2 items-center'>
+                      <span>Discount:</span>
+                      <span>{p.discount}%</span>
                     </p>
                   </div>
                 </div>
-                <div className='pl-4 flex flex-col'>
-                  <h2 className='text-green-800'>${p.price - Math.floor((p.price * p.discount) / 100)}</h2>
-                  <p className='line-through'>{p.price}</p>
-                  <p>{p.discount}%</p>
-                </div>
+                {/* <div className='pl-2 flex flex-col border '>
+                  <h2 className='text-[#059473] text-sm flex gap-2 items-center'>
+                    <span>After Discount:</span>
+                    {p.price - Math.floor((p.price * p.discount) / 100)}¥
+                  </h2>
+                  <p className='text-muted-foreground text-sm flex gap-2 items-center'>
+                    <span className=''>Before Discount:</span>
+                    <span className='line-through text-muted-foreground'>{p.price}¥</span>
+                  </p>
+                  <p className='text-muted-foreground text-sm flex gap-2 items-center'>
+                    <span>Discount:</span>
+                    <span>{p.discount}%</span>
+                  </p>
+                </div> */}
               </div>
             </div>
           ))}

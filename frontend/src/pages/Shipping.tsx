@@ -2,9 +2,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { IoIosArrowForward } from "react-icons/io";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { place_order } from "../store/reducers/orderReducer";
+import { messageClear, place_order } from "../store/reducers/orderReducer";
+import toast from "react-hot-toast";
 
 export default function Shipping() {
   const {
@@ -14,6 +15,7 @@ export default function Shipping() {
   const navigate = useNavigate();
   const [res, setRes] = useState(false);
   const { userInfo } = useSelector((state) => state.auth);
+  const { successMessage } = useSelector((state) => state.order);
   const [state, setState] = useState({
     name: userInfo.name,
     email: userInfo.email,
@@ -54,6 +56,17 @@ export default function Shipping() {
       })
     );
   };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(messageClear());
+    }
+    // if (errorMessage) {
+    //   toast.error(errorMessage);
+    //   dispatch(messageClear());
+    // }
+  }, [successMessage]);
   return (
     <div>
       <Header />
@@ -218,14 +231,6 @@ export default function Shipping() {
                     <span>Total Items ({items})</span>
                     <span>{price}¥</span>
                   </div>
-                  {/* <div className='flex justify-between items-center'>
-                    <span>Delivery Fee</span>
-                    <span>${shippingFee}</span>
-                  </div>
-                  <div className='flex justify-between items-center'>
-                    <span>Total Payment</span>
-                    <span>${price + shippingFee}</span>
-                  </div> */}
 
                   <div className='flex justify-between items-center'>
                     <span>Total Payment</span>

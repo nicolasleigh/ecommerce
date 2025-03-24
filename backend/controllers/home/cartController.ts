@@ -39,7 +39,8 @@ class cartController {
   };
 
   getCartProducts = async (req, res) => {
-    const commission = 5;
+    // const commission = 5;
+    const commission = 0;
     const { userId } = req.params;
     try {
       const cartProducts = await cartModel.aggregate([
@@ -122,7 +123,8 @@ class cartController {
         cartProducts: p,
         price: calculatePrice,
         cartProductCount,
-        shippingFee: 20 * p.length,
+        // shippingFee: 20 * p.length,
+        shippingFee: 0,
         outOfStockProducts,
         buyProductItem,
       });

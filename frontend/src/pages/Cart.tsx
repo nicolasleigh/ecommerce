@@ -34,7 +34,7 @@ export default function Cart() {
       },
     });
   };
-  console.log(cartProducts);
+  // console.log(cartProducts, price);
 
   const increment = (quantity, stock, id) => {
     {
