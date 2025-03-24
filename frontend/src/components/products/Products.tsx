@@ -32,7 +32,7 @@ export default function Products({ title, products }) {
     const {
       carouselState: { currentSlide },
     } = rest;
-    console.log(currentSlide);
+    // console.log(currentSlide);
     return (
       <div className='flex justify-between items-center'>
         <div className='text-xl font-bold text-slate-600'>{title}</div>
@@ -73,7 +73,7 @@ export default function Products({ title, products }) {
         customButtonGroup={<ButtonGroup />}
       >
         {products.map((slides, i) => {
-          console.log(slides);
+          // console.log(slides);
           return (
             <div key={i} className=' flex flex-col justify-start  border rounded-sm'>
               {slides.map((product, j) => (

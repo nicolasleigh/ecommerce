@@ -45,15 +45,6 @@ export default function Footer() {
                   <li>
                     <Link>Company Profile</Link>
                   </li>
-                  <li>
-                    <Link>Delivery Information</Link>
-                  </li>
-                  <li>
-                    <Link>Privacy Policy</Link>
-                  </li>
-                  <li>
-                    <Link>Blogs</Link>
-                  </li>
                 </ul>
               </div>
             </div>

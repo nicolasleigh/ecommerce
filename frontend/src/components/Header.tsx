@@ -42,6 +42,14 @@ export default function Header() {
     }
   };
 
+  const redirectWishlistPage = () => {
+    if (userInfo) {
+      navigate("/dashboard/my-wishlist");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <div className='w-full bg-white'>
       {/* <div className='header-top bg-[#caddff] md-lg:hidden'> */}
@@ -129,25 +137,39 @@ export default function Header() {
                     </Link>
                   </li>
                   <li>
-                    <Link className={`p-2 block ${pathname === "/blog" ? "text-[#059473]" : "text-slate-600"}`}>
-                      Blog
+                    <Link
+                      to='/cart'
+                      className={`p-2 block ${pathname === "/cart" ? "text-[#059473]" : "text-slate-600"}`}
+                    >
+                      Cart
                     </Link>
                   </li>
                   <li>
-                    <Link className={`p-2 block ${pathname === "/about" ? "text-[#059473]" : "text-slate-600"}`}>
-                      About Us
+                    <Link
+                      to='/dashboard/my-wishlist'
+                      className={`p-2 block ${
+                        pathname === "/dashboard/my-wishlist" ? "text-[#059473]" : "text-slate-600"
+                      }`}
+                    >
+                      Wishlist
                     </Link>
                   </li>
                   <li>
-                    <Link className={`p-2 block ${pathname === "/contact" ? "text-[#059473]" : "text-slate-600"}`}>
-                      Contact Us
+                    <Link
+                      to='/dashboard/chat'
+                      className={`p-2 block ${pathname === "/contact" ? "text-[#059473]" : "text-slate-600"}`}
+                    >
+                      Contact Seller
                     </Link>
                   </li>
                 </ul>
 
                 <div className='flex md-lg:hidden justify-center items-center gap-5'>
                   <div className='flex justify-center gap-5'>
-                    <div className='relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]'>
+                    <div
+                      onClick={redirectWishlistPage}
+                      className='relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]'
+                    >
                       <span className='text-xl text-green-500'>
                         <FaHeart />
                       </span>
@@ -191,7 +213,7 @@ export default function Header() {
           } overflow-y-auto bg-white h-screen py-6 px-8`}
         >
           <div className='flex justify-start flex-col gap-6'>
-            <Link className=''>
+            <Link to='/' className=''>
               <img src='/logo.svg' className='' alt='logo' />
             </Link>
             <div className='flex justify-start items-center gap-10'>
@@ -230,16 +252,26 @@ export default function Header() {
                 </Link>
               </li>
               <li>
-                <Link className={`py-2 block ${pathname === "/blog" ? "text-[#059473]" : "text-slate-600"}`}>Blog</Link>
-              </li>
-              <li>
-                <Link className={`py-2 block ${pathname === "/about" ? "text-[#059473]" : "text-slate-600"}`}>
-                  About Us
+                <Link to='/cart' className={`py-2 block ${pathname === "/cart" ? "text-[#059473]" : "text-slate-600"}`}>
+                  Cart
                 </Link>
               </li>
               <li>
-                <Link className={`py-2 block ${pathname === "/contact" ? "text-[#059473]" : "text-slate-600"}`}>
-                  Contact Us
+                <Link
+                  to='/dashboard/my-wishlist'
+                  className={`py-2 block ${
+                    pathname === "/dashboard/my-wishlist" ? "text-[#059473]" : "text-slate-600"
+                  }`}
+                >
+                  Wishlist
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to='/dashboard/chat'
+                  className={`py-2 block ${pathname === "/contact" ? "text-[#059473]" : "text-slate-600"}`}
+                >
+                  Contact Seller
                 </Link>
               </li>
             </ul>
@@ -295,12 +327,14 @@ export default function Header() {
                     return (
                       <li
                         key={i}
-                        className='flex border-b border-b-green-800 last:border-b-0 justify-start items-center gap-3 px-6 py-3'
+                        className='flex cursor-pointer border-b border-b-green-800 last:border-b-0 justify-start items-center gap-3 px-6 py-3'
+                        onClick={() => {
+                          navigate(`/products?category=${c.name}`);
+                          setShowCategory(!showCategory);
+                        }}
                       >
                         <img src={c.image} alt='category image' className='w-16 h-16 rounded-sm overflow-hidden' />
-                        <Link to={`/products?category=${c.name}`} className='text-sm block uppercase'>
-                          {c.name}
-                        </Link>
+                        <span className='text-sm block uppercase'>{c.name}</span>
                       </li>
                     );
                   })}

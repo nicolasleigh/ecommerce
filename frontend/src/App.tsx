@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { get_category } from "./store/reducers/homeReducer";
 import CategoryShop from "./pages/CategoryShop";
 import SearchProducts from "./pages/SearchProducts";
-import Payment from "./pages/Payment";
+// import Payment from "./pages/Payment";
 import Dashboard from "./pages/Dashboard";
 import ProtectUser from "./utils/ProtectUser";
 import Index from "./components/dashboard/Index";
@@ -46,7 +46,7 @@ export default function App() {
           <Route path='/register' element={<Register />} />
           <Route path='/shop' element={<Shop />} />
           <Route path='/cart' element={<Cart />} />
-          <Route path='/payment' element={<Payment />} />
+          {/* <Route path='/payment' element={<Payment />} /> */}
           <Route path='/shipping' element={<Shipping />} />
           <Route path='/products?' element={<CategoryShop />} />
           <Route path='/products/search?' element={<SearchProducts />} />

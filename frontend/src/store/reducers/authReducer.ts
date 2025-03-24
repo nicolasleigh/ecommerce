@@ -30,6 +30,19 @@ export const customer_login = createAsyncThunk(
   }
 );
 
+export const updatePassword = createAsyncThunk(
+  "auth/updatePassword",
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post("/customer/update-password", info, { withCredentials: true });
+      localStorage.setItem("customerToken", data.token);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const decodeToken = (token) => {
   if (token) {
     const userInfo = jwtDecode(token);
@@ -79,6 +92,17 @@ export const authReducer = createSlice({
       .addCase(customer_login.fulfilled, (state, { payload }) => {
         const userInfo = decodeToken(payload.token);
         state.userInfo = userInfo;
+        state.loader = false;
+        state.successMessage = payload.message;
+      })
+      .addCase(updatePassword.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(updatePassword.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error;
+      })
+      .addCase(updatePassword.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message;
       });

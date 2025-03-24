@@ -18,9 +18,10 @@ export default function OrderDetails() {
 
   return (
     <div className='bg-white p-5 space-y-2 relative'>
+      <h2 className='text-xl font-semibold text-slate-600'>Order details</h2>
       <Link
         to='/dashboard/my-orders'
-        className='absolute right-5 text-sm underline hover:no-underline underline-offset-2 hover:text-slate-600'
+        className='absolute right-5 top-2 text-sm underline hover:no-underline underline-offset-2 hover:text-slate-600'
       >
         View All Orders
       </Link>
@@ -98,20 +99,6 @@ export default function OrderDetails() {
                     </p>
                   </div>
                 </div>
-                {/* <div className='pl-2 flex flex-col border '>
-                  <h2 className='text-[#059473] text-sm flex gap-2 items-center'>
-                    <span>After Discount:</span>
-                    {p.price - Math.floor((p.price * p.discount) / 100)}¥
-                  </h2>
-                  <p className='text-muted-foreground text-sm flex gap-2 items-center'>
-                    <span className=''>Before Discount:</span>
-                    <span className='line-through text-muted-foreground'>{p.price}¥</span>
-                  </p>
-                  <p className='text-muted-foreground text-sm flex gap-2 items-center'>
-                    <span>Discount:</span>
-                    <span>{p.discount}%</span>
-                  </p>
-                </div> */}
               </div>
             </div>
           ))}

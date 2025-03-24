@@ -59,7 +59,7 @@ export default function Details() {
     },
   };
 
-  console.log(product);
+  // console.log(product);
 
   const decrement = () => {
     if (quantity > 1) {
@@ -409,7 +409,7 @@ export default function Details() {
                 <div className='flex flex-col gap-5 mt-3 border rounded-sm p-3'>
                   {moreProducts.map((p, i) => {
                     return (
-                      <Link key={i} className='block'>
+                      <Link to={`/product/details/${p.slug}`} key={i} className='block'>
                         <div className='relative h-[270px]'>
                           <img src={p.images[0]} alt='product' className='w-full h-full rounded-sm' />
                           {p.discount !== 0 && (
@@ -463,14 +463,14 @@ export default function Details() {
                 {relatedProducts.map((p, i) => {
                   return (
                     <SwiperSlide key={i}>
-                      <Link className='block border rounded-sm overflow-hidden'>
+                      <Link to={`/product/details/${p.slug}`} className='block border rounded-sm overflow-hidden'>
                         <div className='relative h-[270px]'>
                           <div className='w-full h-full'>
                             <img src={p.images[0]} alt='products' className='w-full h-full rounded-t-sm' />
                             <div className='absolute h-full w-full top-0 left-0 bg-[#000] opacity-10 hover:opacity-40 transition-all duration-500'></div>
                           </div>
                           {p.discount !== 0 && (
-                            <div className='flex justify-center items-center absolute text-white w-[38px] h-[38px] rounded-full bg-red-500 font-semibold text-xs left-2 top-2'>
+                            <div className='flex justify-center items-center absolute text-white w-[38px] h-[38px] rounded-full bg-[#059473] font-semibold text-xs left-2 top-2'>
                               {p.discount}%
                             </div>
                           )}

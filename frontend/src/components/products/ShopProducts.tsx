@@ -57,7 +57,7 @@ export default function ShopProducts({ styles, products }) {
         styles === "grid"
           ? "grid-cols-3 md-lg:grid-cols-2 md:grid-cols-2"
           : "grid-cols-1 md-lg:grid-cols-2 md:grid-cols-2"
-      } gap-3 `}
+      } gap-3 gap-y-6 `}
     >
       {products.map((p, i) => (
         <div
@@ -66,13 +66,13 @@ export default function ShopProducts({ styles, products }) {
             styles === "grid"
               ? "flex-col justify-start items-start"
               : "justify-start items-center md-lg:flex-col md-lg:justify-start md-lg:items-start"
-          } w-full gap-4 bg-white p-1 rounded-md border`}
+          } w-full gap-4 bg-white p-1 rounded-md border group`}
         >
           <div
             className={
               styles === "grid"
-                ? "w-full relative group h-[210px] md:h-[270px] xs:h-[170px] overflow-hidden"
-                : "md-lg:w-full relative group h-[210px] md:h-[270px] overflow-hidden"
+                ? "w-full relative h-[210px] md:h-[270px] xs:h-[170px] overflow-hidden"
+                : "md-lg:w-full relative h-[210px] md:h-[270px] overflow-hidden"
             }
           >
             <img

@@ -10,6 +10,7 @@ import { categories } from "./data/categories";
 import categoryModel from "../models/categoryModel";
 import { products } from "./data/products";
 import productModel from "../models/productModel";
+import sellerCustomerModel from "../models/chat/sellerCustomerModel";
 
 const dsn = "mongodb://user:pass@localhost:27017/ecommerce?authSource=admin";
 
@@ -26,7 +27,10 @@ async function seedCustomer() {
     const hashedPassword = await bcrypt.hash(customer.password, salt);
     customer.password = hashedPassword;
 
-    await customerModel.create(customer);
+    const createCustomer = await customerModel.create(customer);
+    await sellerCustomerModel.create({
+      myId: createCustomer.id,
+    });
     console.log(`Inserted customer: ${customer.name}`);
 
     // Wait for 1 second before continuing to the next customer
@@ -57,7 +61,10 @@ async function seedSeller() {
   const exist = await sellerModel.exists({ email: "seller@email.com" });
 
   if (!exist) {
-    await sellerModel.create(seller);
+    const createSeller = await sellerModel.create(seller);
+    await sellerCustomerModel.create({
+      myId: createSeller.id,
+    });
     console.log("Seller created successfully");
   } else {
     console.log("Seller already exists");

@@ -7,20 +7,20 @@ import store from "./store/index.ts";
 import { Toaster } from "react-hot-toast";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <Suspense>
-        <App />
-        <Toaster
-          toastOptions={{
-            position: "top-right",
-            style: {
-              background: "#283046",
-              color: "white",
-            },
-          }}
-        />
-      </Suspense>
-    </Provider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <Provider store={store}>
+    <Suspense>
+      <App />
+      <Toaster
+        toastOptions={{
+          position: "top-right",
+          style: {
+            background: "#283046",
+            color: "white",
+          },
+        }}
+      />
+    </Suspense>
+  </Provider>
+  // </React.StrictMode>
 );

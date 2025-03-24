@@ -1,8 +1,10 @@
 import { useEffect } from "react";
-import { RiShoppingCart2Fill } from "react-icons/ri";
+import { RiCheckboxIndeterminateFill, RiExchangeCnyFill, RiMoneyCnyBoxFill, RiShoppingCart2Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { get_dashboard_index_data } from "../../store/reducers/dashboardReducer";
+import { getShortObjectID } from "@/utils/helper";
+import toast from "react-hot-toast";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -15,18 +17,20 @@ export default function Index() {
   }, []);
 
   const redirect = (order) => {
-    let items = 0;
-    for (let i = 0; i < order.products.length; i++) {
-      items = order.products[i].quantity + items;
-    }
-    // console.log(order);
-    navigate("/payment", {
-      state: {
-        price: order.price,
-        items,
-        orderId: order._id,
-      },
-    });
+    return toast.error("Unavailable to pay right now");
+
+    // let items = 0;
+    // for (let i = 0; i < order.products.length; i++) {
+    //   items = order.products[i].quantity + items;
+    // }
+    // // console.log(order);
+    // navigate("/payment", {
+    //   state: {
+    //     price: order.price,
+    //     items,
+    //     orderId: order._id,
+    //   },
+    // });
   };
 
   return (
@@ -47,7 +51,7 @@ export default function Index() {
         <div className='flex justify-center items-center p-5 bg-white rounded-md gap-5'>
           <div className='bg-green-100 w-[47px] h-[47px] rounded-full flex justify-center items-center text-xl'>
             <span className='text-xl text-green-800'>
-              <RiShoppingCart2Fill />
+              <RiMoneyCnyBoxFill />
             </span>
           </div>
           <div className='flex flex-col justify-start items-start text-slate-600'>
@@ -59,7 +63,7 @@ export default function Index() {
         <div className='flex justify-center items-center p-5 bg-white rounded-md gap-5'>
           <div className='bg-green-100 w-[47px] h-[47px] rounded-full flex justify-center items-center text-xl'>
             <span className='text-xl text-green-800'>
-              <RiShoppingCart2Fill />
+              <RiCheckboxIndeterminateFill />
             </span>
           </div>
           <div className='flex flex-col justify-start items-start text-slate-600'>
@@ -70,7 +74,7 @@ export default function Index() {
       </div>
 
       <div className='bg-white p-5 mt-5 rounded-md'>
-        <h2>Recent Orders</h2>
+        <h2 className='text-xl font-semibold text-slate-600'>Recent Orders</h2>
         <div className='pt-4'>
           <div className='relative overflow-x-auto rounded-md'>
             <table className='w-full text-sm text-left text-gray-500 '>
@@ -97,27 +101,29 @@ export default function Index() {
                 {recentOrders.map((order, i) => (
                   <tr key={i} className='bg-white border-b'>
                     <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                      #{order._id}
+                      {getShortObjectID(order._id)}
                     </td>
                     <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                      ${order.price}
+                      {order.price}¥
                     </td>
                     <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                      {order.paymentStatus}
+                      <span className='uppercase bg-blue-200 py-[1px] text-blue-600 px-2 rounded-sm font-light'>
+                        {order.paymentStatus}
+                      </span>
                     </td>
                     <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
-                      {order.deliveryStatus}
+                      <span className='uppercase bg-red-200 py-[1px] text-red-600 px-2 rounded-sm font-light'>
+                        {order.deliveryStatus}
+                      </span>
                     </td>
                     <td scope='row' className='px-6 py-4 font-medium whitespace-nowrap'>
                       <Link to={`/dashboard/order/details/${order._id}`}>
-                        <span className='bg-green-200 text-green-800 font-semibold mr-2 px-3 py-[2px] rounded'>
-                          View
-                        </span>
+                        <span className='bg-green-200 text-green-800  mr-2 px-3 py-[2px] rounded uppercase'>View</span>
                       </Link>
                       {order.paymentStatus !== "paid" && (
                         <span
                           onClick={() => redirect(order)}
-                          className='bg-green-200 text-green-800 font-semibold mr-2 px-3 py-[2px] rounded cursor-pointer'
+                          className='bg-green-200 text-green-800  mr-2 px-3 py-[2px] rounded cursor-pointer uppercase'
                         >
                           Pay Now
                         </span>
