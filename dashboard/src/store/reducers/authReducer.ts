@@ -94,6 +94,19 @@ export const profileInfoAdd = createAsyncThunk(
   }
 );
 
+export const updatePassword = createAsyncThunk(
+  "auth/updatePassword",
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post("/update-password", info, { withCredentials: true });
+      localStorage.setItem("accessToken", data.token);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const returnRole = (token) => {
   if (token) {
     const decodeToken = jwtDecode(token);
@@ -111,6 +124,7 @@ export const authReducer = createSlice({
     successMessage: "",
     errorMessage: "",
     loader: false,
+    imageLoader: false,
     userInfo: "",
     role: returnRole(localStorage.getItem("accessToken")),
     token: localStorage.getItem("accessToken"),
@@ -118,6 +132,7 @@ export const authReducer = createSlice({
   reducers: {
     messageClear: (state, _) => {
       state.errorMessage = "";
+      state.successMessage = "";
     },
   },
   extraReducers: (builder) => {
@@ -161,15 +176,28 @@ export const authReducer = createSlice({
         state.token = payload.token;
         state.role = returnRole(payload.token);
       })
+      .addCase(updatePassword.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(updatePassword.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error;
+      })
+      .addCase(updatePassword.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message;
+        state.token = payload.token;
+        state.role = returnRole(payload.token);
+      })
       .addCase(get_user_info.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.userInfo = payload.userInfo;
       })
       .addCase(profileImageUpload.pending, (state, { payload }) => {
-        state.loader = true;
+        state.imageLoader = true;
       })
       .addCase(profileImageUpload.fulfilled, (state, { payload }) => {
-        state.loader = false;
+        state.imageLoader = false;
         state.userInfo = payload.userInfo;
         state.successMessage = payload.message;
       })

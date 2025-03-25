@@ -5,14 +5,14 @@ import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export default function DiscountProducts() {
-  const [parPage, setParPage] = useState(5);
+  const [perPage, setPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <h1 className='text-black mb-3 font-semibold text-lg'>Discount Products</h1>
       <div className='w-full p-4 bg-[#6a5fdf] rounded-md'>
-        <Search setParPage={setParPage} setSearchValue={setSearchValue} searchValue={searchValue} />
+        {/* <Search setPerPage={setPerPage} setSearchValue={setSearchValue} searchValue={searchValue} /> */}
 
         <div className='relative overflow-x-auto mt-5'>
           <table className='w-full text-sm text-left text-[#d0d2d6]'>
@@ -105,7 +105,7 @@ export default function DiscountProducts() {
             pageNumber={currentPage}
             setPageNumber={setCurrentPage}
             totalItem={50}
-            parPage={parPage}
+            perPage={perPage}
             showItem={3}
           />
         </div>

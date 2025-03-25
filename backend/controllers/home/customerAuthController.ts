@@ -67,6 +67,34 @@ class customerAuthController {
     }
   };
 
+  customerUpdatePassword = async (req, res) => {
+    const { email, oldPassword, newPassword } = req.body;
+
+    try {
+      const customer = await customerModel.findOne({ email }).select("+password");
+      if (customer) {
+        const matched = await bcrypt.compare(oldPassword, customer.password);
+        if (matched) {
+          await customerModel.findByIdAndUpdate(customer.id, { password: await bcrypt.hash(newPassword, 10) });
+          const token = await createToken({
+            id: customer.id,
+            name: customer.name,
+            email: customer.email,
+            method: customer.method,
+          });
+          res.cookie("customerToken", token, { expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) });
+          responseReturn(res, 200, { token, message: "Password reset successfully" });
+        } else {
+          responseReturn(res, 404, { error: "Password wrong" });
+        }
+      } else {
+        responseReturn(res, 404, { error: "Customer not found" });
+      }
+    } catch (error) {
+      responseReturn(res, 500, { message: error.message });
+    }
+  };
+
   customerLogout = async (req, res) => {
     res.cookie("customerToken", "", {
       expires: new Date(Date.now()),

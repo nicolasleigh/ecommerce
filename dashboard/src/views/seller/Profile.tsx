@@ -1,24 +1,26 @@
-import { FaImages, FaRegEdit } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { FadeLoader, PropagateLoader } from "react-spinners";
-import { profileImageUpload, messageClear, profileInfoAdd } from "../../store/reducers/authReducer";
-import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Loader, PencilIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { overrideStyle } from "../../utils/utils";
-import { createStripeConnectAccount } from "../../store/reducers/sellerReducer";
+import toast from "react-hot-toast";
+import { FaImages } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { messageClear, profileImageUpload, profileInfoAdd, updatePassword } from "../../store/reducers/authReducer";
 
 export default function Profile() {
-  const [state, setState] = useState({
-    division: "",
-    district: "",
-    shopName: "",
-    subDistrict: "",
-  });
+  const [openEdit, setOpenEdit] = useState(false);
 
   const dispatch = useDispatch();
-  const { userInfo, loader, successMessage } = useSelector((state) => state.auth);
-
-  const status = "active";
+  const { userInfo, loader, successMessage, errorMessage, imageLoader } = useSelector((state) => state.auth);
+  const [state, setState] = useState({
+    sellerName: userInfo.name,
+  });
+  const [pass, setPass] = useState({
+    oldPassword: "",
+    newPassword: "",
+  });
 
   const addImage = (e) => {
     if (e.target.files.length) {
@@ -33,7 +35,11 @@ export default function Profile() {
       toast.success(successMessage);
       dispatch(messageClear());
     }
-  }, [successMessage]);
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(messageClear());
+    }
+  }, [successMessage, errorMessage]);
 
   const handleChange = (e) => {
     setState({
@@ -44,22 +50,54 @@ export default function Profile() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!state.sellerName) {
+      return toast.error("Seller name cannot be empty");
+    }
     dispatch(profileInfoAdd(state));
+    setOpenEdit(false);
+  };
+
+  const handleChangePass = (e) => {
+    setPass({
+      ...pass,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmitPass = (e) => {
+    e.preventDefault();
+    if (!pass.oldPassword) {
+      return toast.error("Old password cannot be empty");
+    }
+    if (!pass.newPassword) {
+      return toast.error("New password cannot be empty");
+    }
+    dispatch(updatePassword(pass));
+  };
+
+  const clear = () => {
+    setPass({
+      oldPassword: "",
+      newPassword: "",
+    });
   };
 
   return (
     <div className='px-2 lg:px-7 py-5'>
-      <div className='w-full flex flex-wrap'>
-        <div className='w-full md:w-6/12'>
-          <div className='w-full p-4 bg-[#6a5fdf] rounded-md text-[#d0d2d6]'>
-            <div className='flex justify-center items-center py-3'>
+      <div className='w-full flex flex-wrap gap-2'>
+        <div className='w-full md:w-[49%]'>
+          <div className='w-full border  rounded-md '>
+            <div className='flex justify-center items-center '>
               {userInfo?.image ? (
-                <label htmlFor='img' className='h-[150px] w-[200px] relative p-3 cursor-pointer overflow-hidden'>
-                  <img src={userInfo.image} alt='image' />
-                  {loader && (
-                    <div className='bg-slate-600 absolute left-0 top-0 w-full h-full opacity-70 flex justify-center items-center z-20'>
+                <label
+                  htmlFor='img'
+                  className='h-[200px] rounded-md w-[200px] relative  cursor-pointer overflow-hidden'
+                >
+                  <img src={userInfo.image} alt='image' className=' w-full' />
+                  {imageLoader && (
+                    <div className='bg-slate-600 rounded-md absolute left-0 top-0 w-full h-full opacity-70 flex justify-center items-center z-20'>
                       <span>
-                        <FadeLoader />
+                        <Loader size={50} className='animate-spin' />
                       </span>
                     </div>
                   )}
@@ -67,16 +105,16 @@ export default function Profile() {
               ) : (
                 <label
                   htmlFor='img'
-                  className='flex items-center justify-center flex-col h-[150px] w-[200px] cursor-pointer border border-dashed hover:border-red-500 border-[#d0d2d6] relative'
+                  className='flex items-center text-muted-foreground hover:border-gray-400 rounded-md justify-center flex-col h-[200px] w-[200px] cursor-pointer border   relative'
                 >
                   <span>
                     <FaImages />
                   </span>
                   <span>Select Image</span>
-                  {loader && (
-                    <div className='bg-slate-600 absolute left-0 top-0 w-full h-full opacity-70 flex justify-center items-center z-20'>
+                  {imageLoader && (
+                    <div className='bg-slate-600 rounded-md absolute left-0 top-0 w-full h-full opacity-70 flex justify-center items-center z-20'>
                       <span>
-                        <FadeLoader />
+                        <Loader size={50} className='animate-spin' />
                       </span>
                     </div>
                   )}
@@ -85,11 +123,30 @@ export default function Profile() {
               <input onChange={addImage} type='file' className='hidden' id='img' />
             </div>
 
-            <div className='px-0 md:px-5 py-2'>
-              <div className='flex justify-between text-sm flex-col gap-2 p-4 bg-slate-800 rounded-md relative'>
-                <span className='p-[6px] bg-yellow-500 rounded hover:shadow-lg hover:shadow-yellow-500/50 absolute right-2 top-2 cursor-pointer'>
-                  <FaRegEdit />
-                </span>
+            <div className='px-2 md:px-5 py-4'>
+              <div className='flex justify-between text-sm flex-col gap-4 p-4 border rounded-md relative'>
+                <Dialog open={openEdit} onOpenChange={setOpenEdit}>
+                  <DialogTrigger>
+                    <span className='p-[6px] hover:bg-muted border rounded  absolute right-2 top-2 cursor-pointer'>
+                      <PencilIcon className='w-4 h-4' />
+                    </span>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Update Seller Name</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleSubmit} className='space-y-2'>
+                      <div>
+                        <Label htmlFor='sellerName'>Seller Name</Label>
+                        <Input name='sellerName' id='sellerName' value={state.sellerName} onChange={handleChange} />
+                      </div>
+                      <Button className='' variant='outline'>
+                        Update
+                      </Button>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+
                 <div className='flex gap-2'>
                   <span>Name:</span>
                   <span>{userInfo.name}</span>
@@ -98,158 +155,49 @@ export default function Profile() {
                   <span>Email:</span>
                   <span>{userInfo.email}</span>
                 </div>
-                <div className='flex gap-2'>
-                  <span>Role:</span>
-                  <span>{userInfo.role}</span>
-                </div>
-                <div className='flex gap-2'>
-                  <span>Status:</span>
-                  <span>{userInfo.status}</span>
-                </div>
-                <div className='flex gap-2'>
-                  <span>Payment Account:</span>
-                  <p>
-                    {userInfo.payment === "active" ? (
-                      <span className='bg-red-500 text-white text-xs cursor-pointer font-normal ml-2 px-2 py-0.5 rounded'>
-                        {userInfo.payment}
-                      </span>
-                    ) : (
-                      <span
-                        onClick={() => dispatch(createStripeConnectAccount())}
-                        className='bg-blue-500 text-white text-xs cursor-pointer font-normal ml-2 px-2 py-0.5 rounded'
-                      >
-                        Click Active
-                      </span>
-                    )}
-                  </p>
-                </div>
               </div>
-            </div>
-
-            <div className='px-0 md:px-5 py-2'>
-              {!userInfo?.shopInfo ? (
-                <form onSubmit={handleSubmit}>
-                  <div className='flex flex-col w-full gap-1 mb-2'>
-                    <label htmlFor='shop'>Shop Name</label>
-                    <input
-                      value={state.shopName}
-                      onChange={handleChange}
-                      type='text'
-                      name='shopName'
-                      id='shop'
-                      placeholder='Shop Name'
-                      className='px-4 py-2 focus:border-indigo-200 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                    />
-                  </div>
-                  <div className='flex flex-col w-full gap-1 mb-2'>
-                    <label htmlFor='division'>Division Name</label>
-                    <input
-                      value={state.division}
-                      onChange={handleChange}
-                      type='text'
-                      name='division'
-                      id='division'
-                      placeholder='Division Name'
-                      className='px-4 py-2 focus:border-indigo-200 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                    />
-                  </div>
-                  <div className='flex flex-col w-full gap-1 mb-2'>
-                    <label htmlFor='district'>District Name</label>
-                    <input
-                      value={state.district}
-                      onChange={handleChange}
-                      type='text'
-                      name='district'
-                      id='district'
-                      placeholder='District Name'
-                      className='px-4 py-2 focus:border-indigo-200 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                    />
-                  </div>
-                  <div className='flex flex-col w-full gap-1 mb-2'>
-                    <label htmlFor='subdis'>Sub District Name</label>
-                    <input
-                      value={state.subDistrict}
-                      onChange={handleChange}
-                      type='text'
-                      name='subDistrict'
-                      id='subdis'
-                      placeholder='Sub District Name'
-                      className='px-4 py-2 focus:border-indigo-200 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                    />
-                  </div>
-
-                  <button
-                    disabled={loader}
-                    className='bg-red-500 w-[200px] hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
-                  >
-                    {loader ? <PropagateLoader color='white' cssOverride={overrideStyle} /> : "Save Changes"}
-                  </button>
-                </form>
-              ) : (
-                <div className='flex justify-between text-sm flex-col gap-2 p-4 bg-slate-800 rounded-md relative'>
-                  <span className='p-[6px] bg-yellow-500 rounded hover:shadow-lg hover:shadow-yellow-500/50 absolute right-2 top-2 cursor-pointer'>
-                    <FaRegEdit />
-                  </span>
-                  <div className='flex gap-2'>
-                    <span>Shop Name:</span>
-                    <span>{userInfo.shopInfo?.shopName}</span>
-                  </div>
-                  <div className='flex gap-2'>
-                    <span>Division:</span>
-                    <span>{userInfo.shopInfo.division}</span>
-                  </div>
-                  <div className='flex gap-2'>
-                    <span>District:</span>
-                    <span>{userInfo.shopInfo.district}</span>
-                  </div>
-                  <div className='flex gap-2'>
-                    <span>Sub District:</span>
-                    <span>{userInfo.shopInfo.subDistrict}</span>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
-        <div className='w-full md:w-6/12'>
+        <div className='w-full md:w-[49%] border rounded-md'>
           <div className='w-full pl-0 md:pl-7 mt-6 md:mt-0'>
-            <div className='bg-[#6a5fdf] rounded-md text-[#d0d2d6] p-4'>
-              <h1 className='text-[#d0d2d6] text-lg mb-3 font-semibold'>Change Password</h1>
-              <form>
+            <div className='rounded-md  p-4'>
+              <h1 className=' text-lg mb-3 font-semibold'>Change Password</h1>
+              <form className='space-y-4' onSubmit={handleSubmitPass}>
                 <div className='flex flex-col w-full gap-1 mb-2'>
-                  <label htmlFor='email'>Email</label>
-                  <input
-                    type='email'
-                    name='email'
-                    id='email'
-                    placeholder='Email'
-                    className='px-4 py-2 focus:border-indigo-200 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                  />
+                  <Label htmlFor='email'>Email</Label>
+                  <Input type='email' name='email' id='email' value={userInfo.email} disabled />
                 </div>
                 <div className='flex flex-col w-full gap-1 mb-2'>
-                  <label htmlFor='old_password'>Old Password</label>
-                  <input
+                  <Label htmlFor='oldPassword'>Old Password</Label>
+                  <Input
                     type='password'
-                    name='old_password'
-                    id='old_password'
-                    placeholder='Old Password'
-                    className='px-4 py-2 focus:border-indigo-200 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
+                    name='oldPassword'
+                    id='oldPassword'
+                    placeholder=''
+                    value={pass.oldPassword}
+                    onChange={handleChangePass}
                   />
                 </div>
                 <div className='flex flex-col w-full gap-1 mb-2'>
-                  <label htmlFor='new_password'>New Password</label>
-                  <input
+                  <Label htmlFor='newPassword'>New Password</Label>
+                  <Input
                     type='password'
-                    name='new_password'
-                    id='new_password'
-                    placeholder='New Password'
-                    className='px-4 py-2 focus:border-indigo-200 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
+                    name='newPassword'
+                    id='newPassword'
+                    placeholder=''
+                    value={pass.newPassword}
+                    onChange={handleChangePass}
                   />
                 </div>
-
-                <button className='bg-red-500 hover:shadow-red-500/40 hover:shadow-md text-white rounded-md px-7 py-2'>
-                  Save Changes
-                </button>
+                <div className='space-x-3'>
+                  <Button variant='outline' type='submit' disabled={loader}>
+                    Update
+                  </Button>
+                  <Button variant='outline' onClick={clear} type='reset' disabled={loader}>
+                    Clear
+                  </Button>
+                </div>
               </form>
             </div>
           </div>

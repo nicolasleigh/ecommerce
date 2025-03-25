@@ -54,33 +54,35 @@ class productController {
   };
 
   productsGet = async (req, res) => {
-    const { page, searchValue, parPage } = req.query;
+    const { page, searchValue, perPage } = req.query;
     const { id } = req;
 
     try {
       let skipPage = 0;
-      if (parPage && page) {
-        skipPage = parseInt(parPage) * (parseInt(page) - 1);
+      if (perPage && page) {
+        skipPage = parseInt(perPage) * (parseInt(page) - 1);
       }
       if (searchValue) {
         const products = await productModel
-          .find({ $text: { $search: searchValue }, sellerId: id })
+          // .find({ $text: { $search: searchValue }, sellerId: id })
+          .find({ $text: { $search: searchValue } })
           .skip(skipPage)
-          .limit(parPage)
+          .limit(perPage)
           .sort({ createdAt: -1 });
 
         const totalProduct = await productModel
           .find({
             $text: { $search: searchValue },
-            sellerId: id,
+            // sellerId: id,
           })
           .countDocuments();
         responseReturn(res, 200, { products, totalProduct });
       } else {
         const products = await productModel
-          .find({ sellerId: id })
+          // .find({ sellerId: id })
+          .find({})
           .skip(skipPage)
-          .limit(parPage)
+          .limit(perPage)
           .sort({ createdAt: -1 });
         const totalProduct = await productModel.find({ sellerId: id }).countDocuments();
         responseReturn(res, 200, { products, totalProduct });
@@ -101,12 +103,21 @@ class productController {
   };
 
   productUpdate = async (req, res) => {
-    let { name, description, stock, price, discount, brand, productId } = req.body;
+    let { name, description, stock, price, discount, brand, productId, category } = req.body;
     name = name.trim().toLowerCase();
     const slug = name.split(" ").join("-");
 
     try {
-      await productModel.findByIdAndUpdate(productId, { name, description, stock, price, discount, brand, productId });
+      await productModel.findByIdAndUpdate(productId, {
+        name,
+        description,
+        stock,
+        price,
+        discount,
+        brand,
+        productId,
+        category,
+      });
       const product = await productModel.findById(productId);
       responseReturn(res, 200, { product, message: "Product updated." });
     } catch (error) {

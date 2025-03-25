@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import Carousel from "react-multi-carousel";
 import { Link } from "react-router-dom";
@@ -26,22 +28,33 @@ export default function Products({ title, products }) {
     },
   };
 
-  const ButtonGroup = ({ next, previous }) => {
+  const ButtonGroup = ({ next, previous, ...rest }) => {
+    const {
+      carouselState: { currentSlide },
+    } = rest;
+    // console.log(currentSlide);
     return (
       <div className='flex justify-between items-center'>
         <div className='text-xl font-bold text-slate-600'>{title}</div>
         <div className='flex justify-center items-center gap-3 text-slate-600'>
           <button
             onClick={() => previous()}
-            className='w-[30px] h-[30px] flex justify-center items-center bg-slate-300 border-slate-200 border'
+            className={cn(
+              currentSlide === 0 ? "bg-slate-100 text-slate-300" : "bg-slate-200",
+              "w-[30px] h-[30px] rounded-sm flex justify-center items-center  "
+            )}
+            disabled={currentSlide === 0}
           >
-            <IoIosArrowBack />
+            <ChevronLeft strokeWidth={1.5} />
           </button>
           <button
             onClick={() => next()}
-            className='w-[30px] h-[30px] flex justify-center items-center bg-slate-300 border-slate-200 border'
+            className={cn(
+              currentSlide === 2 ? "bg-slate-100 text-slate-300" : "bg-slate-200",
+              "w-[30px] h-[30px] rounded-sm flex justify-center items-center "
+            )}
           >
-            <IoIosArrowForward />
+            <ChevronRight strokeWidth={1.5} />
           </button>
         </div>
       </div>
@@ -49,7 +62,7 @@ export default function Products({ title, products }) {
   };
 
   return (
-    <div className='flex gap-8 flex-col-reverse'>
+    <div className='flex gap-5 flex-col-reverse'>
       <Carousel
         autoPlay={false}
         infinite={false}
@@ -59,15 +72,20 @@ export default function Products({ title, products }) {
         renderButtonGroupOutside={true}
         customButtonGroup={<ButtonGroup />}
       >
-        {products.map((p, i) => {
+        {products.map((slides, i) => {
+          // console.log(slides);
           return (
-            <div key={i} className=' flex flex-col justify-start gap-2'>
-              {p.map((pl, j) => (
-                <Link key={pl + j} className='flex justify-start items-start'>
-                  <img src={pl.images[0]} alt='products' className='w-[110px] h-[110px]' />
+            <div key={i} className=' flex flex-col justify-start  border rounded-sm'>
+              {slides.map((product, j) => (
+                <Link
+                  to={`/product/details/${product.slug}`}
+                  key={product.slug}
+                  className='flex justify-start items-start border-b last:border-b-0 py-2 px-2'
+                >
+                  <img src={product.images[0]} alt='products' className='w-[110px] h-[110px] rounded-sm border ' />
                   <div className='px-3 flex justify-start items-start gap-1 flex-col text-slate-600'>
-                    <h2>{pl.name}</h2>
-                    <span className='text-lg font-bold'>${pl.price}</span>
+                    <h2 className='capitalize text-lg font-semibold'>{product.name}</h2>
+                    <span className='font-semibold'>{product.price}¥</span>
                   </div>
                 </Link>
               ))}

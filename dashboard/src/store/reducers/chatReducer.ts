@@ -25,6 +25,18 @@ export const get_customer_message = createAsyncThunk(
   }
 );
 
+export const getLatestMessage = createAsyncThunk(
+  "chat/getLatestMessage",
+  async (limit, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/chat/seller/get-latest-message/${limit}`, { withCredentials: true });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const send_message = createAsyncThunk(
   "chat/send_message",
   async (info, { rejectWithValue, fulfillWithValue }) => {
@@ -97,6 +109,7 @@ export const chatReducer = createSlice({
     currentSeller: {},
     currentCustomer: {},
     sellers: [],
+    latestMessages:[]
   },
   reducers: {
     messageClear: (state, _) => {
@@ -154,7 +167,10 @@ export const chatReducer = createSlice({
       })
       .addCase(get_seller_message.fulfilled, (state, { payload }) => {
         state.sellerAdminMessage = payload.messages;
-      });
+      })
+      .addCase(getLatestMessage.fulfilled, (state, { payload }) => {
+        state.latestMessages = payload.messages;
+      })
   },
 });
 

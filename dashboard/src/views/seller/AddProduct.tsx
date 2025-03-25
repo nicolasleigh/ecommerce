@@ -7,6 +7,27 @@ import { messageClear, productAdd } from "../../store/reducers/productReducer";
 import { PropagateLoader } from "react-spinners";
 import { overrideStyle } from "../../utils/utils";
 import toast from "react-hot-toast";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import CategorySelector from "./CategorySelector";
+import { Textarea } from "@/components/ui/textarea";
+import { Pencil } from "lucide-react";
+import ProductImageSelect from "./ProductImageSelect";
+
+const formSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  discount: z.string(),
+  price: z.string(),
+  brand: z.string(),
+  stock: z.string(),
+  category: z.string(),
+  images: z.any(),
+});
 
 export default function AddProduct() {
   const dispatch = useDispatch();
@@ -18,7 +39,7 @@ export default function AddProduct() {
       getCategory({
         searchValue: "",
         page: "",
-        parPage: "",
+        perPage: "",
       })
     );
   }, []);
@@ -38,6 +59,22 @@ export default function AddProduct() {
   const [searchValue, setSearchValue] = useState("");
   const [images, setImages] = useState([]);
   const [imageShow, setImageShow] = useState([]);
+  const [categoryVal, setCategoryVal] = useState("");
+  const [categorySelectedObj, setCategorySelectedObj] = useState("");
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      discount: "",
+      price: "",
+      brand: "",
+      stock: "",
+      category: "",
+      images: "",
+    },
+  });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -62,6 +99,7 @@ export default function AddProduct() {
     const length = files.length;
     if (length > 0) {
       setImages([...images, ...files]);
+      form.setValue("images", [...images, ...files]);
       let imageUrl = [];
       for (let i = 0; i < length; i++) {
         imageUrl.push({ url: URL.createObjectURL(files[i]) });
@@ -79,6 +117,7 @@ export default function AddProduct() {
       tempUrl[index] = { url: URL.createObjectURL(img) };
       setImageShow([...tempUrl]);
       setImages([...tempImages]);
+      form.setValue("images", [...tempImages]);
     }
   };
 
@@ -86,30 +125,36 @@ export default function AddProduct() {
     const filterImage = images.filter((img, index) => index !== i);
     const filterImageUrl = imageShow.filter((img, index) => index !== i);
     setImages(filterImage);
+    form.setValue("images", filterImage);
     setImageShow(filterImageUrl);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", state.name);
-    formData.append("description", state.description);
-    formData.append("discount", state.discount);
-    formData.append("price", state.price);
-    formData.append("brand", state.brand);
-    formData.append("stock", state.stock);
-    formData.append("shopName", "EasyShop");
-    formData.append("category", category);
-    for (let i = 0; i < images.length; i++) {
-      formData.append("images", images[i]);
-    }
-    // console.log(state);
-    dispatch(productAdd(formData));
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append("name", state.name);
+  //   formData.append("description", state.description);
+  //   formData.append("discount", state.discount);
+  //   formData.append("price", state.price);
+  //   formData.append("brand", state.brand);
+  //   formData.append("stock", state.stock);
+  //   formData.append("shopName", "EasyShop");
+  //   formData.append("category", category);
+  //   for (let i = 0; i < images.length; i++) {
+  //     formData.append("images", images[i]);
+  //   }
+  //   dispatch(productAdd(formData));
+  // };
+
+  const handleSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log(values);
   };
 
   useEffect(() => {
     setAllCategory(categories);
   }, [categories]);
+
+  console.log(categories);
 
   useEffect(() => {
     if (successMessage) {
@@ -134,9 +179,9 @@ export default function AddProduct() {
   }, [successMessage, errorMessage]);
 
   return (
-    <div className='px-2 lg:px-7 pt-5'>
-      <div className='w-full p-4 bg-[#6a5fdf] rounded-md'>
-        <div className='flex justify-between items-center pb-4'>
+    <div className='px-2 lg:px-7 pt-5 '>
+      <div className='w-full p-4  rounded-md '>
+        {/* <div className='flex justify-between items-center pb-4'>
           <h1 className='text-[#d0d2d6] text-xl font-semibold'>Add Product</h1>
           <Link
             to='/seller/dashboard/products'
@@ -144,185 +189,159 @@ export default function AddProduct() {
           >
             All Product
           </Link>
-        </div>
-        <div>
-          <form onSubmit={handleSubmit}>
+        </div> */}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)}>
             {/* first row */}
-            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]'>
-              <div className='flex flex-col w-full gap-1'>
-                <label htmlFor='name'>Product Name</label>
-                <input
-                  value={state.name}
-                  onChange={handleChange}
-                  type='text'
-                  name='name'
-                  id='name'
-                  placeholder='Product Name'
-                  className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                />
-              </div>
-
-              <div className='flex flex-col w-full gap-1'>
-                <label htmlFor='brand'>Product Brand</label>
-                <input
-                  value={state.brand}
-                  onChange={handleChange}
-                  type='text'
-                  name='brand'
-                  id='brand'
-                  placeholder='Brand Name'
-                  className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                />
-              </div>
+            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full '>
+              <FormField
+                control={form.control}
+                name='name'
+                render={({ field }) => (
+                  <FormItem className='w-1/2'>
+                    <FormLabel>Product Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='brand'
+                render={({ field }) => (
+                  <FormItem className='w-1/2'>
+                    <FormLabel>Product Brand</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             {/* second row */}
-            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]'>
-              <div className='flex flex-col w-full gap-1 relative'>
-                <label htmlFor='category'>Category</label>
-                <input
-                  value={category}
-                  onChange={handleChange}
-                  onClick={() => setCateShow(!cateShow)}
-                  type='text'
-                  id='category'
-                  placeholder='Category'
-                  readOnly
-                  className=' px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                />
-                <div
-                  className={`absolute top-[101%] bg-[#475569] w-full transition-all ${
-                    cateShow ? "scale-100" : "scale-0"
-                  }`}
-                >
-                  <div className='w-full px-4 py-2 fixed'>
-                    <input
-                      value={searchValue}
-                      onChange={categorySearch}
-                      type='text'
-                      placeholder='search'
-                      className='px-3 py-1 w-full focus:border-indigo-500 outline-none bg-transparent border border-slate-700 rounded-md text-[#d0d2d6] overflow-hidden'
-                    />
-                  </div>
-                  <div className='pt-14'></div>
-                  <div className='flex justify-start items-start flex-col h-[200px] overflow-y-auto'>
-                    {allCategory.map((c, i) => (
-                      <span
-                        key={i}
-                        onClick={() => {
-                          setCateShow(false);
-                          setCategory(c.name);
-                          setSearchValue("");
-                          setAllCategory(categories);
-                        }}
-                        className={`px-4 py-2 hover:bg-indigo-500 hover:text-white hover:shadow-lg w-full cursor-pointer ${
-                          category === c.name && "bg-indigo-500"
-                        }`}
-                      >
-                        {c.name}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
+            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full '>
+              <FormField
+                control={form.control}
+                name='category'
+                render={({ field }) => (
+                  <FormItem className='w-1/2'>
+                    <FormLabel>Category</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value || ""}>
+                      <FormControl>
+                        <SelectTrigger className='capitalize'>
+                          <SelectValue placeholder='Select Category' />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {categories.map((c, i) => (
+                          <SelectItem key={i} value={c._id} className='capitalize'>
+                            {c.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
 
-              <div className='flex flex-col w-full gap-1'>
-                <label htmlFor='stock'>Product Stock</label>
-                <input
-                  value={state.stock}
-                  onChange={handleChange}
-                  type='text'
-                  name='stock'
-                  id='stock'
-                  placeholder='Stock'
-                  className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                />
-              </div>
+              <FormField
+                control={form.control}
+                name='stock'
+                render={({ field }) => (
+                  <FormItem className='w-1/2'>
+                    <FormLabel>Product Stock</FormLabel>
+                    <FormControl>
+                      <Input {...field} type='number' min={0} max={100} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             {/* third row */}
-            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]'>
-              <div className='flex flex-col w-full gap-1'>
-                <label htmlFor='price'>Price</label>
-                <input
-                  value={state.price}
-                  onChange={handleChange}
-                  type='number'
-                  name='price'
-                  id='price'
-                  placeholder='price'
-                  className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                />
-              </div>
+            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full'>
+              <FormField
+                control={form.control}
+                name='price'
+                render={({ field }) => (
+                  <FormItem className='w-1/2'>
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <Input {...field} type='number' min={0} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <div className='flex flex-col w-full gap-1'>
-                <label htmlFor='discount'>Discount</label>
-                <input
-                  value={state.discount}
-                  onChange={handleChange}
-                  type='number'
-                  name='discount'
-                  id='discount'
-                  placeholder='Discount by %'
-                  className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                />
-              </div>
+              <FormField
+                control={form.control}
+                name='discount'
+                render={({ field }) => (
+                  <FormItem className='w-1/2'>
+                    <FormLabel>Discount</FormLabel>
+                    <FormControl>
+                      <Input {...field} type='number' />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             {/* fourth row */}
-            <div className='flex flex-col w-full gap-1 mb-5'>
-              <label htmlFor='description' className='text-[#d0d2d6]'>
-                Description
-              </label>
-              <textarea
-                value={state.description}
-                onChange={handleChange}
+            <div className='mb-3 '>
+              <FormField
+                control={form.control}
                 name='description'
-                id='description'
-                placeholder='Description'
-                className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                cols='10'
-                rows='4'
-              ></textarea>
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea {...field} className='h-40 ' />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
-            <div className='grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 gap-3 w-full text-[#d0d2d6] mb-4'>
-              {imageShow.map((image, i) => (
-                <div key={i} className='h-[180px] relative'>
-                  <label htmlFor={i}>
-                    <img src={image.url} alt='image' className='w-full h-full rounded-sm' />
-                  </label>
-                  <input onChange={(e) => changeImage(e.target.files[0], i)} type='file' id={i} className='hidden' />
-                  <span
-                    onClick={() => removeImage(i)}
-                    className='p-2 z-10 cursor-pointer bg-slate-700 hover:shadow-lg hover:shadow-slate-400/50 text-white absolute top-1 right-1 rounded-full'
-                  >
-                    <IoMdCloseCircle />
-                  </span>
-                </div>
-              ))}
-              <label
-                htmlFor='image'
-                className='flex justify-center items-center flex-col h-[180px] cursor-pointer border border-dashed hover:border-red-500 w-full text-[#d0d2d6]'
-              >
-                <span>
-                  <IoMdImages />
-                </span>
-                <span>Select Image</span>
-              </label>
-              <input onChange={imageHandle} type='file' id='image' multiple className='hidden' />
+            <div className='mb-6 '>
+              <FormField
+                control={form.control}
+                name='images'
+                render={() => (
+                  <FormItem>
+                    <FormLabel>Product Image</FormLabel>
+                    <FormControl>
+                      <ProductImageSelect
+                        imageShow={imageShow}
+                        imageHandle={imageHandle}
+                        removeImage={removeImage}
+                        changeImage={changeImage}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             <div className='flex'>
               <button
                 disabled={loader}
-                className='bg-red-500 w-[280px] hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
+                className='bg-red-500 w-60 hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
               >
                 {loader ? <PropagateLoader color='white' cssOverride={overrideStyle} /> : "Add Product"}
               </button>
             </div>
           </form>
-        </div>
+        </Form>
       </div>
     </div>
   );

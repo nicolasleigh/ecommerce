@@ -77,8 +77,8 @@ class homeControllers {
   };
 
   queryProducts = async (req, res) => {
-    const parPage = 12;
-    req.query.parPage = parPage;
+    const perPage = 12;
+    req.query.perPage = perPage;
 
     try {
       const products = await productModel.find({}).sort({ createdAt: -1 });
@@ -103,7 +103,7 @@ class homeControllers {
       responseReturn(res, 200, {
         products: result,
         totalProduct,
-        parPage,
+        perPage,
       });
     } catch (error) {
       console.log(error.message);

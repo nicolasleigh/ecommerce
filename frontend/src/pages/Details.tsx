@@ -14,7 +14,7 @@ import Reviews from "../components/Reviews";
 import { useDispatch, useSelector } from "react-redux";
 import { product_details } from "../store/reducers/homeReducer";
 import toast from "react-hot-toast";
-import { add_to_card, add_to_wishlist, messageClear } from "../store/reducers/cardReducer";
+import { add_to_cart, add_to_wishlist, messageClear } from "../store/reducers/cartReducer";
 
 export default function Details() {
   const [image, setImage] = useState("");
@@ -24,9 +24,9 @@ export default function Details() {
   const [quantity, setQuantity] = useState(1);
   const { slug } = useParams();
   const dispatch = useDispatch();
-  const { product, relatedProducts, moreProducts } = useSelector((state) => state.home);
+  const { product, relatedProducts, moreProducts, totalReview } = useSelector((state) => state.home);
   const { userInfo } = useSelector((state) => state.auth);
-  const { errorMessage, successMessage } = useSelector((state) => state.card);
+  const { errorMessage, successMessage } = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const responsive = {
     superLargeDesktop: {
@@ -58,6 +58,8 @@ export default function Details() {
       items: 1,
     },
   };
+
+  // console.log(product);
 
   const decrement = () => {
     if (quantity > 1) {
@@ -95,7 +97,7 @@ export default function Details() {
   const addCart = () => {
     if (userInfo) {
       dispatch(
-        add_to_card({
+        add_to_cart({
           userId: userInfo.id,
           quantity,
           productId: product._id,
@@ -132,7 +134,7 @@ export default function Details() {
       state: {
         products: obj,
         price: price * quantity,
-        shippingFee: 50,
+        shippingFee: 0,
         items: 1,
       },
     });
@@ -157,7 +159,7 @@ export default function Details() {
     <div>
       <Header />
 
-      <section className="bg-[url('/images/banner/shop.png')] h-[220px] mt-6 bg-cover bg-no-repeat relative bg-left">
+      <section className="bg-[url('/images/banner/shop.webp')] h-[220px] mt-6 bg-cover bg-no-repeat relative bg-left">
         <div className='absolute left-0 top-0 w-full h-full bg-[#2422228a]'>
           <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto'>
             <div className='flex flex-col justify-center gap-1 items-center h-full w-full text-white'>
@@ -177,35 +179,43 @@ export default function Details() {
       <section>
         <div className='bg-slate-100 py-5 mb-5'>
           <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto'>
-            <div className='flex justify-start items-center text-slate-600 w-full'>
-              <Link to='/'>Home</Link>
-              <span className='pt-1'>
+            <div className='flex justify-start items-center text-slate-700 w-full'>
+              <Link to='/' className='text-slate-500 hover:text-slate-700'>
+                Home
+              </Link>
+              <span className='pt-1 text-slate-500'>
                 <IoIosArrowForward />
               </span>
-              <Link to='/'>{product?.category}</Link>
-              <span className='pt-1'>
+              <Link to='/' className='capitalize text-slate-500 hover:text-slate-700'>
+                {product?.category}
+              </Link>
+              <span className='pt-1 text-slate-500'>
                 <IoIosArrowForward />
               </span>
-              <span>{product?.name}</span>
+              <span className='capitalize '>{product?.name}</span>
             </div>
           </div>
         </div>
       </section>
 
       <section>
-        <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto pb-16'>
+        <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%]  h-full mx-auto pb-16'>
           <div className='grid grid-cols-2 md-lg:grid-cols-1 gap-8'>
             <div>
-              <div className='p-5 border'>
-                <img src={image ? image : product.images?.[0]} alt='product images' className='h-[400px] w-full' />
+              <div className='p-5 border rounded-sm'>
+                <img
+                  src={image ? image : product.images?.[0]}
+                  alt='product images'
+                  className='h-[400px] w-full rounded-sm'
+                />
               </div>
-              <div className='py-3'>
+              <div className='py-3 '>
                 {product.images && (
                   <Carousel autoPlay={true} infinite={true} responsive={responsive} transitionDuration={500}>
                     {product.images.map((img, i) => {
                       return (
-                        <div key={i} onClick={() => setImage(img)}>
-                          <img src={img} alt='product images' className='h-[120px] cursor-pointer' />
+                        <div key={i} onClick={() => setImage(img)} className='p-1'>
+                          <img src={img} alt='product images' className='h-[120px] w-full rounded-sm  cursor-pointer' />
                         </div>
                       );
                     })}
@@ -215,51 +225,59 @@ export default function Details() {
             </div>
 
             <div className='flex flex-col gap-5'>
-              <div className='text-3xl text-slate-600 font-bold'>
+              <div className='text-3xl text-slate-600 font-bold capitalize'>
                 <h3>{product.name}</h3>
               </div>
               <div className='flex justify-start items-center gap-4'>
                 <div className='flex text-xl'>
-                  <Rating ratings={4.5} />
+                  <Rating ratings={product.rating} />
                 </div>
-                <span className='text-green-500'>(24 reviews)</span>
+                <span className='text-[#059473]'>
+                  ({totalReview} {totalReview > 1 ? "reviews" : "review"})
+                </span>
               </div>
 
               <div className='text-2xl text-red-500 font-bold flex gap-3'>
                 {product.discount !== 0 ? (
                   <>
-                    Price : <h2 className='line-through'>${product.price}</h2>
+                    Price : <h2 className='line-through'>{product.price}¥</h2>
                     <h2>
-                      ${product.price - Math.floor((product.price * product.discount) / 100)} (-{product.discount}%)
+                      {product.price - Math.round((product.price * product.discount) / 100)}¥ (-{product.discount}%)
                     </h2>
                   </>
                 ) : (
-                  <h2>Price : ${product.price}</h2>
+                  <h2>Price : {product.price}¥</h2>
                 )}
               </div>
 
               <div className='text-slate-600'>
                 <p>{product.description}</p>
-                <p className='text-slate-600 py-1 font-bold'>Shop Name : {product.shopName}</p>
               </div>
 
               <div className='flex gap-3 pb-10 border-b'>
                 {product.stock ? (
                   <>
-                    <div className='flex bg-slate-200 h-[50px] justify-center items-center text-xl'>
-                      <div onClick={decrement} className='px-6 cursor-pointer'>
+                    <div className='flex bg-slate-200 h-[50px] rounded-sm justify-center items-center text-xl'>
+                      <button
+                        onClick={decrement}
+                        className='px-6 disabled:cursor-not-allowed h-full'
+                        disabled={quantity === 1}
+                      >
                         -
-                      </div>
-                      <div className='px-6 '>{quantity}</div>
-                      <div onClick={increment} className='px-6 cursor-pointer'>
+                      </button>
+                      <div className='px-6 w-12 flex items-center justify-center'>{quantity}</div>
+                      <button
+                        onClick={increment}
+                        className='px-6 disabled:cursor-not-allowed h-full'
+                        disabled={product.stock === quantity}
+                      >
                         +
-                      </div>
+                      </button>
                     </div>
-
                     <div>
                       <button
                         onClick={addCart}
-                        className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#059473] text-white'
+                        className='px-8 py-3 h-[50px] rounded-sm cursor-pointer hover:bg-[#059473]/90  bg-[#059473] text-white'
                       >
                         Add To Cart
                       </button>
@@ -272,7 +290,7 @@ export default function Details() {
                 <div>
                   <div
                     onClick={addWishlist}
-                    className='h-[50px] w-[50px] flex justify-center items-center cursor-pointer hover:shadow-lg hover:shadow-cyan-500/40 bg-cyan-500 text-white'
+                    className='h-[50px] w-[50px] rounded-sm flex justify-center items-center cursor-pointer hover:bg-cyan-500/90 bg-cyan-500 text-white'
                   >
                     <FaHeart />
                   </div>
@@ -280,12 +298,12 @@ export default function Details() {
               </div>
 
               <div className='flex py-5 gap-5'>
-                <div className='w-[150px] text-black font-bold text-xl flex flex-col gap-5'>
+                <div className='w-[150px] text-slate-700 font-bold text-xl flex flex-col gap-5'>
                   <span>Availability</span>
                   <span>Share On</span>
                 </div>
                 <div className='flex flex-col gap-5'>
-                  <span className={`${product.stock ? "text-green-500" : "text-red-500"}`}>
+                  <span className={`${product.stock ? "text-[#059473]" : "text-red-500"}`}>
                     {product.stock ? `In Stock(${product.stock})` : "Out of Stock"}
                   </span>
 
@@ -330,7 +348,7 @@ export default function Details() {
                 {product.stock ? (
                   <button
                     onClick={buyNow}
-                    className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#059473] text-white'
+                    className='px-8 py-3 h-[50px] cursor-pointer rounded-sm hover:bg-[#059473]/90 bg-[#059473] text-white'
                   >
                     Buy Now
                   </button>
@@ -339,7 +357,7 @@ export default function Details() {
                 )}
                 <Link
                   to={`/dashboard/chat/${product.sellerId}`}
-                  className='px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-red-500/40 bg-red-500 text-white'
+                  className='px-8 py-3 h-[50px] cursor-pointer rounded-sm hover:bg-red-500/90 bg-red-500 text-white'
                 >
                   Chat Seller
                 </Link>
@@ -354,10 +372,10 @@ export default function Details() {
           <div className='flex flex-wrap'>
             <div className='w-[72%] md-lg:w-full'>
               <div className='pr-4 md-lg:pr-0'>
-                <div className='grid grid-cols-2'>
+                <div className='grid grid-cols-2 gap-x-2'>
                   <button
                     onClick={() => setState("reviews")}
-                    className={`py-1 hover:text-white px-5 hover:bg-[#059473] ${
+                    className={`py-1 hover:text-white px-5 font-semibold hover:bg-[#059473] ${
                       state === "reviews" ? "bg-[#059473] text-white" : "bg-slate-200 text-slate-700"
                     } rounded-sm`}
                   >
@@ -365,7 +383,7 @@ export default function Details() {
                   </button>
                   <button
                     onClick={() => setState("description")}
-                    className={`py-1 hover:text-white px-5 hover:bg-[#059473] ${
+                    className={`py-1 hover:text-white px-5 font-semibold hover:bg-[#059473] ${
                       state === "description" ? "bg-[#059473] text-white" : "bg-slate-200 text-slate-700"
                     } rounded-sm`}
                   >
@@ -377,17 +395,7 @@ export default function Details() {
                   {state === "reviews" ? (
                     <Reviews product={product} />
                   ) : (
-                    <p className='py-5 text-slate-600'>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, voluptatum. Possimus omnis eius
-                      voluptatum aut, esse rem mollitia assumenda doloribus perferendis dolores asperiores molestiae
-                      facilis eaque a rerum aliquid perspiciatis minus libero, atque sed! Blanditiis quae recusandae
-                      repellendus pariatur, aliquid, aspernatur dolorum quas dolor unde error laudantium eaque quisquam
-                      cumque cupiditate. Quas ab reprehenderit corrupti perspiciatis ipsum quidem aliquid minus dicta
-                      enim quos, labore mollitia sapiente eveniet rem. Aut labore nobis dolorum sunt obcaecati ipsum
-                      voluptas temporibus? A ullam laudantium at, eveniet vel facere molestiae error, eaque dignissimos
-                      assumenda minima repudiandae esse architecto officiis tempora nesciunt eius labore voluptate
-                      corrupti!
-                    </p>
+                    <p className='py-5 text-slate-600'>{product.description}</p>
                   )}
                 </div>
               </div>
@@ -395,15 +403,15 @@ export default function Details() {
 
             <div className='w-[28%] md-lg:w-full'>
               <div className='pl-4 md-lg:pl-0'>
-                <div className='px-3 py-2 text-slate-600 bg-slate-200'>
-                  <h2 className='font-semibold'>From {product.shopName}</h2>
+                <div className='px-3 py-1 text-slate-600 bg-slate-200 rounded-sm'>
+                  <h2 className='font-semibold '>Find More In Our Shop</h2>
                 </div>
-                <div className='flex flex-col gap-5 mt-3 border p-3'>
+                <div className='flex flex-col gap-5 mt-3 border rounded-sm p-3'>
                   {moreProducts.map((p, i) => {
                     return (
-                      <Link key={i} className='block'>
+                      <Link to={`/product/details/${p.slug}`} key={i} className='block'>
                         <div className='relative h-[270px]'>
-                          <img src={p.images[0]} alt='product' className='w-full h-full' />
+                          <img src={p.images[0]} alt='product' className='w-full h-full rounded-sm' />
                           {p.discount !== 0 && (
                             <div className='flex justify-center items-center absolute text-white w-[38px] h-[38px] rounded-full bg-red-500 font-semibold text-xs left-2 top-2'>
                               {p.discount}%
@@ -411,10 +419,10 @@ export default function Details() {
                           )}
                         </div>
 
-                        <h2 className='text-slate-600 py-1 font-semibold'>{p.name}</h2>
-                        <div className='flex gap-2'>
-                          <h2 className='text-lg font-bold text-slate-600'>${p.price}</h2>
-                          <div className='flex items-center gap-2'>
+                        <h2 className='text-slate-600 py-1 font-semibold capitalize'>{p.name}</h2>
+                        <div className='flex gap-4'>
+                          <h2 className='text-lg font-bold text-[#059473]'>{p.price}¥</h2>
+                          <div className='flex items-center gap-1'>
                             <Rating ratings={p.rating} />
                           </div>
                         </div>
@@ -430,58 +438,62 @@ export default function Details() {
 
       <section>
         <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto'>
-          <h2 className='text-2xl py-8 text-slate-600'>Related Products</h2>
-          <div>
-            <Swiper
-              slidesPerView='auto'
-              breakpoints={{
-                1280: {
-                  slidesPerView: 3,
-                },
-                565: {
-                  slidesPerView: 2,
-                },
-              }}
-              spaceBetween={25}
-              loop={true}
-              pagination={{
-                clickable: true,
-                el: ".custom_bullet",
-              }}
-              modules={[Pagination]}
-              className='mySwiper'
-            >
-              {relatedProducts.map((p, i) => {
-                return (
-                  <SwiperSlide key={i}>
-                    <Link className='block'>
-                      <div className='relative h-[270px]'>
-                        <div className='w-full h-full'>
-                          <img src={p.images[0]} alt='products' className='w-full h-full' />
-                          <div className='absolute h-full w-full top-0 left-0 bg-[#000] opacity-25 hover:opacity-50 transition-all duration-500'></div>
-                        </div>
-                        {p.discount !== 0 && (
-                          <div className='flex justify-center items-center absolute text-white w-[38px] h-[38px] rounded-full bg-red-500 font-semibold text-xs left-2 top-2'>
-                            {p.discount}%
+          <h2 className='text-xl pb-4 pt-8 text-slate-600 font-semibold'>Related Products</h2>
+          {relatedProducts.length !== 0 ? (
+            <div>
+              <Swiper
+                slidesPerView='auto'
+                breakpoints={{
+                  1280: {
+                    slidesPerView: 3,
+                  },
+                  565: {
+                    slidesPerView: 2,
+                  },
+                }}
+                spaceBetween={25}
+                loop={true}
+                pagination={{
+                  clickable: true,
+                  el: ".custom_bullet",
+                }}
+                modules={[Pagination]}
+                className='mySwiper'
+              >
+                {relatedProducts.map((p, i) => {
+                  return (
+                    <SwiperSlide key={i}>
+                      <Link to={`/product/details/${p.slug}`} className='block border rounded-sm overflow-hidden'>
+                        <div className='relative h-[270px]'>
+                          <div className='w-full h-full'>
+                            <img src={p.images[0]} alt='products' className='w-full h-full rounded-t-sm' />
+                            <div className='absolute h-full w-full top-0 left-0 bg-[#000] opacity-10 hover:opacity-40 transition-all duration-500'></div>
                           </div>
-                        )}
-                      </div>
+                          {p.discount !== 0 && (
+                            <div className='flex justify-center items-center absolute text-white w-[38px] h-[38px] rounded-full bg-[#059473] font-semibold text-xs left-2 top-2'>
+                              {p.discount}%
+                            </div>
+                          )}
+                        </div>
 
-                      <div className='p-4 flex flex-col gap-1'>
-                        <h2 className='text-slate-600 text-lg font-semibold'>{p.name}</h2>
-                        <div className='flex justify-start items-center gap-3'>
-                          <h2 className='text-lg font-bold text-slate-600'>${p.price}</h2>
-                          <div className='flex '>
-                            <Rating ratings={p.rating} />
+                        <div className='p-4 flex flex-col gap-1'>
+                          <h2 className='text-slate-600 text-lg font-semibold capitalize'>{p.name}</h2>
+                          <div className='flex justify-start items-center gap-4'>
+                            <h2 className='text-lg font-bold text-[#059473]'>{p.price}¥</h2>
+                            <div className='flex gap-1'>
+                              <Rating ratings={p.rating} />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Link>
-                  </SwiperSlide>
-                );
-              })}
-            </Swiper>
-          </div>
+                      </Link>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+            </div>
+          ) : (
+            <p className='text-muted-foreground'>No related products yet</p>
+          )}
 
           <div className='w-full flex justify-center items-center py-8 '>
             <div className='custom_bullet justify-center gap-3 !w-auto'></div>

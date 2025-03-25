@@ -1,12 +1,17 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { IoMdCloseCircle, IoMdImages } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getCategory } from "../../store/reducers/categoryReducer";
 import { getProduct, messageClear, updateProduct, productImageUpdate } from "../../store/reducers/productReducer";
 import { PropagateLoader } from "react-spinners";
 import { overrideStyle } from "../../utils/utils";
 import toast from "react-hot-toast";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 export default function EditProduct() {
   const { productId } = useParams();
@@ -14,13 +19,14 @@ export default function EditProduct() {
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.category);
   const { product, loader, successMessage, errorMessage } = useSelector((state) => state.product);
+  // console.log(product);
 
   useEffect(() => {
     dispatch(
       getCategory({
         searchValue: "",
         page: "",
-        parPage: "",
+        perPage: "",
       })
     );
   }, []);
@@ -55,6 +61,7 @@ export default function EditProduct() {
   const [searchValue, setSearchValue] = useState("");
   const [images, setImages] = useState([]);
   const [imageShow, setImageShow] = useState([]);
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -115,58 +122,70 @@ export default function EditProduct() {
       brand: state.brand,
       stock: state.stock,
       productId: productId,
+      category: category,
     };
     dispatch(updateProduct(obj));
   };
 
   return (
     <div className='px-2 lg:px-7 pt-5'>
-      <div className='w-full p-4 bg-[#6a5fdf] rounded-md'>
+      <div className='w-full p-4  rounded-md'>
         <div className='flex justify-between items-center pb-4'>
-          <h1 className='text-[#d0d2d6] text-xl font-semibold'>Edit Product</h1>
-          <Link
-            to='/seller/dashboard/products'
-            className='bg-blue-500 hover:shadow-blue-500/50 hover:shadow-lg text-white rounded-sm px-7 py-2 my-2'
-          >
+          <h1 className=' text-xl font-semibold'>Edit Product</h1>
+          {/* <Link to='/seller/dashboard/products' className=' underline hover:no-underline text-sm rounded-sm '>
             All Product
-          </Link>
+          </Link> */}
+          <Button variant='link' onClick={() => navigate(-1)} className='p-0 underline hover:no-underline'>
+            &larr; Go back
+          </Button>
         </div>
         <div>
           <form onSubmit={handleSubmit}>
             {/* first row */}
-            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]'>
+            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full '>
               <div className='flex flex-col w-full gap-1'>
-                <label htmlFor='name'>Product Name</label>
-                <input
+                <Label htmlFor='name'>Product Name</Label>
+                <Input
                   value={state.name}
                   onChange={handleChange}
                   type='text'
                   name='name'
                   id='name'
                   placeholder='Product Name'
-                  className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
                 />
               </div>
 
               <div className='flex flex-col w-full gap-1'>
-                <label htmlFor='brand'>Product Brand</label>
-                <input
+                <Label htmlFor='brand'>Product Brand</Label>
+                <Input
                   value={state.brand}
                   onChange={handleChange}
                   type='text'
                   name='brand'
                   id='brand'
                   placeholder='Brand Name'
-                  className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
                 />
               </div>
             </div>
 
             {/* second row */}
-            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]'>
+            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full '>
               <div className='flex flex-col w-full gap-1 relative'>
-                <label htmlFor='category'>Category</label>
-                <input
+                <Label htmlFor='category'>Category</Label>
+                <Select value={category || ""} onValueChange={setCategory}>
+                  <SelectTrigger className='capitalize'>
+                    <SelectValue placeholder='Select Category' />
+                  </SelectTrigger>
+                  <SelectContent className='flex gap-2'>
+                    {allCategory.length &&
+                      allCategory.map((c, i) => (
+                        <SelectItem key={i} value={c.name} className='capitalize'>
+                          {c.name}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+                {/* <input
                   value={category}
                   onChange={handleChange}
                   onClick={() => setCateShow(!cateShow)}
@@ -174,7 +193,7 @@ export default function EditProduct() {
                   id='category'
                   placeholder='Category'
                   readOnly
-                  className=' px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
+                  className=' px-4 py-2 focus:border-indigo-500 outline-none  border border-slate-700 rounded-md '
                 />
                 <div
                   className={`absolute top-[101%] bg-[#475569] w-full transition-all ${
@@ -210,67 +229,65 @@ export default function EditProduct() {
                         </span>
                       ))}
                   </div>
-                </div>
+                </div> */}
               </div>
 
               <div className='flex flex-col w-full gap-1'>
-                <label htmlFor='stock'>Product Stock</label>
-                <input
+                <Label htmlFor='stock'>Product Stock</Label>
+                <Input
                   value={state.stock}
                   onChange={handleChange}
-                  type='text'
+                  type='number'
                   name='stock'
                   id='stock'
                   placeholder='Stock'
-                  className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
+                  min={0}
                 />
               </div>
             </div>
 
             {/* third row */}
-            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-[#d0d2d6]'>
+            <div className='flex flex-col mb-3 md:flex-row gap-4 w-full '>
               <div className='flex flex-col w-full gap-1'>
-                <label htmlFor='price'>Price</label>
-                <input
+                <Label htmlFor='price'>Price</Label>
+                <Input
                   value={state.price}
                   onChange={handleChange}
                   type='number'
                   name='price'
                   id='price'
                   placeholder='price'
-                  className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
+                  min={0}
                 />
               </div>
 
               <div className='flex flex-col w-full gap-1'>
-                <label htmlFor='discount'>Discount</label>
-                <input
+                <Label htmlFor='discount'>Discount</Label>
+                <Input
                   value={state.discount}
                   onChange={handleChange}
                   type='number'
                   name='discount'
                   id='discount'
                   placeholder='Discount by %'
-                  className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
+                  min={0}
                 />
               </div>
             </div>
 
             {/* fourth row */}
             <div className='flex flex-col w-full gap-1 mb-5'>
-              <label htmlFor='description' className='text-[#d0d2d6]'>
+              <Label htmlFor='description' className=''>
                 Description
-              </label>
-              <textarea
+              </Label>
+              <Textarea
                 value={state.description}
                 onChange={handleChange}
                 name='description'
                 id='description'
                 placeholder='Description'
-                className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
-                cols='10'
-                rows='4'
-              ></textarea>
+                rows={5}
+              />
             </div>
 
             <div className='grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 gap-3 w-full text-[#d0d2d6] mb-4'>

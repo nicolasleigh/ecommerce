@@ -9,3 +9,8 @@ export const overrideStyle = {
 };
 
 export const socket = io("http://localhost:8000");
+
+export const getShortObjectID = (id: string) => {
+  // const len = id?.length;
+  return id?.substring(0, 8).toUpperCase();
+};

@@ -9,7 +9,7 @@ import { RiLockPasswordFill, RiLockPasswordLine } from "react-icons/ri";
 import api from "../api";
 import { useDispatch } from "react-redux";
 import { userReset } from "../store/reducers/authReducer";
-import { resetCount } from "../store/reducers/cardReducer";
+import { resetCount } from "../store/reducers/cartReducer";
 
 export default function Dashboard() {
   const [filterShow, setFilterShow] = useState(false);

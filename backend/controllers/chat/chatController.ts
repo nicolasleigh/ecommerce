@@ -8,6 +8,7 @@ import { responseReturn } from "../../utils/response";
 class chatController {
   addCustomerFriend = async (req, res) => {
     const { sellerId, userId } = req.body;
+    // console.log("sellerId:", sellerId, "userId:", userId);
 
     try {
       if (sellerId !== "") {
@@ -38,8 +39,8 @@ class chatController {
               $push: {
                 myFriends: {
                   friendId: sellerId,
-                  name: seller?.shopInfo.shopName,
-                  image: seller.image,
+                  name: seller?.name,
+                  image: seller?.image,
                 },
               },
             }
@@ -71,7 +72,7 @@ class chatController {
               $push: {
                 myFriends: {
                   friendId: userId,
-                  name: user.name,
+                  name: user?.name,
                   image: "",
                 },
               },
@@ -111,6 +112,7 @@ class chatController {
         responseReturn(res, 200, { myFriends: myFriends?.myFriends, currentFriend, messages });
       } else {
         const myFriends = await sellerCustomerModel.findOne({ myId: userId });
+        // console.log("myFriends:", myFriends);
         responseReturn(res, 200, { myFriends: myFriends?.myFriends });
       }
     } catch (error) {
@@ -216,6 +218,24 @@ class chatController {
 
       const currentCustomer = await customerModel.findById(customerId);
       responseReturn(res, 200, { currentCustomer, messages });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  getLatestMessage = async (req, res) => {
+    const { id } = req;
+    const { limit } = req.params;
+
+    try {
+      const messages = await sellerCustomerMessageModel
+        .find({
+          receiverId: { $eq: id },
+        })
+        .sort({ createdAt: -1 })
+        .limit(limit);
+
+      responseReturn(res, 200, { messages });
     } catch (error) {
       console.log(error.message);
     }

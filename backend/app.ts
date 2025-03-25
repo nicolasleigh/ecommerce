@@ -11,7 +11,7 @@ import categoryRoutes from "./routes/categoryRoutes";
 import productRoutes from "./routes/productRoutes";
 import sellerRoutes from "./routes/sellerRoutes";
 import homeRoutes from "./routes/home/homeRoutes";
-import cardRoutes from "./routes/home/cardRoutes";
+import cartRoutes from "./routes/home/cartRoutes";
 import orderRoutes from "./routes/order/orderRoutes";
 import chatRoutes from "./routes/chatRoutes";
 import customerAuthRoutes from "./routes/home/customerAuthRoutes";
@@ -69,7 +69,7 @@ io.on("connection", (socket) => {
   console.log("socket server running...");
   socket.on("add_user", (customerId, userInfo) => {
     addUser(customerId, socket.id, userInfo);
-    io.emit("activeSeller", allSeller);
+    io.emit("activeCustomer", allCustomer);
     // console.log(allCustomer);
   });
   socket.on("add_seller", (sellerId, userInfo) => {
@@ -125,7 +125,7 @@ app.use("/api", productRoutes);
 app.use("/api", sellerRoutes);
 app.use("/api/home", homeRoutes);
 app.use("/api", customerAuthRoutes);
-app.use("/api", cardRoutes);
+app.use("/api", cartRoutes);
 app.use("/api", orderRoutes);
 app.use("/api", chatRoutes);
 app.use("/api", paymentRoutes);

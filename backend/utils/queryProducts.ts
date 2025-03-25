@@ -47,7 +47,7 @@ class queryProducts {
 
   skip = () => {
     let { pageNumber } = this.query;
-    const skipPage = (parseInt(pageNumber) - 1) * parseInt(this.query.parPage);
+    const skipPage = (parseInt(pageNumber) - 1) * parseInt(this.query.perPage);
     let skipProduct = [];
     // console.log(skipPage, this.products.length);
 
@@ -60,8 +60,8 @@ class queryProducts {
 
   limit = () => {
     let temp = [];
-    if (this.products.length > this.query.parPage) {
-      for (let i = 0; i < this.query.parPage; i++) {
+    if (this.products.length > this.query.perPage) {
+      for (let i = 0; i < this.query.perPage; i++) {
         temp.push(this.products[i]);
       }
     } else {

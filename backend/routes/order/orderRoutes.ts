@@ -15,7 +15,12 @@ router.put("/admin/order-status/update/:orderId", orderController.adminOrderStat
 
 // Seller
 router.get("/seller/orders/:sellerId", orderController.getSellerOrders);
+router.get("/seller/latest-orders/:limit", orderController.getLatestOrders);
+router.get("/seller/order-stats", orderController.getPaymentStats);
+router.get("/seller/dashboard-stats", orderController.getDashboardStats);
+router.get("/seller/all-orders", orderController.getAllOrders);
 router.get("/seller/order/:orderId", orderController.getSellerOrder);
 router.put("/seller/order-status/update/:orderId", orderController.sellerOrderStatusUpdate);
+router.put("/seller/chart-data", orderController.getChartData);
 
 export default router;

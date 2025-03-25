@@ -1,7 +1,7 @@
 import { MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 
-export default function Pagination({ pageNumber, setPageNumber, totalItem, parPage, showItem }) {
-  let totalPage = Math.ceil(totalItem / parPage);
+export default function Pagination({ pageNumber, setPageNumber, totalItem, perPage, showItem }) {
+  let totalPage = Math.ceil(totalItem / perPage);
   let startPage = pageNumber;
   let dif = totalPage - pageNumber;
 
