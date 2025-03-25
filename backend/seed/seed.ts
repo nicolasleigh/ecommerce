@@ -11,6 +11,8 @@ import categoryModel from "../models/categoryModel";
 import { products } from "./data/products";
 import productModel from "../models/productModel";
 import sellerCustomerModel from "../models/chat/sellerCustomerModel";
+import { orders } from "./data/orders";
+import customerOrderModel from "../models/customerOrderModel";
 
 const dsn = "mongodb://user:pass@localhost:27017/ecommerce?authSource=admin";
 
@@ -109,6 +111,51 @@ async function seedProduct() {
   }
 }
 
+async function seedOrder() {
+  await mongoose.connect(dsn);
+
+  for (let i = 0; i < orders.length; i++) {
+    const order = orders[i];
+    const customer = await customerModel.findOne({ email: order.customerEmail });
+    if (!customer) {
+      console.log("Error: Customer not found");
+      return;
+    }
+
+    const productPromises = order.productSlug.map(async (e, i) => {
+      const product = await productModel.findOne({ slug: e });
+      if (product) {
+        const tempProduct = product._doc;
+        tempProduct.quantity = order.quantity[i];
+        return tempProduct;
+      }
+      return null;
+    });
+    const products = await Promise.all(productPromises);
+    const validProducts = products.filter((product) => product !== null);
+    const price = validProducts.reduce(
+      (acc, cur) => acc + Math.round(((cur.price * (100 - cur.discount)) / 100) * cur.quantity),
+      0
+    );
+    const orderData = {
+      customerId: customer._id,
+      products: validProducts,
+      price: price,
+      paymentStatus: order.paymentStatus,
+      shippingInfo: order.shippingInfo,
+      deliveryStatus: order.deliveryStatus,
+      date: order.date,
+    };
+
+    const createOrder = await customerOrderModel.create(orderData);
+    console.log(`Inserted order: ${createOrder._id}`);
+
+    if (i < customers.length - 1) {
+      await delay(10000);
+    }
+  }
+}
+
 function main() {
   // seedCustomer()
   //   .then(async () => {
@@ -150,7 +197,18 @@ function main() {
   //     await mongoose.disconnect();
   //     process.exit(1);
   //   });
-  seedProduct()
+  // seedProduct()
+  //   .then(async () => {
+  //     console.log("Seeding completed");
+  //     await mongoose.disconnect();
+  //     process.exit(0);
+  //   })
+  //   .catch(async (err) => {
+  //     console.error("Error:", err);
+  //     await mongoose.disconnect();
+  //     process.exit(1);
+  //   });
+  seedOrder()
     .then(async () => {
       console.log("Seeding completed");
       await mongoose.disconnect();
