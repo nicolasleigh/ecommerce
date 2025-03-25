@@ -141,6 +141,17 @@ export const sellerOrderStatusUpdate = createAsyncThunk(
   }
 );
 
+export const getChartData = createAsyncThunk("order/getChartData", async (_, { rejectWithValue, fulfillWithValue }) => {
+  try {
+    const { data } = await api.put(`/seller/chart-data`, {
+      withCredentials: true,
+    });
+    return fulfillWithValue(data);
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});
+
 export const orderReducer = createSlice({
   name: "order",
   initialState: {
@@ -164,6 +175,7 @@ export const orderReducer = createSlice({
       customerCount: 0,
       orderCount: 0,
     },
+    chartData: [],
   },
   reducers: {
     messageClear: (state, _) => {
@@ -212,7 +224,9 @@ export const orderReducer = createSlice({
         state.dashboardStats.customerCount = payload.customerCount;
         state.dashboardStats.orderCount = payload.orderCount;
       })
-
+      .addCase(getChartData.fulfilled, (state, { payload }) => {
+        state.chartData = payload.chartData;
+      })
       .addCase(sellerOrderStatusUpdate.rejected, (state, { payload }) => {
         state.errorMessage = payload.message;
       })

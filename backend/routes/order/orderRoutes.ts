@@ -21,5 +21,6 @@ router.get("/seller/dashboard-stats", orderController.getDashboardStats);
 router.get("/seller/all-orders", orderController.getAllOrders);
 router.get("/seller/order/:orderId", orderController.getSellerOrder);
 router.put("/seller/order-status/update/:orderId", orderController.sellerOrderStatusUpdate);
+router.put("/seller/chart-data", orderController.getChartData);
 
 export default router;

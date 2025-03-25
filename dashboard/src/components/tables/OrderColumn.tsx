@@ -14,13 +14,13 @@ export type Order = {
 };
 
 export const columns: ColumnDef<Order>[] = [
-  {
-    accessorKey: "number",
-    header: "NO.",
-    cell: ({ row }) => {
-      return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{row.index + 1}</div>;
-    },
-  },
+  // {
+  //   accessorKey: "number",
+  //   header: "NO.",
+  //   cell: ({ row }) => {
+  //     return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{row.index + 1}</div>;
+  //   },
+  // },
   {
     accessorKey: "id",
     header: "ID",
@@ -32,10 +32,13 @@ export const columns: ColumnDef<Order>[] = [
   },
   {
     accessorKey: "name",
-    header: "Product Name",
+    header: "Name",
     cell: ({ row }) => {
-      const value = row.getValue("name") as string;
-      return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{value}</div>;
+      const productName = row.getValue("name") as string;
+      const customerName = row.original.shippingInfo?.name;
+      return (
+        <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{productName ? productName : customerName}</div>
+      );
     },
   },
   {

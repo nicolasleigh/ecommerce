@@ -6,6 +6,7 @@ import customerOrderModel from "../../models/customerOrderModel";
 import mongoose, { ObjectId } from "mongoose";
 import productModel from "../../models/productModel";
 import customerModel from "../../models/customerModel";
+import { capitalizeFirstLetter } from "../../utils/helper";
 
 class orderController {
   paymentCheck = async (id) => {
@@ -361,6 +362,44 @@ class orderController {
       const paidStats = paidAmount.reduce((acc, cur) => cur.price + acc, 0);
 
       responseReturn(res, 200, { unpaidStats, paidStats, productCount, customerCount, orderCount });
+    } catch (error) {
+      console.log(error);
+      responseReturn(res, 500, { message: "error" });
+    }
+  };
+
+  getChartData = async (req, res) => {
+    try {
+      const categoryNumMap: Record<string, number> = {};
+      const categorySaleMap: Record<string, number> = {};
+      const allOrders = await customerOrderModel.find({});
+      for (let i = 0; i < allOrders.length; i++) {
+        const order = allOrders[i];
+        if (order.paymentStatus === "refund" || order.paymentStatus === "cancelled") {
+          continue;
+        }
+        order.products.forEach((product, index) => {
+          const category: string = product.category;
+          const categoryNum = categoryNumMap[category] || 0;
+          categoryNumMap[category] = categoryNum + 1;
+
+          const sale = Math.round(((product.price * (100 - product.discount)) / 100) * product.quantity);
+          const categorySale = categorySaleMap[category] || 0;
+          categorySaleMap[category] = categorySale + sale;
+        });
+      }
+
+      const keyArray = Object.keys(categoryNumMap);
+      const chartData = keyArray.map((item, i) => {
+        const obj = {
+          category: capitalizeFirstLetter(item),
+          orders: categoryNumMap[item],
+          sales: categorySaleMap[item],
+        };
+        return obj;
+      });
+
+      responseReturn(res, 200, { chartData });
     } catch (error) {
       console.log(error);
       responseReturn(res, 500, { message: "error" });
