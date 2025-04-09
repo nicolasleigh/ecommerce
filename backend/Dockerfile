@@ -1,7 +1,8 @@
-FROM node:20-alpine3.16
+FROM node:22-slim
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
+COPY .env ./
 COPY ./ ./
 EXPOSE 8083
 CMD ["npm", "start"]

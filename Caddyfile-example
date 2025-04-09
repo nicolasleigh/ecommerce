@@ -2,13 +2,18 @@ pet.linze.pro {
 	handle /api/* {
 		reverse_proxy localhost:8083
 	}
-	handle /seller/* {
-		root * /home/nicolas/petify/react-build-dashboard/dist
+	handle {
+		root * /home/nicolas/petify/react-build-frontend/dist
 		try_files {path} /index.html
 		file_server
 	}
+}
+seller.pet.linze.pro {
+	handle /api/* {
+		reverse_proxy localhost:8083
+	}
 	handle {
-		root * /home/nicolas/petify/react-build-frontend/dist
+		root * /home/nicolas/petify/react-build-dashboard/dist
 		try_files {path} /index.html
 		file_server
 	}
