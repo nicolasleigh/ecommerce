@@ -8,23 +8,23 @@ const UnAuthorized = lazy(() => import("../../views/UnAuthorized"));
 
 const publicRoutes = [
   {
-    path: "/",
+    path: "/seller",
     element: <Home />,
   },
   {
-    path: "/login",
+    path: "/seller/login",
     element: <Login />,
   },
   {
-    path: "/signup",
+    path: "/seller/signup",
     element: <Signup />,
   },
   {
-    path: "/admin/login",
+    path: "/seller/admin/login",
     element: <AdminLogin />,
   },
   {
-    path: "/unauthorized",
+    path: "/seller/unauthorized",
     element: <UnAuthorized />,
   },
 ];

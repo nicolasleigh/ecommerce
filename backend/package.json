@@ -1,11 +1,12 @@
 {
-  "name": "backend",
+  "name": "petify-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "dev": "tsx watch ./app.ts",
-    "seed": "tsx ./seed/seed.ts"
+    "seed": "tsx ./seed/seed.ts",
+    "start": "tsx ./app.ts"
   },
   "keywords": [],
   "author": "",

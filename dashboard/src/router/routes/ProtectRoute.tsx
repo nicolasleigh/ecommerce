@@ -52,7 +52,7 @@ export default function ProtectRoute({ route, children }) {
   if (role) {
     if (userInfo) {
       if (userInfo.role === route.role) return <Suspense fallback={null}>{children}</Suspense>;
-      else return <Navigate to='/unauthorized' replace />;
+      else return <Navigate to='/seller/unauthorized' replace />;
     }
-  } else return <Navigate to='/login' replace />;
+  } else return <Navigate to='/seller/login' replace />;
 }

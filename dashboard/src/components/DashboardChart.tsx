@@ -39,7 +39,7 @@ export function DashboardChart({ chartData }) {
     }
   }
   return (
-    <Card>
+    <Card className='rounded-md'>
       <CardHeader>
         <CardTitle>Category Sales</CardTitle>
         <CardDescription>Not Including Refund and Cancelled Orders</CardDescription>

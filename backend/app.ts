@@ -135,4 +135,6 @@ dbConnect();
 app.get("/", (req, res) => res.send("Backend!!"));
 const port = process.env.PORT;
 
-httpServer.listen(port, () => console.log(`Server is running on port ${port}`));
+httpServer.listen(port, () =>
+  console.log(`Server is running on port ${port}; Current environment is: ${process.env.NODE_ENV}`)
+);

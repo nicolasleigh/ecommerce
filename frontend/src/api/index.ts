@@ -1,9 +1,11 @@
 import axios from "axios";
 
-const local = "http://localhost:8000";
-const production = "";
+let base = "http://localhost:8083";
+if (import.meta.env.PROD) {
+  base = "https://pet.linze.pro";
+}
 const api = axios.create({
-  baseURL: `${local}/api`,
+  baseURL: `${base}/api`,
 });
 
 export default api;

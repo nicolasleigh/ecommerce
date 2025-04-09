@@ -1,0 +1,44 @@
+name: petify
+
+services:
+  mongodb:
+    restart: always
+    image: mongo:7.0-jammy
+    container_name: petify-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: nicolas
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    volumes:
+      - mongo_data:/data/db
+    expose:
+      - "27017"
+    networks:
+      - backend_network
+
+  backend:
+    restart: always
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: petify-backend
+    environment:
+      NODE_ENV: production
+    networks:
+      - backend_network
+    depends_on:
+      - mongodb
+    ports:
+      - "127.0.0.1:8083:8083"
+
+secrets:
+  db_password:
+    file: db_password.txt
+
+volumes:
+  mongo_data:
+
+networks:
+  backend_network:
+    driver: bridge
