@@ -1,11 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
-import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { Loader } from "lucide-react";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { PropagateLoader } from "react-spinners";
-import { overrideStyle } from "../../utils/utils";
-import { messageClear, seller_register } from "../../store/reducers/authReducer";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { messageClear, seller_register } from "../../store/reducers/authReducer";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -39,13 +37,13 @@ export default function Signup() {
   }, [successMessage, errorMessage]);
 
   return (
-    <div className='min-w-full min-h-screen bg-[#cdcae9] flex justify-center items-center'>
-      <div className='w-[350px] text-[#fff] p-2'>
-        <div className='bg-[#6f68d1] p-4 rounded-md'>
+    <div className='min-w-full min-h-screen  flex justify-center items-center'>
+      <div className='w-[350px]  p-2'>
+        <div className='border p-4 rounded-md'>
           <h2 className='text-xl mb-3 font-bold '>Welcome</h2>
           <p className='text-sm mb-3 font-medium'>Please register your account</p>
           <form onSubmit={handleSubmit}>
-            <div className='flex flex-col w-full gap-1 mb-3'>
+            <div className='flex flex-col w-full gap-1 mb-3 text-sm'>
               <label htmlFor='name'>Name</label>
               <input
                 value={state.name}
@@ -58,7 +56,7 @@ export default function Signup() {
                 className='px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md'
               />
             </div>
-            <div className='flex flex-col w-full gap-1 mb-3'>
+            <div className='flex flex-col w-full gap-1 mb-3 text-sm'>
               <label htmlFor='email'>Email</label>
               <input
                 value={state.email}
@@ -71,7 +69,7 @@ export default function Signup() {
                 className='px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md'
               />
             </div>
-            <div className='flex flex-col w-full gap-1 mb-3'>
+            <div className='flex flex-col w-full gap-1 mb-3 text-sm'>
               <label htmlFor='password'>Password</label>
               <input
                 value={state.password}
@@ -85,52 +83,20 @@ export default function Signup() {
               />
             </div>
 
-            <div className='flex items-center w-full gap-3 mb-3'>
-              <input
-                type='checkbox'
-                name='checkbox'
-                id='checkbox'
-                className='w-4 h-4 text-blue-600 overflow-hidden bg-gray-200 rounded border-gray-300 focus:ring-blue-500'
-              />
-              <label htmlFor='checkbox'>I agree to the privacy terms</label>
-            </div>
-
             <button
               disabled={loader}
-              className='bg-slate-800 w-full hover:shadow-blue-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
+              className='bg-secondary hover:bg-secondary/70 flex items-center justify-center  w-full border rounded-md px-7 py-2 mb-3'
             >
-              {loader ? <PropagateLoader color='white' cssOverride={overrideStyle} /> : "Sign Up"}
+              {loader ? <Loader className='animate-spin' /> : "Sign Up"}
             </button>
 
-            <div className='flex items-center mb-3 gap-3 justify-center'>
+            <div className='flex items-center mb-3 gap-3 justify-center text-sm'>
               <p>
-                Already Have an Account?{" "}
-                <Link className='font-bold' to='/login'>
+                Already Have an Account?
+                <Link className='font-bold ml-3 underline hover:no-underline underline-offset-4 ' to='/login'>
                   Login
                 </Link>
               </p>
-            </div>
-
-            <div className='w-full flex justify-center items-center mb-3'>
-              <div className='w-[45%] bg-slate-700 h-[1px]'></div>
-              <div className='w-[10%] flex justify-center items-center'>
-                <span className='pb-1'>Or</span>
-              </div>
-              <div className='w-[45%] bg-slate-700 h-[1px]'></div>
-            </div>
-
-            <div className='flex justify-center items-center gap-3'>
-              <div className='w-[135px] h-[35px] flex rounded-md bg-orange-700 shadow-lg hover:shadow-orange-700/50 justify-center cursor-pointer items-center overflow-hidden'>
-                <span>
-                  <FaGoogle />
-                </span>
-              </div>
-
-              <div className='w-[135px] h-[35px] flex rounded-md bg-blue-700 shadow-lg hover:shadow-blue-700/50 justify-center cursor-pointer items-center overflow-hidden'>
-                <span>
-                  <FaFacebook />
-                </span>
-              </div>
             </div>
           </form>
         </div>

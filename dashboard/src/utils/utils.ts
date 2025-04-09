@@ -1,14 +1,13 @@
 import { io } from "socket.io-client";
 
-export const overrideStyle = {
-  display: "flex",
-  margin: "0 auto",
-  height: "24px",
-  justifyContent: "center",
-  alignItems: "center",
-};
+let socketUrl = "http://localhost:8083";
 
-export const socket = io("http://localhost:8000");
+if (process.env.NODE_ENV === "production") {
+  // TODO:
+  socketUrl = "";
+}
+
+export const socket = io(socketUrl);
 
 export const getShortObjectID = (id: string) => {
   // const len = id?.length;

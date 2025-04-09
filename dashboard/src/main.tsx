@@ -15,23 +15,23 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <Provider store={store}>
         <Suspense>
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+          <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarInset>
                 <App />
-              </ThemeProvider>
-            </SidebarInset>
-            <Toaster
-              toastOptions={{
-                position: "top-right",
-                style: {
-                  background: "#283046",
-                  color: "white",
-                },
-              }}
-            />
-          </SidebarProvider>
+              </SidebarInset>
+              <Toaster
+                toastOptions={{
+                  position: "top-right",
+                  style: {
+                    background: "#283046",
+                    color: "white",
+                  },
+                }}
+              />
+            </SidebarProvider>
+          </ThemeProvider>
         </Suspense>
       </Provider>
     </BrowserRouter>

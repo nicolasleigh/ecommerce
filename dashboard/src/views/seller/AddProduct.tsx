@@ -1,21 +1,16 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { IoMdCloseCircle, IoMdImages } from "react-icons/io";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { getCategory } from "../../store/reducers/categoryReducer";
-import { messageClear, productAdd } from "../../store/reducers/productReducer";
-import { PropagateLoader } from "react-spinners";
-import { overrideStyle } from "../../utils/utils";
-import toast from "react-hot-toast";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import CategorySelector from "./CategorySelector";
 import { Textarea } from "@/components/ui/textarea";
-import { Pencil } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader } from "lucide-react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { z } from "zod";
+import { getCategory } from "../../store/reducers/categoryReducer";
+import { messageClear } from "../../store/reducers/productReducer";
 import ProductImageSelect from "./ProductImageSelect";
 
 const formSchema = z.object({
@@ -335,9 +330,9 @@ export default function AddProduct() {
             <div className='flex'>
               <button
                 disabled={loader}
-                className='bg-red-500 w-60 hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
+                className='bg-red-500 w-60 flex items-center justify-center hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
               >
-                {loader ? <PropagateLoader color='white' cssOverride={overrideStyle} /> : "Add Product"}
+                {loader ? <Loader className='animate-spin' /> : "Add Product"}
               </button>
             </div>
           </form>

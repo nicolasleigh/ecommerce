@@ -17,10 +17,13 @@ import { CgProfile } from "react-icons/cg";
 import { IoMdAdd } from "react-icons/io";
 import { IoChatbubbles } from "react-icons/io5";
 import { MdPayment, MdViewList } from "react-icons/md";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Button } from "./button";
+import { useTheme } from "../theme-provider";
+import { useDispatch } from "react-redux";
+import { logout } from "@/store/reducers/authReducer";
 
-export const items = [
+const items = [
   {
     title: "Dashboard",
     icon: <AiOutlineDashboard />,
@@ -41,11 +44,6 @@ export const items = [
     icon: <MdViewList />,
     url: "/products",
   },
-  // {
-  //   title: "Discount Product",
-  //   icon: <TbBasketDiscount />,
-  //   url: "/discount-product",
-  // },
   {
     title: "Orders",
     icon: <BsCartCheck />,
@@ -61,11 +59,6 @@ export const items = [
     icon: <IoChatbubbles />,
     url: "/chat-customer",
   },
-  // {
-  //   title: "Chat-Support",
-  //   icon: <BsFillChatQuoteFill />,
-  //   url: "/chat-support",
-  // },
   {
     title: "Profile",
     icon: <CgProfile />,
@@ -75,11 +68,15 @@ export const items = [
 
 export function AppSidebar() {
   const { t } = useTranslation();
+  const { theme } = useTheme();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   return (
     <Sidebar variant='inset'>
-      <SidebarHeader className='mb-8'>
+      <SidebarHeader className='mb-4'>
         <Link to='/'>
-          <img src='/logo.svg' alt='Petify logo' className='w-full pt-2' />
+          <img src={theme === "dark" ? "/logo-dark.svg" : "/logo.svg"} alt='Petify logo' className='w-full pt-2' />
         </Link>
       </SidebarHeader>
       <SidebarContent className=''>
@@ -102,7 +99,11 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarRail />
       <SidebarFooter className='p-0'>
-        <Button variant='secondary' className='flex items-center justify-start w-full py-1 px-2'>
+        <Button
+          variant='secondary'
+          onClick={() => dispatch(logout(navigate))}
+          className='flex items-center justify-start w-full py-1 px-2'
+        >
           <LogOut size={18} />
           <span>{t("Log out")}</span>
         </Button>

@@ -1,22 +1,18 @@
-import { useEffect, useState } from "react";
-import { FaEdit, FaImage, FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import Pagination from "../Pagination";
-import { IoMdCloseCircle } from "react-icons/io";
-import { PropagateLoader } from "react-spinners";
-import { overrideStyle } from "../../utils/utils";
-import { categoryAdd, messageClear, getCategory } from "../../store/reducers/categoryReducer";
-import { useDispatch, useSelector } from "react-redux";
-import toast from "react-hot-toast";
-import Search from "../components/Search";
+import { columns } from "@/components/tables/CategoryColumn";
+import { DataTable } from "@/components/tables/DataTable";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { DataTable } from "@/components/tables/DataTable";
-import { columns } from "@/components/tables/CategoryColumn";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { FaImage } from "react-icons/fa";
+import { IoMdCloseCircle } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { z } from "zod";
+import { categoryAdd, getCategory, messageClear } from "../../store/reducers/categoryReducer";
 
 const formSchema = z.object({
   name: z.string().nonempty(),
@@ -274,9 +270,9 @@ export default function Category() {
                     <div className='mt-4'>
                       <button
                         disabled={loader}
-                        className='bg-red-800 w-full hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
+                        className='bg-red-800 w-full flex items-center justify-center hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
                       >
-                        {loader ? <PropagateLoader color='white' cssOverride={overrideStyle} /> : "Add Category"}
+                        {loader ? <Loader className='animate-spin' /> : "Add Category"}
                       </button>
                     </div>
                   </div>

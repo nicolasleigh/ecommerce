@@ -1,17 +1,15 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { IoMdCloseCircle, IoMdImages } from "react-icons/io";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { getCategory } from "../../store/reducers/categoryReducer";
-import { getProduct, messageClear, updateProduct, productImageUpdate } from "../../store/reducers/productReducer";
-import { PropagateLoader } from "react-spinners";
-import { overrideStyle } from "../../utils/utils";
-import toast from "react-hot-toast";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { Loader } from "lucide-react";
+import { ChangeEvent, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCategory } from "../../store/reducers/categoryReducer";
+import { getProduct, messageClear, productImageUpdate, updateProduct } from "../../store/reducers/productReducer";
 
 export default function EditProduct() {
   const { productId } = useParams();
@@ -306,9 +304,9 @@ export default function EditProduct() {
             <div className='flex'>
               <button
                 disabled={loader}
-                className='bg-red-500 w-[280px] hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
+                className='bg-red-500 w-[280px] flex items-center justify-center hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
               >
-                {loader ? <PropagateLoader color='white' cssOverride={overrideStyle} /> : "Save Changes"}
+                {loader ? <Loader className='animate-spin' /> : "Save Changes"}
               </button>
             </div>
           </form>

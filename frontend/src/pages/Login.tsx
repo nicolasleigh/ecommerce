@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { customer_login, messageClear } from "../store/reducers/authReducer";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { FadeLoader } from "react-spinners";
+import { Loader } from "lucide-react";
 
 export default function Login() {
   const [state, setState] = useState({
@@ -47,7 +47,7 @@ export default function Login() {
     <div>
       {loader && (
         <div className='w-screen h-screen flex justify-center items-center fixed left-0 top-0 bg-[#38303033] z-[999]'>
-          <FadeLoader />
+          <Loader className='animate-spin' width={50} height={50} />
         </div>
       )}
 

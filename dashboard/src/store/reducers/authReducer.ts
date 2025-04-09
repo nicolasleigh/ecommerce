@@ -26,23 +26,16 @@ export const seller_login = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk(
-  "auth/logout",
-  async ({ navigate, role }, { rejectWithValue, fulfillWithValue }) => {
-    try {
-      const { data } = await api.get("/logout", { withCredentials: true });
-      localStorage.removeItem("accessToken");
-      if (role === "admin") {
-        navigate("/admin/login");
-      } else {
-        navigate("/login");
-      }
-      return fulfillWithValue(data);
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
+export const logout = createAsyncThunk("auth/logout", async (navigate, { rejectWithValue, fulfillWithValue }) => {
+  try {
+    const { data } = await api.get("/logout", { withCredentials: true });
+    localStorage.removeItem("accessToken");
+    navigate("/login");
+    return fulfillWithValue(data);
+  } catch (error) {
+    return rejectWithValue(error.response.data);
   }
-);
+});
 
 export const get_user_info = createAsyncThunk(
   "auth/get_user_info",
@@ -175,6 +168,12 @@ export const authReducer = createSlice({
         state.successMessage = payload.message;
         state.token = payload.token;
         state.role = returnRole(payload.token);
+      })
+      .addCase(logout.fulfilled, (state, { payload }) => {
+        // state.successMessage = payload.message;
+        state.token = "";
+        state.role = "";
+        state.userInfo = "";
       })
       .addCase(updatePassword.pending, (state, { payload }) => {
         state.loader = true;

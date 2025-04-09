@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import { MessageSquareMore, Send } from "lucide-react";
 import CustomerAvatar from "../CustomerAvatar";
 
-const socket = io("http://localhost:8000");
+const socket = io("http://localhost:8083");
 
 export default function Chat() {
   const { sellerId } = useParams();
