@@ -103,9 +103,9 @@ export default function OrderColumnAction({ orderId, isProduct }) {
             className='w-full flex  items-center gap-3'
             onClick={() => {
               if (isProduct) {
-                return navigate(`/seller/dashboard/product/details/${orderId}`);
+                return navigate(`/product/details/${orderId}`);
               }
-              navigate(`/seller/dashboard/order/details/${orderId}`);
+              navigate(`/order/details/${orderId}`);
             }}
           >
             <Eye strokeWidth={0.9} size={20} />

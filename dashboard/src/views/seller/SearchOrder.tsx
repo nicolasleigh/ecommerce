@@ -37,7 +37,7 @@ export function SearchOrder({ orders }) {
                   value={order.label}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
-                    navigate(`/seller/dashboard/order/details/${order.value}`);
+                    navigate(`/order/details/${order.value}`);
                     setOpen(false);
                   }}
                 >

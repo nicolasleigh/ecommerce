@@ -2,29 +2,24 @@ import { lazy } from "react";
 
 const Login = lazy(() => import("../../views/auth/Login"));
 const Signup = lazy(() => import("../../views/auth/Signup"));
-const AdminLogin = lazy(() => import("../../views/auth/AdminLogin"));
 const Home = lazy(() => import("../../views/Home"));
 const UnAuthorized = lazy(() => import("../../views/UnAuthorized"));
 
 const publicRoutes = [
   {
-    path: "/seller",
+    path: "/",
     element: <Home />,
   },
   {
-    path: "/seller/login",
+    path: "/login",
     element: <Login />,
   },
   {
-    path: "/seller/signup",
+    path: "/signup",
     element: <Signup />,
   },
   {
-    path: "/seller/admin/login",
-    element: <AdminLogin />,
-  },
-  {
-    path: "/seller/unauthorized",
+    path: "/unauthorized",
     element: <UnAuthorized />,
   },
 ];

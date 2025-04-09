@@ -102,7 +102,7 @@ export default function SellerToCustomer() {
                   customers.length !== 0 &&
                   customers.map((c, i) => (
                     <Link
-                      to={`/seller/dashboard/chat-customer/${c.friendId}`}
+                      to={`/chat-customer/${c.friendId}`}
                       key={i}
                       className={`h-[60px] flex justify-start gap-2 items-center border px-2 py-2 rounded-md cursor-pointer `}
                     >

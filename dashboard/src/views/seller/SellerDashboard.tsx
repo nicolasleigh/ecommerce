@@ -86,7 +86,7 @@ export default function SellerDashboard() {
           <div className='w-full border p-4 rounded-md shadow-md'>
             <div className='flex justify-between items-center'>
               <h2 className='font-semibold text-lg  pb-3'>Recent Customer Message</h2>
-              <Link to={`/seller/dashboard/chat-customer`} className='font-semibold text-sm '>
+              <Link to={`/chat-customer`} className='font-semibold text-sm '>
                 View All
               </Link>
             </div>
@@ -112,7 +112,7 @@ export default function SellerDashboard() {
                         </div>
                         <div className='p-3  rounded-lg border border-slate-600 shadow-sm'>
                           <div className='flex justify-between items-center mb-2'>
-                            <Link to={`/seller/dashboard/chat-customer/${item.senderId}`} className='font-normal'>
+                            <Link to={`/chat-customer/${item.senderId}`} className='font-normal'>
                               {item.senderName}
                             </Link>
                             {day ? (
@@ -137,7 +137,7 @@ export default function SellerDashboard() {
       <div className='w-full p-4 border shadow-md rounded-md mt-6'>
         <div className='flex justify-between items-center'>
           <h2 className='font-semibold text-lg  pb-3'>Recent Orders</h2>
-          <Link to='/seller/dashboard/orders' className='font-semibold text-sm '>
+          <Link to='/orders' className='font-semibold text-sm '>
             View All
           </Link>
         </div>
@@ -183,7 +183,7 @@ export default function SellerDashboard() {
                         <Badge className='uppercase font-light'>{item.paymentStatus}</Badge>
                       </td>
                       <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>
-                        <Link to={`/seller/dashboard/order/details/${item._id}`}>
+                        <Link to={`/order/details/${item._id}`}>
                           <SquareArrowOutUpRight strokeWidth={1.3} size={20} />
                         </Link>
                       </td>

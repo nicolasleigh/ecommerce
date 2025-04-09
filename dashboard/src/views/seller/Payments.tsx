@@ -108,7 +108,7 @@ export default function Payments() {
           <SquareArrowOutUpRight
             strokeWidth={1}
             size={20}
-            onClick={() => navigate(`/seller/dashboard/order/details/${allOrders[index]?._id}`)}
+            onClick={() => navigate(`/order/details/${allOrders[index]?._id}`)}
             className='cursor-pointer'
           />
         </div>

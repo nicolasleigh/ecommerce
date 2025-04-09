@@ -8,112 +8,68 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { Gauge, Home, LogOut, MonitorPlay, UserRound } from "lucide-react";
+import { LogOut } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { AiOutlineDashboard } from "react-icons/ai";
+import { BiCategory } from "react-icons/bi";
+import { BsCartCheck } from "react-icons/bs";
+import { CgProfile } from "react-icons/cg";
+import { IoMdAdd } from "react-icons/io";
+import { IoChatbubbles } from "react-icons/io5";
+import { MdPayment, MdViewList } from "react-icons/md";
 import { Link, NavLink } from "react-router-dom";
 import { Button } from "./button";
-import { useTranslation } from "react-i18next";
-import i18n from "@/utils/i18n";
-import { AiOutlineDashboard, AiOutlineShoppingCart } from "react-icons/ai";
-import { BiCategory } from "react-icons/bi";
-import { FaUsers, FaUserTimes } from "react-icons/fa";
-import { MdPayment, MdViewList } from "react-icons/md";
-import { FaCodePullRequest } from "react-icons/fa6";
-import { IoIosChatbubbles, IoMdAdd } from "react-icons/io";
-import { TbBasketDiscount } from "react-icons/tb";
-import { BsCartCheck, BsFillChatQuoteFill } from "react-icons/bs";
-import { IoChatbubbles } from "react-icons/io5";
-import { CgProfile } from "react-icons/cg";
 
 export const items = [
-  // {
-  //   title: "Dashboard",
-  //   icon: <AiOutlineDashboard />,
-  //   url: "/admin/dashboard",
-  // },
-  // {
-  //   title: "Orders",
-  //   icon: <AiOutlineShoppingCart />,
-  //   url: "/admin/dashboard/orders",
-  // },
-  // {
-  //   title: "Category",
-  //   icon: <BiCategory />,
-  //   url: "/admin/dashboard/category",
-  // },
-  // {
-  //   title: "Sellers",
-  //   icon: <FaUsers />,
-  //   url: "/admin/dashboard/sellers",
-  // },
-  // {
-  //   title: "Payment Request",
-  //   icon: <MdPayment />,
-  //   url: "/admin/dashboard/payment-request",
-  // },
-  // {
-  //   title: "Deactive Sellers",
-  //   icon: <FaUserTimes />,
-  //   url: "/admin/dashboard/deactive-sellers",
-  // },
-  // {
-  //   title: "Sellers Request",
-  //   icon: <FaCodePullRequest />,
-  //   url: "/admin/dashboard/sellers-request",
-  // },
-  // {
-  //   title: "Live Chat",
-  //   icon: <IoIosChatbubbles />,
-  //   url: "/admin/dashboard/chat-seller",
-  // },
   {
     title: "Dashboard",
     icon: <AiOutlineDashboard />,
-    url: "/seller/dashboard",
+    url: "/dashboard",
   },
   {
     title: "Category",
     icon: <BiCategory />,
-    url: "/seller/dashboard/category",
+    url: "/category",
   },
   {
     title: "Add Product",
     icon: <IoMdAdd />,
-    url: "/seller/dashboard/add-product",
+    url: "/add-product",
   },
   {
     title: "All Product",
     icon: <MdViewList />,
-    url: "/seller/dashboard/products",
+    url: "/products",
   },
   // {
   //   title: "Discount Product",
   //   icon: <TbBasketDiscount />,
-  //   url: "/seller/dashboard/discount-product",
+  //   url: "/discount-product",
   // },
   {
     title: "Orders",
     icon: <BsCartCheck />,
-    url: "/seller/dashboard/orders",
+    url: "/orders",
   },
   {
     title: "Payments",
     icon: <MdPayment />,
-    url: "/seller/dashboard/payments",
+    url: "/payments",
   },
   {
     title: "Chat-Customer",
     icon: <IoChatbubbles />,
-    url: "/seller/dashboard/chat-customer",
+    url: "/chat-customer",
   },
   // {
   //   title: "Chat-Support",
   //   icon: <BsFillChatQuoteFill />,
-  //   url: "/seller/dashboard/chat-support",
+  //   url: "/chat-support",
   // },
   {
     title: "Profile",
     icon: <CgProfile />,
-    url: "/seller/dashboard/profile",
+    url: "/profile",
   },
 ];
 
