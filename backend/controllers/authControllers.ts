@@ -151,13 +151,14 @@ class authControllers {
       if (seller) {
         const matched = await bcrypt.compare(oldPassword, seller.password);
         if (matched) {
-          await sellerModel.findByIdAndUpdate(id, { password: await bcrypt.hash(newPassword, 10) });
-          const token = await createToken({
-            id: seller.id,
-            role: seller.role,
-          });
-          res.cookie("accessToken", token, { expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) });
-          responseReturn(res, 200, { token, message: "Password reset successfully" });
+          return responseReturn(res, 401, { error: "Sorry, you don't have the right to modify the password" });
+          // await sellerModel.findByIdAndUpdate(id, { password: await bcrypt.hash(newPassword, 10) });
+          // const token = await createToken({
+          //   id: seller.id,
+          //   role: seller.role,
+          // });
+          // res.cookie("accessToken", token, { expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) });
+          // responseReturn(res, 200, { token, message: "Password reset successfully" });
         } else {
           responseReturn(res, 404, { error: "Password wrong" });
         }

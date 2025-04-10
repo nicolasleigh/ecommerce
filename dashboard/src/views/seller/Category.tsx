@@ -65,10 +65,6 @@ export default function Category() {
     if (successMessage) {
       toast.success(successMessage);
       dispatch(messageClear());
-      // setState({
-      //   name: "",
-      //   image: "",
-      // });
       setImageShow("");
     }
     if (errorMessage) {
@@ -92,18 +88,13 @@ export default function Category() {
     <div className='px-2 lg:px-7 pt-5'>
       <div className='flex lg:hidden justify-between items-center mb-5 p-4 border rounded-md'>
         <h1 className='font-semibold text-lg'>Category</h1>
-        <Button
-          onClick={() => setShow(true)}
-          className='bg-red-500 shadow-lg hover:shadow-red-500/40 px-4 py-2 cursor-pointer text-white rounded-sm text-sm'
-        >
+        <Button onClick={() => setShow(true)} className='px-4 py-2 cursor-pointer rounded-sm text-sm'>
           Add
         </Button>
       </div>
       <div className='flex flex-wrap w-full'>
         <div className='w-full lg:w-7/12'>
           <div className='w-full p-4 border rounded-md'>
-            {/* <Search setPerPage={setPerPage} setSearchValue={setSearchValue} searchValue={searchValue} /> */}
-
             <div className='relative overflow-x-auto mt-4'>
               <DataTable
                 columns={columns}
@@ -189,12 +180,13 @@ export default function Category() {
                       )}
                     />
                     <div className='mt-4'>
-                      <button
+                      <Button
                         disabled={loader}
-                        className='bg-red-500 w-full flex items-center justify-center hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
+                        variant='outline'
+                        className=' w-full flex items-center justify-center px-7 py-2 mb-3'
                       >
                         {loader ? <Loader className='animate-spin' /> : "Add Category"}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </form>

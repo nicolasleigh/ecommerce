@@ -91,9 +91,9 @@ export default function Profile() {
               {userInfo?.image ? (
                 <label
                   htmlFor='img'
-                  className='h-[200px] rounded-md w-[200px] relative  cursor-pointer overflow-hidden'
+                  className='h-[200px] rounded-md w-[200px] relative mt-5 cursor-pointer overflow-hidden'
                 >
-                  <img src={userInfo.image} alt='image' className=' w-full' />
+                  <img src={userInfo.image} alt='image' className='w-full' />
                   {imageLoader && (
                     <div className='bg-slate-600 rounded-md absolute left-0 top-0 w-full h-full opacity-70 flex justify-center items-center z-20'>
                       <span>

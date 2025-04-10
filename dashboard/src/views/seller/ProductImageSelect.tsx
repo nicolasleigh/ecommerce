@@ -1,5 +1,4 @@
-import { CircleX, Images, X } from "lucide-react";
-import { IoMdCloseCircle, IoMdImages } from "react-icons/io";
+import { Images, X } from "lucide-react";
 
 export default function ProductImageSelect({ imageShow, imageHandle, removeImage, changeImage }) {
   return (
@@ -12,15 +11,15 @@ export default function ProductImageSelect({ imageShow, imageHandle, removeImage
           <input onChange={(e) => changeImage(e.target.files[0], i)} type='file' id={i} className='hidden' />
           <span
             onClick={() => removeImage(i)}
-            className='p-1.5 z-10 cursor-pointer bg-red-500 hover:shadow-lg hover:shadow-red-400/50 text-white absolute top-1 right-1 rounded-full'
+            className='p-1.5 z-10 cursor-pointer bg-primary text-primary-foreground absolute top-1 right-1 rounded-full'
           >
-            <X width={18} height={18} />
+            <X width={18} strokeWidth={2.5} height={18} />
           </span>
         </div>
       ))}
       <label
         htmlFor='image'
-        className='flex justify-center rounded-md items-center flex-col h-[180px] cursor-pointer border  hover:border-red-400 w-full text-muted-foreground'
+        className='flex justify-center rounded-md items-center flex-col h-[180px] cursor-pointer border  hover:border-primary w-full text-muted-foreground'
       >
         <span>
           <Images width={18} />

@@ -22,6 +22,7 @@ import {
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import EditCategory from "@/views/seller/EditCategory";
+import toast from "react-hot-toast";
 
 export default function CategoryColumnAction({ id, category }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -61,14 +62,11 @@ export default function CategoryColumnAction({ id, category }) {
 
   const handleDelete = async (setOpenDialog) => {
     setBusy(true);
-    // const { error, message } = await deleteMovie(movieId);
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    toast.error("You have no rights to delete this category");
     setBusy(false);
-
-    // if (error) return toast.error(t(error));
-    // toast.success(t(message));
     setOpenDialog(false);
-    // handleUIUpdate();
+    setDropdownOpen(false);
   };
 
   return (
@@ -132,10 +130,17 @@ export default function CategoryColumnAction({ id, category }) {
         >
           <DialogHeader>
             <DialogTitle>{t("Are you sure?")}</DialogTitle>
-            <DialogDescription>{t("This action will remove this movie permanently!")}</DialogDescription>
+            <DialogDescription>{t("This action will remove this category permanently!")}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button disabled={busy} onClick={() => setOpenDeleteDialog(false)} variant='secondary'>
+            <Button
+              disabled={busy}
+              onClick={() => {
+                setOpenDeleteDialog(false);
+                setDropdownOpen(false);
+              }}
+              variant='secondary'
+            >
               {t("Cancel")}
             </Button>
             <Button

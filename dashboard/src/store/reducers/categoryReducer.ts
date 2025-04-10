@@ -60,6 +60,7 @@ export const categoryReducer = createSlice({
   reducers: {
     messageClear: (state, _) => {
       state.errorMessage = "";
+      state.successMessage = "";
     },
   },
   extraReducers: (builder) => {

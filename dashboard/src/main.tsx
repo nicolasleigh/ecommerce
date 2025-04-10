@@ -23,11 +23,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               </SidebarInset>
               <Toaster
                 toastOptions={{
-                  position: "top-right",
-                  style: {
-                    background: "#283046",
-                    color: "white",
-                  },
+                  position: "top-center",
+                  // style: {
+                  //   background: "#283046",
+                  //   color: "white",
+                  // },
                 }}
               />
             </SidebarProvider>

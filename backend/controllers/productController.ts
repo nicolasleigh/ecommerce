@@ -34,7 +34,7 @@ class productController {
           description: description.trim(),
           stock: parseInt(stock),
           price: parseInt(price),
-          discount: parseInt(discount),
+          discount: parseInt(discount) || 0,
           images: allImageUrl,
           brand: brand.trim(),
         });
@@ -42,6 +42,7 @@ class productController {
         responseReturn(res, 201, { message: "Product added successfully" });
       } catch (error) {
         console.log(error.message);
+        responseReturn(res, 400, { error: "Failed to add product" });
       }
     });
   };
