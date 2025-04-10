@@ -17,6 +17,22 @@ export const categoryAdd = createAsyncThunk(
   }
 );
 
+export const categoryEdit = createAsyncThunk(
+  "category/categoryEdit",
+  async ({ name, image, id }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("image", image);
+      const { data } = await api.patch(`/category-edit/${id}`, formData, { withCredentials: true });
+      // console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const getCategory = createAsyncThunk(
   "category/getCategory",
   async ({ perPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
@@ -59,6 +75,16 @@ export const categoryReducer = createSlice({
         state.loader = false;
         state.successMessage = payload.message;
         state.categories = [...state.categories, payload.category];
+      })
+      .addCase(categoryEdit.fulfilled, (state, { payload }) => {
+        state.successMessage = payload.message;
+        const replacedCategories = state.categories.map((e) => {
+          if (payload.category._id === e._id) {
+            return payload.category;
+          }
+          return e;
+        });
+        state.categories = replacedCategories;
       })
       .addCase(getCategory.fulfilled, (state, { payload }) => {
         state.totalCategory = payload.totalCategory;

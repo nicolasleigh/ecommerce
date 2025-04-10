@@ -1,35 +1,12 @@
-import { getAllOrders, getPaymentStats, sellerOrderStatusUpdate } from "@/store/reducers/orderReducer";
-import { forwardRef, useEffect, useState } from "react";
-import { FaCartShopping } from "react-icons/fa6";
-import { MdCurrencyExchange, MdProductionQuantityLimits } from "react-icons/md";
+import { Badge } from "@/components/ui/badge";
+import { getAllOrders, getPaymentStats } from "@/store/reducers/orderReducer";
+import { getShortObjectID } from "@/utils/utils";
+import { ChartColumnDecreasing, CreditCard, SquareArrowOutUpRight, SwitchCamera, Wallet } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { FixedSizeList } from "react-window";
 import { SearchOrder } from "./SearchOrder";
-import { getShortObjectID } from "@/utils/utils";
-import { Badge } from "@/components/ui/badge";
-import {
-  Banknote,
-  ChartColumnDecreasing,
-  ChevronDown,
-  CircleDollarSign,
-  CreditCard,
-  Eye,
-  RefreshCw,
-  SquareActivity,
-  SquareArrowOutUpRight,
-  SwitchCamera,
-  Wallet,
-} from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 // function handleOnWheel({ deltaY }) {
 //   console.log("handleOnWheel", deltaY);

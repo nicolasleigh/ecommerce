@@ -8,60 +8,63 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { LogOut } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import { AiOutlineDashboard } from "react-icons/ai";
-import { BiCategory } from "react-icons/bi";
-import { BsCartCheck } from "react-icons/bs";
-import { CgProfile } from "react-icons/cg";
-import { IoMdAdd } from "react-icons/io";
-import { IoChatbubbles } from "react-icons/io5";
-import { MdPayment, MdViewList } from "react-icons/md";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Button } from "./button";
-import { useTheme } from "../theme-provider";
-import { useDispatch } from "react-redux";
 import { logout } from "@/store/reducers/authReducer";
+import {
+  CreditCard,
+  Gauge,
+  LayoutList,
+  ListPlus,
+  LogOut,
+  MessageSquareMore,
+  ShoppingCart,
+  UserRoundPen,
+  Wallet,
+} from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useTheme } from "../theme-provider";
+import { Button } from "./button";
 
 const items = [
   {
     title: "Dashboard",
-    icon: <AiOutlineDashboard />,
+    icon: <Gauge />,
     url: "/dashboard",
   },
   {
     title: "Category",
-    icon: <BiCategory />,
+    icon: <LayoutList />,
     url: "/category",
   },
   {
     title: "Add Product",
-    icon: <IoMdAdd />,
+    icon: <ListPlus />,
     url: "/add-product",
   },
   {
     title: "All Product",
-    icon: <MdViewList />,
+    icon: <ShoppingCart />,
     url: "/products",
   },
   {
     title: "Orders",
-    icon: <BsCartCheck />,
+    icon: <Wallet />,
     url: "/orders",
   },
   {
     title: "Payments",
-    icon: <MdPayment />,
+    icon: <CreditCard />,
     url: "/payments",
   },
   {
     title: "Chat-Customer",
-    icon: <IoChatbubbles />,
+    icon: <MessageSquareMore />,
     url: "/chat-customer",
   },
   {
     title: "Profile",
-    icon: <CgProfile />,
+    icon: <UserRoundPen />,
     url: "/profile",
   },
 ];
@@ -84,8 +87,15 @@ export function AppSidebar() {
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton className='p-0'>
-                <NavLink to={item.url} className={({ isActive }) => (isActive ? "bg-muted" : " ") + " w-full"}>
-                  <Button variant='ghost' className='flex items-center justify-start w-full py-1 px-2' asChild>
+                <NavLink
+                  to={item.url}
+                  className={({ isActive }) => (isActive ? "bg-primary text-primary-foreground" : " ") + " w-full"}
+                >
+                  <Button
+                    variant='ghost'
+                    className='flex items-center justify-start w-full py-1 px-2 hover:bg-primary hover:text-primary-foreground'
+                    asChild
+                  >
                     <div>
                       {item.icon}
                       <span>{t(item.title)}</span>

@@ -21,8 +21,9 @@ import {
 } from "../ui/dialog";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import EditCategory from "@/views/seller/EditCategory";
 
-export default function MovieListColumnAction({ categoryId }) {
+export default function CategoryColumnAction({ id, category }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   // const [hasOpenDialog, setHasOpenDialog] = useState(false);
   const dropdownTriggerRef = useRef(null);
@@ -108,8 +109,11 @@ export default function MovieListColumnAction({ categoryId }) {
           open={openEditDialog}
           className='w-[900px]'
         >
-          <DialogTitle>{t("Edit Movie")}</DialogTitle>
-          {/* <UpdateMovie movieId={movieId} /> */}
+          <DialogTitle>{t("Edit Category")}</DialogTitle>
+          <EditCategory
+            initialState={{ name: category.name, image: category.image, id: id }}
+            setVisible={handleOpenEdit}
+          />
         </DialogItem>
 
         <DropdownMenuSeparator />

@@ -1,7 +1,7 @@
 import formidable from "formidable";
-import { v2 as cloudinary } from "cloudinary";
 import productModel from "../models/productModel";
 import { responseReturn } from "../utils/response";
+import cloudinary from "../utils/cloud";
 
 class productController {
   productAdd = async (req, res) => {
@@ -12,13 +12,6 @@ class productController {
       const { images } = files;
       name = name.trim().toLowerCase();
       const slug = name.split(" ").join("-");
-
-      cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET,
-        secure: true,
-      });
 
       try {
         let allImageUrl = [];
@@ -135,12 +128,6 @@ class productController {
         responseReturn(res, 404, { error: err.message });
       } else {
         try {
-          cloudinary.config({
-            cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-            api_key: process.env.CLOUDINARY_API_KEY,
-            api_secret: process.env.CLOUDINARY_API_SECRET,
-            secure: true,
-          });
           const result = await cloudinary.uploader.upload(newImage.filepath, { folder: "products" });
           if (result) {
             let { images } = await productModel.findById(productId);

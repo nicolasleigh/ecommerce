@@ -25,12 +25,14 @@ export function DataTable<TData, TValue>({
   data,
   setSearchValue,
   searchValue,
+  showSearch = false,
+  initialPageSize = 10,
 }: DataTableProps<TData, TValue>) {
   // const windowSize = typeof window !== "undefined" ? useWindowSize() : false;
 
   const [pagination, setPagination] = useState({
     pageIndex: 0, //initial page index
-    pageSize: 10, //default page size
+    pageSize: initialPageSize, //default page size
   });
 
   const table = useReactTable({
@@ -54,7 +56,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className='px-1'>
-      <Search table={table} setSearchValue={setSearchValue} searchValue={searchValue} />
+      <Search table={table} setSearchValue={setSearchValue} searchValue={searchValue} visible={showSearch} />
 
       <div className='rounded-md border'>
         <Table>

@@ -23,7 +23,7 @@ export const columns: ColumnDef<Category>[] = [
       const value = row.getValue("image");
       return (
         <div className='w-20 sm:w-28'>
-          <img src={value} alt='category image' className='w-full rounded' />
+          <img src={value} alt='category image' className='w-full rounded h-24' />
         </div>
       );
     },
@@ -39,7 +39,7 @@ export const columns: ColumnDef<Category>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      return <CategoryColumnAction categoryId={row.original.id} />;
+      return <CategoryColumnAction id={row.original._id} category={row.original} />;
     },
   },
 ];

@@ -183,51 +183,6 @@ export default function EditProduct() {
                       ))}
                   </SelectContent>
                 </Select>
-                {/* <input
-                  value={category}
-                  onChange={handleChange}
-                  onClick={() => setCateShow(!cateShow)}
-                  type='text'
-                  id='category'
-                  placeholder='Category'
-                  readOnly
-                  className=' px-4 py-2 focus:border-indigo-500 outline-none  border border-slate-700 rounded-md '
-                />
-                <div
-                  className={`absolute top-[101%] bg-[#475569] w-full transition-all ${
-                    cateShow ? "scale-100" : "scale-0"
-                  }`}
-                >
-                  <div className='w-full px-4 py-2 fixed'>
-                    <input
-                      value={searchValue}
-                      onChange={categorySearch}
-                      type='text'
-                      placeholder='search'
-                      className='px-3 py-1 w-full focus:border-indigo-500 outline-none bg-transparent border border-slate-700 rounded-md text-[#d0d2d6] overflow-hidden'
-                    />
-                  </div>
-                  <div className='pt-14'></div>
-                  <div className='flex justify-start items-start flex-col h-[200px] overflow-y-auto'>
-                    {allCategory.length &&
-                      allCategory.map((c, i) => (
-                        <span
-                          key={i}
-                          onClick={() => {
-                            setCateShow(false);
-                            setCategory(c.name);
-                            setSearchValue("");
-                            setAllCategory(categories);
-                          }}
-                          className={`px-4 py-2 hover:bg-indigo-500 hover:text-white hover:shadow-lg w-full cursor-pointer ${
-                            category === c.name && "bg-indigo-500"
-                          }`}
-                        >
-                          {c.name}
-                        </span>
-                      ))}
-                  </div>
-                </div> */}
               </div>
 
               <div className='flex flex-col w-full gap-1'>

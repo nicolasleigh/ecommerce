@@ -5,7 +5,7 @@ import sellerCustomerModel from "../models/chat/sellerCustomerModel";
 import { responseReturn } from "../utils/response";
 import createToken from "../utils/tokenCreate";
 import formidable from "formidable";
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "../utils/cloud";
 
 class authControllers {
   admin_login = async (req, res) => {
@@ -106,13 +106,6 @@ class authControllers {
     const { id } = req;
     const form = formidable({ multiples: true });
     form.parse(req, async (err, _, files) => {
-      cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET,
-        secure: true,
-      });
-
       const { image } = files;
 
       try {

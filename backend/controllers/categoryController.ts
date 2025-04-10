@@ -1,7 +1,7 @@
 import formidable from "formidable";
-import { v2 as cloudinary } from "cloudinary";
 import { responseReturn } from "../utils/response";
 import categoryModel from "../models/categoryModel";
+import cloudinary from "../utils/cloud";
 
 class categoryControllers {
   addCategory = async (req, res) => {
@@ -14,13 +14,6 @@ class categoryControllers {
         let { image } = files;
         name = name.trim().toLowerCase();
         const slug = name.split(" ").join("-");
-
-        cloudinary.config({
-          cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-          api_key: process.env.CLOUDINARY_API_KEY,
-          api_secret: process.env.CLOUDINARY_API_SECRET,
-          secure: true,
-        });
 
         try {
           const result = await cloudinary.uploader.upload(image.filepath, { folder: "categories" });
@@ -38,6 +31,45 @@ class categoryControllers {
           console.log(error.message);
         }
       }
+    });
+  };
+
+  editCategory = async (req, res) => {
+    const { categoryId } = req.params;
+    const form = formidable();
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        responseReturn(res, 404, { error: "something went wrong" });
+      }
+      let { name } = fields;
+      let { image } = files;
+
+      let imageUrl = "";
+      name = name?.trim().toLowerCase();
+      const slug = name?.split(" ").join("-");
+
+      if (image) {
+        const { secure_url: url } = await cloudinary.uploader.upload(image.filepath, { folder: "categories" });
+        imageUrl = url;
+      }
+
+      const updateObj = {
+        name: name,
+        slug: slug,
+        image: imageUrl,
+      };
+      // console.log("updateObj---before", updateObj);
+      Object.keys(updateObj).forEach((k) => !Boolean(updateObj[k]) && delete updateObj[k]);
+      // console.log("updateObj---after", updateObj);
+
+      const category = await categoryModel.findByIdAndUpdate(
+        categoryId,
+        {
+          ...updateObj,
+        },
+        { new: true }
+      );
+      responseReturn(res, 201, { category, message: "Category updated successfully" });
     });
   };
 

@@ -4,12 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader } from "lucide-react";
+import { Image, Loader, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { FaImage } from "react-icons/fa";
-import { IoMdCloseCircle } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { z } from "zod";
 import { categoryAdd, getCategory, messageClear } from "../../store/reducers/categoryReducer";
@@ -113,64 +111,9 @@ export default function Category() {
                 searchValue={searchValue}
                 // setPerPage={setPerPage}
                 setSearchValue={setSearchValue}
+                initialPageSize={5}
               />
-              {/* <table className='w-full text-sm text-left '>
-                <thead className='text-sm  uppercase border-b border-slate-700'>
-                  <tr>
-                    <th scope='col' className='py-3 px-4'>
-                      No.
-                    </th>
-                    <th scope='col' className='py-3 px-4'>
-                      Image
-                    </th>
-                    <th scope='col' className='py-3 px-4'>
-                      Name
-                    </th>
-                    <th scope='col' className='py-3 px-4'>
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {categories.map((data, index) => {
-                    return (
-                      <tr key={index}>
-                        <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                          {index + 1}
-                        </td>
-                        <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                          <img src={data.image} alt='product image' className='w-[45px] h-[45px]' />
-                        </td>
-                        <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap capitalize'>
-                          {data.name}
-                        </td>
-
-                        <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
-                          <div className='flex justify-start items-center gap-4'>
-                            <Link className='p-[6px] bg-yellow-500 rounded hover:shadow-lg hover:shadow-yellow-500/50'>
-                              <FaEdit />
-                            </Link>
-                            <Link className='p-[6px] bg-red-500 rounded hover:shadow-lg hover:shadow-red-500/50'>
-                              <FaTrash />
-                            </Link>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table> */}
             </div>
-
-            {/* <div className='w-full flex justify-end mt-4 '>
-              <Pagination
-                pageNumber={currentPage}
-                setPageNumber={setCurrentPage}
-                totalItem={50}
-                perPage={perPage}
-                showItem={3}
-              />
-            </div> */}
           </div>
         </div>
         <div
@@ -182,8 +125,11 @@ export default function Category() {
             <div className='border h-screen lg:h-auto px-3 py-2 lg:rounded-md '>
               <div className='flex justify-between items-center mb-4'>
                 <h1 className=' font-semibold text-xl w-full text-center'>Add Category</h1>
-                <div onClick={() => setShow(false)} className='block lg:hidden'>
-                  <IoMdCloseCircle />
+                <div
+                  onClick={() => setShow(false)}
+                  className='block p-1 bg-primary rounded-full text-primary-foreground lg:hidden'
+                >
+                  <X width={18} height={18} />
                 </div>
               </div>
 
@@ -203,16 +149,6 @@ export default function Category() {
                         </FormItem>
                       )}
                     />
-                    {/* <label htmlFor='name'>Category Name</label>
-                    <input
-                      value={state.name}
-                      onChange={(e) => setState({ ...state, name: e.target.value })}
-                      type='text'
-                      id='name'
-                      name='category_name'
-                      placeholder='Category Name'
-                      className='px-4 py-2  outline-none bg-transparent border border-slate-700 rounded-md '
-                    /> */}
                   </div>
                   <div>
                     <FormField
@@ -225,13 +161,13 @@ export default function Category() {
                             <>
                               <label
                                 htmlFor='image'
-                                className='flex justify-center items-center flex-col h-40  cursor-pointer rounded-md border   w-full '
+                                className='flex justify-center items-center flex-col h-72 cursor-pointer rounded-md border w-full '
                               >
                                 {imageShow ? (
                                   <img src={imageShow} className='w-full h-full' />
                                 ) : (
                                   <span className='flex gap-2 items-center text-muted-foreground'>
-                                    <FaImage />
+                                    <Image width={18} height={18} />
                                     Select Image
                                   </span>
                                 )}
@@ -252,25 +188,10 @@ export default function Category() {
                         </FormItem>
                       )}
                     />
-                    {/* <label
-                      htmlFor='image'
-                      className='flex justify-center items-center flex-col h-[238px] cursor-pointer border border-dashed hover:border-red-500 w-full '
-                    >
-                      {imageShow ? (
-                        <img src={imageShow} className='w-full h-full' />
-                      ) : (
-                        <span>
-                          <FaImage />
-                        </span>
-                      )}
-
-                      <span>Select Image</span>
-                    </label>
-                    <input onChange={imageHandle} type='file' name='image' id='image' className='hidden' /> */}
                     <div className='mt-4'>
                       <button
                         disabled={loader}
-                        className='bg-red-800 w-full flex items-center justify-center hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
+                        className='bg-red-500 w-full flex items-center justify-center hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
                       >
                         {loader ? <Loader className='animate-spin' /> : "Add Category"}
                       </button>
