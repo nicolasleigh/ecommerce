@@ -1,5 +1,10 @@
-import { ExternalLink, Eye, Loader, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Eye, Loader, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
+import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,51 +12,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { forwardRef, useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
 import DialogItem from "./DialogItem";
 
 export default function ProductColumnAction({ productId }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  // const [hasOpenDialog, setHasOpenDialog] = useState(false);
-  const dropdownTriggerRef = useRef(null);
-  // const focusRef = useRef(null);
-  const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [busy, setBusy] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   fetchLatestUploads();
-  // }, []);
-
-  // const handleUIUpdate = () => fetchLatestUploads();
-
-  // function handleDialogItemSelect() {
-  //   focusRef.current = dropdownTriggerRef.current;
-  // }
-
-  function handleOpenEdit(open) {
-    // setHasOpenDialog(open);
-    setOpenEditDialog(open);
-    if (open === false) {
-      setDropdownOpen(false);
-    }
-  }
 
   function handleOpenDelete(open) {
     // setHasOpenDialog(open);
@@ -63,40 +31,21 @@ export default function ProductColumnAction({ productId }) {
 
   const handleDelete = async (setOpenDialog) => {
     setBusy(true);
-    // const { error, message } = await deleteMovie(movieId);
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
+    toast.error(t("You have no right to delete a product"));
     setBusy(false);
-
-    // if (error) return toast.error(t(error));
-    // toast.success(t(message));
     setOpenDialog(false);
-    // handleUIUpdate();
   };
 
   return (
     <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant='ghost'
-          className='h-3 w-3 sm:w-8 sm:h-8 p-0'
-          // ref={dropdownTriggerRef}
-        >
+        <Button variant='ghost' className='h-3 w-3 sm:w-8 sm:h-8 p-0'>
           <span className='sr-only'>Open menu</span>
           <MoreHorizontal className='h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align='end'
-        // hidden={hasOpenDialog}
-        // hidden={openEditDialog || openDeleteDialog}
-        // onCloseAutoFocus={(event) => {
-        //   if (focusRef.current) {
-        //     focusRef.current.focus();
-        //     focusRef.current = null;
-        //     event.preventDefault();
-        //   }
-        // }}
-      >
+      <DropdownMenuContent align='end'>
         <DropdownMenuItem className='p-0'>
           <div
             onClick={() => navigate(`/product/details/${productId}`)}
@@ -130,7 +79,7 @@ export default function ProductColumnAction({ productId }) {
         >
           <DialogHeader>
             <DialogTitle>{t("Are you sure?")}</DialogTitle>
-            <DialogDescription>{t("This action will remove this movie permanently!")}</DialogDescription>
+            <DialogDescription>{t("This action will remove this product permanently!")}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button
@@ -146,6 +95,7 @@ export default function ProductColumnAction({ productId }) {
             <Button
               onClick={() => {
                 handleDelete(setOpenDeleteDialog);
+                setDropdownOpen(false);
               }}
               variant='destructive'
               disabled={busy}

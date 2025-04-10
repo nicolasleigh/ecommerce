@@ -1,16 +1,31 @@
 import { FaEye, FaRegHeart } from "react-icons/fa";
 import { RiShoppingCartLine } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Rating from "../Rating";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { get_wishlist_products, messageClear, remove_wishlist } from "../../store/reducers/cartReducer";
+import { add_to_cart, get_wishlist_products, messageClear, remove_wishlist } from "../../store/reducers/cartReducer";
 import toast from "react-hot-toast";
 
 export default function Wishlist() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.auth);
   const { successMessage, wishlist } = useSelector((state) => state.cart);
+
+  const handleClick = (id) => {
+    if (userInfo) {
+      dispatch(
+        add_to_cart({
+          userId: userInfo.id,
+          quantity: 1,
+          productId: id,
+        })
+      );
+    } else {
+      navigate("/login");
+    }
+  };
 
   useEffect(() => {
     dispatch(get_wishlist_products(userInfo.id));
@@ -55,7 +70,10 @@ export default function Wishlist() {
                   >
                     <FaEye />
                   </Link>
-                  <li className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all'>
+                  <li
+                    onClick={() => handleClick(p._id)}
+                    className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all'
+                  >
                     <RiShoppingCartLine />
                   </li>
                 </ul>

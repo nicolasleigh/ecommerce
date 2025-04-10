@@ -1,13 +1,11 @@
-import { FaBorderAll, FaHeart, FaList } from "react-icons/fa";
+import { Book, Heart, House, Lock, LogOut, MessageSquareMore } from "lucide-react";
+import { useState } from "react";
+import { FaList } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import api from "../api";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { IoIosHome, IoMdLogOut } from "react-icons/io";
-import { IoChatbubbleEllipses } from "react-icons/io5";
-import { RiLockPasswordFill, RiLockPasswordLine } from "react-icons/ri";
-import api from "../api";
-import { useDispatch } from "react-redux";
 import { userReset } from "../store/reducers/authReducer";
 import { resetCount } from "../store/reducers/cartReducer";
 
@@ -50,50 +48,51 @@ export default function Dashboard() {
                 filterShow ? "-left-4" : "-left-[360px]"
               } w-[270px] ml-4 bg-white`}
             >
-              <ul className='py-2 text-slate-600 px-4'>
-                <li className='flex justify-start items-center gap-2 py-2'>
-                  <span className='text-xl'>
-                    <IoIosHome />
-                  </span>
-                  <Link to='/dashboard' className='block'>
-                    Dashboard
-                  </Link>
-                </li>
-                <li className='flex justify-start items-center gap-2 py-2'>
-                  <span className='text-xl'>
-                    <FaBorderAll />
-                  </span>
-                  <Link to='/dashboard/my-orders' className='block'>
+              <ul className='py-2 text-slate-600 px-2'>
+                <Link to='/dashboard' className='block hover:bg-muted rounded-md'>
+                  <li className='flex justify-start items-center gap-2 py-2 px-4'>
+                    <House size={20} />
+                    <span>Dashboard</span>
+                  </li>
+                </Link>
+                <Link to='/dashboard/my-orders' className='block hover:bg-muted rounded-md'>
+                  <li className='flex justify-start items-center gap-2 py-2 px-4'>
+                    <span className='text-xl'>
+                      <Book size={20} />
+                    </span>
                     My Orders
-                  </Link>
-                </li>
-                <li className='flex justify-start items-center gap-2 py-2'>
-                  <span className='text-xl'>
-                    <FaHeart />
-                  </span>
-                  <Link to='/dashboard/my-wishlist' className='block'>
+                  </li>
+                </Link>
+                <Link to='/dashboard/my-wishlist' className='block hover:bg-muted rounded-md'>
+                  <li className='flex justify-start items-center gap-2 py-2 px-4'>
+                    <span className='text-xl'>
+                      <Heart size={20} />
+                    </span>
                     Wishlist
-                  </Link>
-                </li>
-                <li className='flex justify-start items-center gap-2 py-2'>
-                  <span className='text-xl'>
-                    <IoChatbubbleEllipses />
-                  </span>
-                  <Link to='/dashboard/chat' className='block'>
-                    Chat
-                  </Link>
-                </li>
-                <li className='flex justify-start items-center gap-2 py-2'>
-                  <span className='text-xl'>
-                    <RiLockPasswordFill />
-                  </span>
-                  <Link to='/dashboard/change-password' className='block'>
+                  </li>
+                </Link>
+                <Link to='/dashboard/chat' className='block hover:bg-muted rounded-md'>
+                  <li className='flex justify-start items-center gap-2 py-2 px-4'>
+                    <span className='text-xl'>
+                      <MessageSquareMore size={20} />
+                    </span>
+                    Chat Seller
+                  </li>
+                </Link>
+                <Link to='/dashboard/change-password' className='block hover:bg-muted rounded-md'>
+                  <li className='flex justify-start items-center gap-2 py-2 px-4'>
+                    <span className='text-xl'>
+                      <Lock size={20} />
+                    </span>
                     Change Password
-                  </Link>
-                </li>
-                <li onClick={logout} className='flex justify-start items-center gap-2 py-2 cursor-pointer'>
+                  </li>
+                </Link>
+                <li
+                  onClick={logout}
+                  className='flex justify-start items-center gap-2 py-2 px-4 cursor-pointer hover:bg-muted rounded-md'
+                >
                   <span className='text-xl'>
-                    <IoMdLogOut />
+                    <LogOut size={20} />
                   </span>
                   <div className='block'>Logout</div>
                 </li>

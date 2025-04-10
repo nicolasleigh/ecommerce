@@ -18,19 +18,6 @@ export default function Index() {
 
   const redirect = (order) => {
     return toast.error("Unavailable to pay right now");
-
-    // let items = 0;
-    // for (let i = 0; i < order.products.length; i++) {
-    //   items = order.products[i].quantity + items;
-    // }
-    // // console.log(order);
-    // navigate("/payment", {
-    //   state: {
-    //     price: order.price,
-    //     items,
-    //     orderId: order._id,
-    //   },
-    // });
   };
 
   return (

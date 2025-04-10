@@ -1,13 +1,10 @@
+import { MessageSquareMore, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { AiOutlineMessage, AiOutlinePlus } from "react-icons/ai";
-import { GrEmoji } from "react-icons/gr";
-import { IoSend } from "react-icons/io5";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 import { add_friend, messageClear, send_message, updateMessage } from "../../store/reducers/chatReducer";
-import toast from "react-hot-toast";
-import { MessageSquareMore, Send } from "lucide-react";
 import CustomerAvatar from "../CustomerAvatar";
 
 const socket = io("http://localhost:8083");
@@ -28,7 +25,7 @@ export default function Chat() {
       setText("");
     }
   };
-  console.log(currentFriend);
+  // console.log(currentFriend);
 
   useEffect(() => {
     socket.on("seller_message", (msg) => {
@@ -139,7 +136,7 @@ export default function Chat() {
                             <span className='bg-[#059473]  text-white py-1 px-2 rounded-sm'>{m.message}</span>
                             <span className='h-4 border border-l-[#059473] border-l-8 border-y-8 border-y-transparent border-r-0'></span>
                           </div>
-                          <CustomerAvatar />
+                          <img src='/images/customerDefaultAvatar.jpg' className='rounded-full w-12 h-12 border p-1 ' />
                         </div>
                       );
                     }

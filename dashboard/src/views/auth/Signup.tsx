@@ -21,7 +21,17 @@ export default function Signup() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(seller_register(state));
+
+    toast("Sorry, registration is not open yet", {
+      icon: "👋",
+      style: {
+        borderRadius: "5px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
+
+    // dispatch(seller_register(state));
   };
 
   useEffect(() => {

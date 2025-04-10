@@ -257,12 +257,9 @@ export default function EditProduct() {
             </div>
 
             <div className='flex'>
-              <button
-                disabled={loader}
-                className='bg-red-500 w-[280px] flex items-center justify-center hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
-              >
+              <Button disabled={loader} className='w-64 flex items-center justify-center px-7 py-2 mb-3'>
                 {loader ? <Loader className='animate-spin' /> : "Save Changes"}
-              </button>
+              </Button>
             </div>
           </form>
         </div>

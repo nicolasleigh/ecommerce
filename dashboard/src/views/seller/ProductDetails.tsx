@@ -16,7 +16,7 @@ export default function ProductDetails() {
   const navigate = useNavigate();
 
   const { product, loader, successMessage, errorMessage } = useSelector((state) => state.product);
-  console.log(product);
+  // console.log(product);
 
   const getFinalPrice = () => {
     return product.price * (1 - product.discount / 100);

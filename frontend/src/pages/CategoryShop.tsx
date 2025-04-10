@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 export default function CategoryShop() {
   const [searchParams, setSearchParams] = useSearchParams();
   const category = searchParams.get("category");
-  console.log(category);
+  // console.log(category);
 
   const [filter, setFilter] = useState(true);
   const [rating, setRating] = useState("");

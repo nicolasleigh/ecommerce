@@ -186,7 +186,10 @@ export default function Details() {
               <span className='pt-1 text-slate-500'>
                 <IoIosArrowForward />
               </span>
-              <Link to='/' className='capitalize text-slate-500 hover:text-slate-700'>
+              <Link
+                to={`/products?category=${product?.category}`}
+                className='capitalize text-slate-500 hover:text-slate-700'
+              >
                 {product?.category}
               </Link>
               <span className='pt-1 text-slate-500'>

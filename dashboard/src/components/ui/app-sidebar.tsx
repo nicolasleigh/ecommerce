@@ -58,7 +58,7 @@ const items = [
     url: "/payments",
   },
   {
-    title: "Chat-Customer",
+    title: "Chat Customer",
     icon: <MessageSquareMore />,
     url: "/chat-customer",
   },

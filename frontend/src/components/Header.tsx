@@ -17,7 +17,7 @@ import { FaCartShopping } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import LanguageButton from "./LanguageButton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { MailCheck, SquareArrowOutUpRight } from "lucide-react";
+import { LogIn, MailCheck, SquareArrowOutUpRight } from "lucide-react";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -30,7 +30,8 @@ export default function Header() {
   const [searchValue, setSearchValue] = useState("");
   const [category, setCategory] = useState("");
 
-  const handleClick = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     navigate(`/products/search?category=${category}&value=${searchValue}`);
   };
 
@@ -79,18 +80,16 @@ export default function Header() {
                     className='flex cursor-pointer justify-center items-center gap-2 text-sm text-green-50'
                     to='/dashboard'
                   >
-                    <span>
-                      <FaUser />
-                    </span>
                     <span>{userInfo.name}</span>
+                    <img src='/images/customerDefaultAvatar.jpg' className='rounded-full w-9 h-9 border p-[2px]' />
                   </Link>
                 ) : (
                   <Link
-                    className='flex cursor-pointer justify-center items-center gap-2 text-sm text-black'
+                    className='flex cursor-pointer justify-center items-center gap-2 text-sm text-white'
                     to='/login'
                   >
                     <span>
-                      <FaLock />
+                      <LogIn size={20} />
                     </span>
                     <span>Login</span>
                   </Link>
@@ -225,15 +224,13 @@ export default function Header() {
                   className='flex cursor-pointer justify-center items-center gap-2 text-sm text-black'
                   to='/dashboard'
                 >
-                  <span>
-                    <FaUser />
-                  </span>
                   <span>{userInfo.name}</span>
+                  <img src='/images/customerDefaultAvatar.jpg' className='rounded-full w-9 h-9 border p-[2px]' />
                 </Link>
               ) : (
                 <Link className='flex cursor-pointer justify-center items-center gap-2 text-sm text-black' to='/login'>
                   <span>
-                    <FaLock />
+                    <LogIn size={20} />
                   </span>
                   <span>Login</span>
                 </Link>
@@ -346,7 +343,7 @@ export default function Header() {
           <div className='w-9/12 pl-8 md-lg:pl-0 md-lg:w-full'>
             <div className='flex flex-wrap w-full justify-between items-center md-lg:gap-6'>
               <div className='w-8/12 md-lg:w-full'>
-                <div className='flex  rounded-sm h-[50px] items-center '>
+                <form className='flex  rounded-sm h-[50px] items-center ' onSubmit={handleSubmit}>
                   <Select onValueChange={(value) => setCategory(value)}>
                     <SelectTrigger className='uppercase h-full w-1/2 rounded-s-sm rounded-e-none border-r-0 focus:ring-0 shadow-none'>
                       <SelectValue placeholder='category' />
@@ -368,12 +365,13 @@ export default function Header() {
                     className='w-full border-l border-y   bg-transparent text-slate-500 outline-0 h-full px-3'
                   />
                   <button
-                    onClick={handleClick}
+                    // onClick={handleClick}
+                    type='submit'
                     className='bg-[#059473] rounded-r-sm  px-8 h-full font-semibold uppercase text-green-50'
                   >
                     Search
                   </button>
-                </div>
+                </form>
               </div>
 
               <div className='w-4/12 block md-lg:hidden pl-2 md-lg:w-full md-lg:pl-0'>

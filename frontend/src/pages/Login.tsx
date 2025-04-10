@@ -57,9 +57,9 @@ export default function Login() {
         <div className='w-full justify-center items-center p-10'>
           <div className='grid grid-cols-2 w-[60%] mx-auto bg-white rounded-md'>
             <div className='px-8 py-8'>
-              <h2 className='text-center w-full text-xl text-slate-600 font-bold'>Login</h2>
+              <h2 className='text-center w-full text-xl text-slate-600 font-bold mb-5'>Login</h2>
               <div>
-                <form onSubmit={handleSubmit} className='text-slate-600'>
+                <form onSubmit={handleSubmit} className='text-slate-600 space-y-5'>
                   <div className='flex flex-col gap-1 mb-2'>
                     <label htmlFor='email'>Email</label>
                     <input
@@ -90,29 +90,9 @@ export default function Login() {
                     Login
                   </button>
                 </form>
-
-                <div className='flex justify-center items-center py-2'>
-                  <div className='h-[1px] bg-slate-300 w-[90%]'></div>
-                  <span className='px-3 text-slate-600'>Or</span>
-                  <div className='h-[1px] bg-slate-300 w-[90%]'></div>
-                </div>
-
-                <button className='px-8 w-full py-2 bg-indigo-500 shadow hover:shadow-indigo-500/40 text-white rounded-md flex justify-center items-center gap-2 mb-3'>
-                  <span>
-                    <FaFacebookF />
-                  </span>
-                  <span>Login With Facebook</span>
-                </button>
-
-                <button className='px-8 w-full py-2 bg-red-500 shadow hover:shadow-indigo-500/40 text-white rounded-md flex justify-center items-center gap-2 mb-3'>
-                  <span>
-                    <FaGoogle />
-                  </span>
-                  <span>Login With Google</span>
-                </button>
               </div>
 
-              <div className='text-center text-slate-600 pt-1'>
+              <div className='text-center text-slate-600 mt-5'>
                 <p>
                   Don't Have an Account?{" "}
                   <Link className='text-blue-500' to='/register'>

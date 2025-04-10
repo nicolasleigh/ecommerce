@@ -10,8 +10,8 @@ export default function Login() {
   const dispatch = useDispatch();
   const { loader, errorMessage, successMessage } = useSelector((state) => state.auth);
   const [state, setState] = useState({
-    email: "",
-    password: "",
+    email: "seller@email.com",
+    password: "okk778899",
   });
 
   const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {

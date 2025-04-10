@@ -112,7 +112,7 @@ export default function SellerToCustomer() {
                           alt='customer default avatar'
                           className='w-[38px] h-[38px] border-2 max-w-[38px] p-[2px] rounded-full'
                         />
-                        <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
+                        {/* <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div> */}
                       </div>
                       <div className='flex justify-center items-start flex-col w-full'>
                         <div className='flex justify-between items-center w-full'>
@@ -133,9 +133,9 @@ export default function SellerToCustomer() {
                     <img
                       src='/customerDefaultAvatar.jpg'
                       alt='admin image'
-                      className='w-[45px] h-[45px] border-green-500 border-2 max-w-[45px] p-[2px] rounded-full'
+                      className='w-[45px] h-[45px] border-2 max-w-[45px] p-[2px] rounded-full'
                     />
-                    <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
+                    {/* <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div> */}
                   </div>
                   <h2 className='text-base  font-semibold'>{currentCustomer.name}</h2>
                 </div>

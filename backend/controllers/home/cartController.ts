@@ -60,15 +60,17 @@ class cartController {
           },
         },
       ]);
+      // console.log("cartProducts---", cartProducts);
       let buyProductItem = 0;
       let calculatePrice = 0;
       let cartProductCount = 0;
-      const outOfStockProducts = cartProducts.filter((p) => p.products[0].stock < p.quantity);
+      const outOfStockProducts = cartProducts.filter((p) => p.products[0] && p.products[0].stock < p.quantity);
+
       for (let i = 0; i < outOfStockProducts.length; i++) {
         cartProductCount = cartProductCount + outOfStockProducts[i].quantity;
       }
 
-      const stockProduct = cartProducts.filter((p) => p.products[0].stock >= p.quantity);
+      const stockProduct = cartProducts.filter((p) => p.products[0] && p.products[0].stock >= p.quantity);
       for (let i = 0; i < stockProduct.length; i++) {
         const { quantity } = stockProduct[i];
         cartProductCount = buyProductItem + quantity;
@@ -119,6 +121,8 @@ class cartController {
           }
         }
       }
+      // console.log("cartProductCount--", cartProductCount);
+      // console.log("buyProductItem--", buyProductItem);
       responseReturn(res, 200, {
         cartProducts: p,
         price: calculatePrice,

@@ -21,7 +21,7 @@ export default function SellerDashboard() {
     dispatch(getLatestMessage(4));
     dispatch(getChartData());
   }, []);
-  console.log(latestMessages);
+  // console.log(latestMessages);
 
   return (
     <div className='px-2 md:px-7 py-5'>
