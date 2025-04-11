@@ -23,6 +23,7 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import DialogItem from "./DialogItem";
+import toast from "react-hot-toast";
 
 export default function OrderColumnAction({ orderId, isProduct }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -64,14 +65,11 @@ export default function OrderColumnAction({ orderId, isProduct }) {
 
   const handleDelete = async (setOpenDialog) => {
     setBusy(true);
-    // const { error, message } = await deleteMovie(movieId);
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
+    toast.error(t("Not authorized to perform this operation"));
     setBusy(false);
-
-    // if (error) return toast.error(t(error));
-    // toast.success(t(message));
     setOpenDialog(false);
-    // handleUIUpdate();
+    setDropdownOpen(false);
   };
 
   return (
@@ -123,7 +121,7 @@ export default function OrderColumnAction({ orderId, isProduct }) {
           }
           onOpenChange={handleOpenDelete}
           open={openDeleteDialog}
-          className='w-[500px]'
+          className='w-[350px] sm:w-[500px]'
         >
           <DialogHeader>
             <DialogTitle>{t("Are you sure?")}</DialogTitle>

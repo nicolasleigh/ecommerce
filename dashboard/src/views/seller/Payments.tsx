@@ -72,16 +72,19 @@ export default function Payments() {
     }, []);
 
     return (
-      <div style={style} className='flex text-sm  font-medium border-b border-x dark:border-gray-600 bg-muted '>
-        <div className='w-[4%] p-2 whitespace-nowrap'>{index + 1}</div>
-        <div className='w-[22%] p-2 whitespace-nowrap'>{getShortObjectID(id)}</div>
-        <div className='w-[22%] p-2 whitespace-nowrap'>{customerName}</div>
-        <div className='w-[20%] p-2 whitespace-nowrap'>{price} ¥</div>
-        <div className='w-[22%] flex items-center  whitespace-nowrap'>
-          <Badge className='uppercase font-light '>{status}</Badge>
+      <div
+        style={style}
+        className='flex text-sm  font-medium max-sm:font-normal max-sm:text-xs border-b border-x dark:border-gray-600 bg-muted '
+      >
+        <div className='w-[5%] p-2 max-sm:px-1 whitespace-nowrap'>{index + 1}</div>
+        <div className='w-[22%] p-2 max-sm:px-1 whitespace-nowrap'>{getShortObjectID(id)}</div>
+        <div className='w-[22%] p-2 max-sm:px-1 whitespace-nowrap'>{customerName}</div>
+        <div className='w-[20%] p-2 max-sm:px-1 whitespace-nowrap'>{price} ¥</div>
+        <div className='w-[22%]  flex items-center  whitespace-nowrap'>
+          <Badge className='uppercase font-light max-sm:text-[9px] max-sm:px-1'>{status}</Badge>
         </div>
         {/* <div className='w-[25%] p-2 whitespace-nowrap'>{allOrders[index]?.createdAt}</div> */}
-        <div className='w-[10%] p-2 whitespace-nowrap'>
+        <div className='w-[10%] p-2 max-sm:px-1 whitespace-nowrap'>
           <SquareArrowOutUpRight
             strokeWidth={1}
             size={20}
@@ -139,18 +142,18 @@ export default function Payments() {
       <SearchOrder orders={searchOrderMap} />
 
       <div className='w-full '>
-        <div className=' border rounded-md p-5'>
+        <div className=' border rounded-md p-5 max-sm:p-1'>
           <div>
             <h2 className='text-lg font-semibold pb-4'>Orders</h2>
             <div className='w-full overflow-x-auto'>
-              <div className='flex border uppercase text-xs font-bold min-w-[340px]  rounded-t-md'>
-                <div className='w-[4%] p-2'>No.</div>
-                <div className='w-[22%] p-2'>ID</div>
-                <div className='w-[22%] p-2'>Customer</div>
-                <div className='w-[20%] p-2'>Price</div>
-                <div className='w-[22%] p-2 '>Status</div>
+              <div className='flex border uppercase text-xs font-bold max-sm:font-normal min-w-[340px]  rounded-t-md'>
+                <div className='w-[5%] p-2 max-sm:px-1'>No.</div>
+                <div className='w-[22%] p-2 max-sm:px-1'>ID</div>
+                <div className='w-[22%] p-2 max-sm:px-1'>Customer</div>
+                <div className='w-[20%] p-2 max-sm:px-1'>Price</div>
+                <div className='w-[22%] p-2 max-sm:px-1'>Status</div>
                 {/* <div className='w-[25%] p-2'>Date</div> */}
-                <div className='w-[10%] p-2'>Detail</div>
+                <div className='w-[10%] p-2 max-sm:hidden'>Detail</div>
               </div>
               {
                 <FixedSizeList

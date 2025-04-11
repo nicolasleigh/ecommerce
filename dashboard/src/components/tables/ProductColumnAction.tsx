@@ -32,7 +32,7 @@ export default function ProductColumnAction({ productId }) {
   const handleDelete = async (setOpenDialog) => {
     setBusy(true);
     // await new Promise((resolve) => setTimeout(resolve, 1000));
-    toast.error(t("You have no right to delete a product"));
+    toast.error(t("Not authorized to perform this operation"));
     setBusy(false);
     setOpenDialog(false);
   };
@@ -75,7 +75,7 @@ export default function ProductColumnAction({ productId }) {
           }
           onOpenChange={handleOpenDelete}
           open={openDeleteDialog}
-          className='w-[500px]'
+          className='w-[350px] sm:w-[500px]'
         >
           <DialogHeader>
             <DialogTitle>{t("Are you sure?")}</DialogTitle>

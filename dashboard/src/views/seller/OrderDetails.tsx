@@ -45,7 +45,7 @@ export default function OrderDetails() {
       <div className='w-full p-4 border rounded-md'>
         <div className='flex justify-between items-center p-4'>
           <h2 className='text-xl font-semibold'>Order Details</h2>
-          <div className='flex gap-6 items-center'>
+          <div className='flex flex-col sm:flex-row gap-0 sm:gap-6 items-center'>
             <Button variant='link' onClick={() => navigate(-1)} className='p-0 underline hover:no-underline'>
               &larr; Go back
             </Button>

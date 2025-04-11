@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { getShortObjectID } from "@/utils/utils";
 import { Badge } from "../ui/badge";
+import moment from "moment";
 
 export type Order = {
   id: string;
@@ -37,7 +38,9 @@ export const columns: ColumnDef<Order>[] = [
       const productName = row.getValue("name") as string;
       const customerName = row.original.shippingInfo?.name;
       return (
-        <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{productName ? productName : customerName}</div>
+        <div className='capitalize text-[10px] lg:w-20 sm:text-xs lg:text-sm'>
+          {productName ? productName : customerName}
+        </div>
       );
     },
   },
@@ -59,7 +62,7 @@ export const columns: ColumnDef<Order>[] = [
       if (quantity) {
         totalPrice = parseInt(price) * parseInt(quantity) + "";
       }
-      return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{totalPrice} ¥</div>;
+      return <div className='capitalize text-[10px] max-sm:w-16 sm:text-xs lg:text-sm'>{totalPrice} ¥</div>;
     },
   },
   {
@@ -76,11 +79,13 @@ export const columns: ColumnDef<Order>[] = [
     header: "Date",
     cell: ({ row }) => {
       const value = row.getValue("date") as string;
-      return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{value}</div>;
+      const formatted = moment(value).format("lll");
+      return <div className='capitalize text-[10px] max-sm:w-20 sm:text-xs lg:text-sm'>{formatted}</div>;
     },
   },
   {
-    header: "Expand",
+    // header: "Expand",
+    id: "expand",
     cell: ({ row }) => {
       return row.getCanExpand() ? (
         <Button onClick={row.getToggleExpandedHandler()} variant='ghost' className='p-1 h-6'>

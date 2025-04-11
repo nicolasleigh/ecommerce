@@ -29,32 +29,24 @@ export default function Details() {
   const { errorMessage, successMessage } = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const responsive = {
-    superLargeDesktop: {
-      breakpoint: { max: 4000, min: 3000 },
-      items: 5,
-    },
     desktop: {
-      breakpoint: { max: 3000, min: 1024 },
+      breakpoint: { max: 3000, min: 1500 },
       items: 5,
     },
     tablet: {
-      breakpoint: { max: 1024, min: 464 },
+      breakpoint: { max: 1500, min: 991 },
       items: 4,
     },
     mdtablet: {
-      breakpoint: { max: 991, min: 464 },
-      items: 4,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
+      breakpoint: { max: 991, min: 640 },
       items: 3,
     },
-    smmobile: {
-      breakpoint: { max: 640, min: 0 },
+    mobile: {
+      breakpoint: { max: 640, min: 360 },
       items: 2,
     },
-    xsmobile: {
-      breakpoint: { max: 440, min: 0 },
+    smmobile: {
+      breakpoint: { max: 360, min: 0 },
       items: 1,
     },
   };
@@ -205,7 +197,7 @@ export default function Details() {
         <div className='w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%]  h-full mx-auto pb-16'>
           <div className='grid grid-cols-2 md-lg:grid-cols-1 gap-8'>
             <div>
-              <div className='p-5 border rounded-sm'>
+              <div className='p-5 md:p-0 border rounded-sm'>
                 <img
                   src={image ? image : product.images?.[0]}
                   alt='product images'
@@ -214,7 +206,13 @@ export default function Details() {
               </div>
               <div className='py-3 '>
                 {product.images && (
-                  <Carousel autoPlay={true} infinite={true} responsive={responsive} transitionDuration={500}>
+                  <Carousel
+                    autoPlay={true}
+                    infinite={true}
+                    responsive={responsive}
+                    transitionDuration={500}
+                    removeArrowOnDeviceType={["mdtablet", "mobile", "smmobile"]}
+                  >
                     {product.images.map((img, i) => {
                       return (
                         <div key={i} onClick={() => setImage(img)} className='p-1'>
@@ -280,7 +278,7 @@ export default function Details() {
                     <div>
                       <button
                         onClick={addCart}
-                        className='px-8 py-3 h-[50px] rounded-sm cursor-pointer hover:bg-[#059473]/90  bg-[#059473] text-white'
+                        className='px-8 py-3 sm:px-2 sm:py-0 h-[50px] rounded-sm cursor-pointer hover:bg-[#059473]/90  bg-[#059473] text-white'
                       >
                         Add To Cart
                       </button>
@@ -293,7 +291,7 @@ export default function Details() {
                 <div>
                   <div
                     onClick={addWishlist}
-                    className='h-[50px] w-[50px] rounded-sm flex justify-center items-center cursor-pointer hover:bg-cyan-500/90 bg-cyan-500 text-white'
+                    className='h-[50px] w-[50px] rounded-sm flex justify-center items-center cursor-pointer hover:bg-red-500/90 bg-red-500 text-white'
                   >
                     <FaHeart />
                   </div>
@@ -303,14 +301,14 @@ export default function Details() {
               <div className='flex py-5 gap-5'>
                 <div className='w-[150px] text-slate-700 font-bold text-xl flex flex-col gap-5'>
                   <span>Availability</span>
-                  <span>Share On</span>
+                  {/* <span>Share On</span> */}
                 </div>
                 <div className='flex flex-col gap-5'>
                   <span className={`${product.stock ? "text-[#059473]" : "text-red-500"}`}>
                     {product.stock ? `In Stock(${product.stock})` : "Out of Stock"}
                   </span>
 
-                  <ul className='flex justify-start items-center gap-3'>
+                  {/* <ul className='flex justify-start items-center gap-3'>
                     <li>
                       <a
                         href='#'
@@ -343,7 +341,7 @@ export default function Details() {
                         <FaGithub />
                       </a>
                     </li>
-                  </ul>
+                  </ul> */}
                 </div>
               </div>
 
@@ -360,7 +358,7 @@ export default function Details() {
                 )}
                 <Link
                   to={`/dashboard/chat/${product.sellerId}`}
-                  className='px-8 py-3 h-[50px] cursor-pointer rounded-sm hover:bg-red-500/90 bg-red-500 text-white'
+                  className='px-8 py-3 h-[50px] cursor-pointer rounded-sm hover:bg-blue-600/90 bg-blue-600 text-white'
                 >
                   Chat Seller
                 </Link>

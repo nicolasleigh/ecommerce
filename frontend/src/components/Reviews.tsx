@@ -209,7 +209,7 @@ export default function Reviews({ product }) {
                 className='border outline-0 p-3 w-full'
               ></textarea>
               <div className='mt-2'>
-                <button className='py-1 px-5 bg-[#059473] text-white rounded-sm'>Submit</button>
+                <button className='py-1 px-5 bg-[#059473] text-white rounded-sm mb-5'>Submit</button>
               </div>
             </form>
           </div>

@@ -35,7 +35,7 @@ export default function EditCategory({ initialState, setVisible }: Props) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className='flex flex-col w-full gap-3 mb-3'>
+      <div className='flex flex-col w-full gap-3 mb-3 '>
         <div>
           <Label htmlFor='name-edit'>Category Name</Label>
           <Input

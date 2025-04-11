@@ -257,7 +257,7 @@ export default function EditProduct() {
             </div>
 
             <div className='flex'>
-              <Button disabled={loader} className='w-64 flex items-center justify-center px-7 py-2 mb-3'>
+              <Button disabled={loader} className='w-full sm:w-64 flex items-center justify-center px-7 py-2 mb-3'>
                 {loader ? <Loader className='animate-spin' /> : "Save Changes"}
               </Button>
             </div>

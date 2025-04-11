@@ -54,8 +54,8 @@ export default function Register() {
       <Header />
 
       <div className='bg-slate-200 mt-4'>
-        <div className='w-full justify-center items-center p-10'>
-          <div className='grid grid-cols-2 w-[60%] mx-auto bg-white rounded-md'>
+        <div className='w-full justify-center items-center p-10 sm:p-2'>
+          <div className='grid grid-cols-2 sm:grid-cols-1 w-[60%] lg:w-[80%] md:w-full mx-auto bg-white rounded-md'>
             <div className='px-8 py-8'>
               <h2 className='text-center w-full text-xl text-slate-600 font-bold mb-2'>Register</h2>
               <div>
@@ -115,7 +115,7 @@ export default function Register() {
               </div>
             </div>
 
-            <div className='w-full h-full py-4 pr-4'>
+            <div className='w-full h-full py-4 pr-4 sm:hidden'>
               <img src='/images/login.jpg' alt='login image' />
             </div>
           </div>

@@ -63,7 +63,7 @@ export default function CategoryColumnAction({ id, category }) {
   const handleDelete = async (setOpenDialog) => {
     setBusy(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    toast.error("You have no rights to delete this category");
+    toast.error("Not authorized to perform this operation");
     setBusy(false);
     setOpenDialog(false);
     setDropdownOpen(false);
@@ -105,7 +105,7 @@ export default function CategoryColumnAction({ id, category }) {
           // onSelect={handleDialogItemSelect}
           onOpenChange={handleOpenEdit}
           open={openEditDialog}
-          className='w-[900px]'
+          className='w-[350px] sm:w-[500px] '
         >
           <DialogTitle>{t("Edit Category")}</DialogTitle>
           <EditCategory
@@ -126,7 +126,7 @@ export default function CategoryColumnAction({ id, category }) {
           onOpenChange={handleOpenDelete}
           open={openDeleteDialog}
           // open={hasOpenDialog}
-          className='w-[500px]'
+          className='w-[350px] sm:w-[500px]'
         >
           <DialogHeader>
             <DialogTitle>{t("Are you sure?")}</DialogTitle>

@@ -126,14 +126,14 @@ export default function AddProduct() {
     <div className='px-2 lg:px-7 pt-5 '>
       <div className='w-full p-4  rounded-md '>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className=''>
             {/* first row */}
             <div className='flex flex-col mb-3 md:flex-row gap-4 w-full '>
               <FormField
                 control={form.control}
                 name='name'
                 render={({ field }) => (
-                  <FormItem className='w-1/2'>
+                  <FormItem className='w-full md:w-1/2'>
                     <FormLabel>Product Name</FormLabel>
                     <FormControl>
                       <Input {...field} />
@@ -146,7 +146,7 @@ export default function AddProduct() {
                 control={form.control}
                 name='brand'
                 render={({ field }) => (
-                  <FormItem className='w-1/2'>
+                  <FormItem className='w-full md:w-1/2'>
                     <FormLabel>Product Brand</FormLabel>
                     <FormControl>
                       <Input {...field} />
@@ -163,7 +163,7 @@ export default function AddProduct() {
                 control={form.control}
                 name='category'
                 render={({ field }) => (
-                  <FormItem className='w-1/2'>
+                  <FormItem className='w-full md:w-1/2'>
                     <FormLabel>Category</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value || ""}>
                       <FormControl>
@@ -188,7 +188,7 @@ export default function AddProduct() {
                 control={form.control}
                 name='stock'
                 render={({ field }) => (
-                  <FormItem className='w-1/2'>
+                  <FormItem className='w-full md:w-1/2'>
                     <FormLabel>Product Stock</FormLabel>
                     <FormControl>
                       <Input {...field} type='number' min={0} />
@@ -205,7 +205,7 @@ export default function AddProduct() {
                 control={form.control}
                 name='price'
                 render={({ field }) => (
-                  <FormItem className='w-1/2'>
+                  <FormItem className='w-full md:w-1/2'>
                     <FormLabel>Price</FormLabel>
                     <FormControl>
                       <Input {...field} type='number' min={0} />
@@ -219,7 +219,7 @@ export default function AddProduct() {
                 control={form.control}
                 name='discount'
                 render={({ field }) => (
-                  <FormItem className='w-1/2'>
+                  <FormItem className='w-full md:w-1/2'>
                     <FormLabel>Discount</FormLabel>
                     <FormControl>
                       <Input {...field} type='number' min={0} />
@@ -271,7 +271,7 @@ export default function AddProduct() {
             <div className='flex'>
               <Button
                 disabled={loader}
-                className='w-64 flex items-center justify-center disabled:cursor-not-allowed px-7 py-2 mb-3'
+                className='w-full sm:w-64 flex items-center justify-center disabled:cursor-not-allowed px-7 py-2 mb-3'
               >
                 {loader ? <Loader className='animate-spin' /> : "Add Product"}
               </Button>

@@ -54,7 +54,7 @@ export default function ChangePassword() {
     }
   }, [successMessage, errorMessage]);
   return (
-    <div className='p-4 bg-white'>
+    <div className='p-4 bg-white rounded-sm'>
       <h2 className='text-xl text-slate-600 pb-5'>Change Password</h2>
       <form onSubmit={handleSubmit}>
         <div className='flex flex-col gap-1 mb-2'>

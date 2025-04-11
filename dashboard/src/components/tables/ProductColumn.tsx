@@ -44,7 +44,7 @@ export const columns: ColumnDef<Product>[] = [
     header: "Name",
     cell: ({ row }) => {
       const value = row.getValue("name") as string;
-      return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{value}</div>;
+      return <div className='capitalize text-[10px] w-20 sm:text-xs lg:text-sm'>{value}</div>;
     },
   },
   {

@@ -34,7 +34,7 @@ export default function Dashboard() {
           <div>
             <button
               onClick={() => setFilterShow(!filterShow)}
-              className='text-center py-3 px-3 bg-green-700 text-white'
+              className='text-center py-3 px-3 bg-[#059473] text-white rounded-sm'
             >
               <FaList />
             </button>
@@ -45,17 +45,21 @@ export default function Dashboard() {
           <div className='py-5 flex md-lg:w-[90%] mx-auto relative'>
             <div
               className={`rounded-md z-50 md-lg:absolute ${
-                filterShow ? "-left-4" : "-left-[360px]"
+                filterShow ? "left-10 -top-10 border shadow-2xl border-slate-400" : "-left-[360px]"
               } w-[270px] ml-4 bg-white`}
             >
               <ul className='py-2 text-slate-600 px-2'>
-                <Link to='/dashboard' className='block hover:bg-muted rounded-md'>
+                <Link to='/dashboard' className='block hover:bg-muted rounded-md' onClick={() => setFilterShow(false)}>
                   <li className='flex justify-start items-center gap-2 py-2 px-4'>
                     <House size={20} />
                     <span>Dashboard</span>
                   </li>
                 </Link>
-                <Link to='/dashboard/my-orders' className='block hover:bg-muted rounded-md'>
+                <Link
+                  to='/dashboard/my-orders'
+                  className='block hover:bg-muted rounded-md'
+                  onClick={() => setFilterShow(false)}
+                >
                   <li className='flex justify-start items-center gap-2 py-2 px-4'>
                     <span className='text-xl'>
                       <Book size={20} />
@@ -63,7 +67,11 @@ export default function Dashboard() {
                     My Orders
                   </li>
                 </Link>
-                <Link to='/dashboard/my-wishlist' className='block hover:bg-muted rounded-md'>
+                <Link
+                  to='/dashboard/my-wishlist'
+                  className='block hover:bg-muted rounded-md'
+                  onClick={() => setFilterShow(false)}
+                >
                   <li className='flex justify-start items-center gap-2 py-2 px-4'>
                     <span className='text-xl'>
                       <Heart size={20} />
@@ -71,7 +79,11 @@ export default function Dashboard() {
                     Wishlist
                   </li>
                 </Link>
-                <Link to='/dashboard/chat' className='block hover:bg-muted rounded-md'>
+                <Link
+                  to='/dashboard/chat'
+                  className='block hover:bg-muted rounded-md'
+                  onClick={() => setFilterShow(false)}
+                >
                   <li className='flex justify-start items-center gap-2 py-2 px-4'>
                     <span className='text-xl'>
                       <MessageSquareMore size={20} />
@@ -79,7 +91,11 @@ export default function Dashboard() {
                     Chat Seller
                   </li>
                 </Link>
-                <Link to='/dashboard/change-password' className='block hover:bg-muted rounded-md'>
+                <Link
+                  to='/dashboard/change-password'
+                  className='block hover:bg-muted rounded-md'
+                  onClick={() => setFilterShow(false)}
+                >
                   <li className='flex justify-start items-center gap-2 py-2 px-4'>
                     <span className='text-xl'>
                       <Lock size={20} />
