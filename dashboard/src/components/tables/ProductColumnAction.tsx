@@ -1,7 +1,6 @@
 import { Eye, Loader, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
@@ -18,7 +17,6 @@ export default function ProductColumnAction({ productId }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [busy, setBusy] = useState(false);
-  const { t } = useTranslation();
   const navigate = useNavigate();
 
   function handleOpenDelete(open) {
@@ -52,7 +50,7 @@ export default function ProductColumnAction({ productId }) {
             className='flex items-center gap-3 w-full py-[6px] px-2'
           >
             <Eye strokeWidth={0.9} size={20} />
-            <span>{t("Details")}</span>
+            <span>{"Details"}</span>
           </div>
         </DropdownMenuItem>
         <DropdownMenuItem className='p-0'>
@@ -61,7 +59,7 @@ export default function ProductColumnAction({ productId }) {
             className='flex items-center gap-3 w-full py-[6px] px-2'
           >
             <Pencil strokeWidth={0.9} size={20} />
-            <span>{t("Edit")}</span>
+            <span>{"Edit"}</span>
           </div>
         </DropdownMenuItem>
 
@@ -70,7 +68,7 @@ export default function ProductColumnAction({ productId }) {
           triggerChildren={
             <div className='flex items-center gap-3'>
               <Trash2 strokeWidth={0.9} size={20} />
-              <span>{t("Delete")}</span>
+              <span>{"Delete"}</span>
             </div>
           }
           onOpenChange={handleOpenDelete}
@@ -78,8 +76,8 @@ export default function ProductColumnAction({ productId }) {
           className='w-[350px] sm:w-[500px]'
         >
           <DialogHeader>
-            <DialogTitle>{t("Are you sure?")}</DialogTitle>
-            <DialogDescription>{t("This action will remove this product permanently!")}</DialogDescription>
+            <DialogTitle>{"Are you sure?"}</DialogTitle>
+            <DialogDescription>{"This action will remove this product permanently!"}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button
@@ -90,7 +88,7 @@ export default function ProductColumnAction({ productId }) {
               }}
               variant='secondary'
             >
-              {t("Cancel")}
+              {"Cancel"}
             </Button>
             <Button
               onClick={() => {
@@ -101,7 +99,7 @@ export default function ProductColumnAction({ productId }) {
               disabled={busy}
             >
               <span className='w-12 flex items-center justify-center'>
-                {busy ? <Loader className='animate-spin' /> : t("Delete")}
+                {busy ? <Loader className='animate-spin' /> : "Delete"}
               </span>
             </Button>
           </DialogFooter>

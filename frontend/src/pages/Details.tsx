@@ -307,41 +307,6 @@ export default function Details() {
                   <span className={`${product.stock ? "text-[#059473]" : "text-red-500"}`}>
                     {product.stock ? `In Stock(${product.stock})` : "Out of Stock"}
                   </span>
-
-                  {/* <ul className='flex justify-start items-center gap-3'>
-                    <li>
-                      <a
-                        href='#'
-                        className='w-[38px] h-[38px] hover:bg-[#059473] hover:text-white flex justify-center items-center bg-indigo-500 rounded-full text-white'
-                      >
-                        <FaFacebookF />
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href='#'
-                        className='w-[38px] h-[38px] hover:bg-[#059473] hover:text-white flex justify-center items-center bg-cyan-500 rounded-full text-white'
-                      >
-                        <FaTwitter />
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href='#'
-                        className='w-[38px] h-[38px] hover:bg-[#059473] hover:text-white flex justify-center items-center bg-purple-500 rounded-full text-white'
-                      >
-                        <FaLinkedin />
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href='#'
-                        className='w-[38px] h-[38px] hover:bg-[#059473] hover:text-white flex justify-center items-center bg-blue-500 rounded-full text-white'
-                      >
-                        <FaGithub />
-                      </a>
-                    </li>
-                  </ul> */}
                 </div>
               </div>
 

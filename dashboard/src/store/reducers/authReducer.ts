@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../api";
 import { jwtDecode } from "jwt-decode";
+import { AxiosError } from "axios";
 
 export const admin_login = createAsyncThunk("auth/admin_login", async (info, { rejectWithValue, fulfillWithValue }) => {
   try {
@@ -8,7 +9,8 @@ export const admin_login = createAsyncThunk("auth/admin_login", async (info, { r
     localStorage.setItem("accessToken", data.token);
     return fulfillWithValue(data);
   } catch (error) {
-    return rejectWithValue(error.response.data);
+    const err = error as AxiosError;
+    return rejectWithValue(err.response?.data);
   }
 });
 
@@ -21,21 +23,26 @@ export const seller_login = createAsyncThunk(
       localStorage.setItem("accessToken", data.token);
       return fulfillWithValue(data);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      const err = error as AxiosError;
+      return rejectWithValue(err.response?.data);
     }
   }
 );
 
-export const logout = createAsyncThunk("auth/logout", async (navigate, { rejectWithValue, fulfillWithValue }) => {
-  try {
-    const { data } = await api.get("/logout", { withCredentials: true });
-    localStorage.removeItem("accessToken");
-    navigate("/login");
-    return fulfillWithValue(data);
-  } catch (error) {
-    return rejectWithValue(error.response.data);
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (navigate: (val: string) => void, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get("/logout", { withCredentials: true });
+      localStorage.removeItem("accessToken");
+      navigate("/login");
+      return fulfillWithValue(data);
+    } catch (error) {
+      const err = error as AxiosError;
+      return rejectWithValue(err.response?.data);
+    }
   }
-});
+);
 
 export const get_user_info = createAsyncThunk(
   "auth/get_user_info",
@@ -44,7 +51,8 @@ export const get_user_info = createAsyncThunk(
       const { data } = await api.get("/get-user", { withCredentials: true });
       return fulfillWithValue(data);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      const err = error as AxiosError;
+      return rejectWithValue(err.response?.data);
     }
   }
 );
@@ -56,7 +64,8 @@ export const profileImageUpload = createAsyncThunk(
       const { data } = await api.post("/profile-image-upload", image, { withCredentials: true });
       return fulfillWithValue(data);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      const err = error as AxiosError;
+      return rejectWithValue(err.response?.data);
     }
   }
 );
@@ -70,7 +79,8 @@ export const seller_register = createAsyncThunk(
       // console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      const err = error as AxiosError;
+      return rejectWithValue(err.response?.data);
     }
   }
 );
@@ -82,7 +92,8 @@ export const profileInfoAdd = createAsyncThunk(
       const { data } = await api.post("/profile-info-add", info, { withCredentials: true });
       return fulfillWithValue(data);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      const err = error as AxiosError;
+      return rejectWithValue(err.response?.data);
     }
   }
 );
@@ -95,12 +106,13 @@ export const updatePassword = createAsyncThunk(
       localStorage.setItem("accessToken", data.token);
       return fulfillWithValue(data);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      const err = error as AxiosError;
+      return rejectWithValue(err.response?.data);
     }
   }
 );
 
-const returnRole = (token) => {
+const returnRole = (token: string) => {
   if (token) {
     const decodeToken = jwtDecode(token);
     const expireTime = new Date(decodeToken.exp * 1000);

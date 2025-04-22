@@ -1,10 +1,9 @@
-import { Outlet } from "react-router-dom";
-import Header from "./Header";
-import Sidebar from "./Sidebar";
 import { useEffect, useState } from "react";
-import { socket } from "../utils/utils";
 import { useDispatch, useSelector } from "react-redux";
+import { Outlet } from "react-router-dom";
 import { updateCustomer, updateSellers } from "../store/reducers/chatReducer";
+import { socket } from "../utils/utils";
+import Header from "./Header";
 
 export default function MainLayout() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -31,8 +30,6 @@ export default function MainLayout() {
   return (
     <div className=' w-full min-h-screen'>
       <Header showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-      {/* <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} /> */}
-      {/* <div className='ml-0 lg:ml-[260px] pt-[95px] transition-all'> */}
       <div className='pt-4'>
         <Outlet />
       </div>

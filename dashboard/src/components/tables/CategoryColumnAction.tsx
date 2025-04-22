@@ -1,5 +1,18 @@
-import { ExternalLink, Loader, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import EditCategory from "@/views/seller/EditCategory";
+import { Loader, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { forwardRef, useState } from "react";
+import toast from "react-hot-toast";
 import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,42 +20,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { forwardRef, useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import EditCategory from "@/views/seller/EditCategory";
-import toast from "react-hot-toast";
 
 export default function CategoryColumnAction({ id, category }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  // const [hasOpenDialog, setHasOpenDialog] = useState(false);
-  const dropdownTriggerRef = useRef(null);
-  // const focusRef = useRef(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [busy, setBusy] = useState(false);
-  const { t } = useTranslation();
-
-  // useEffect(() => {
-  //   fetchLatestUploads();
-  // }, []);
-
-  // const handleUIUpdate = () => fetchLatestUploads();
-
-  // function handleDialogItemSelect() {
-  //   focusRef.current = dropdownTriggerRef.current;
-  // }
 
   function handleOpenEdit(open) {
     // setHasOpenDialog(open);
@@ -81,33 +64,19 @@ export default function CategoryColumnAction({ id, category }) {
           <MoreHorizontal className='h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align='end'
-        // hidden={hasOpenDialog}
-        hidden={openEditDialog || openDeleteDialog}
-        // onCloseAutoFocus={(event) => {
-        //   if (focusRef.current) {
-        //     focusRef.current.focus();
-        //     focusRef.current = null;
-        //     event.preventDefault();
-        //   }
-        // }}
-      >
-        {/* <Dialog>
-          <DialogTrigger className="w-full"> */}
+      <DropdownMenuContent align='end' hidden={openEditDialog || openDeleteDialog}>
         <DialogItem
           triggerChildren={
             <div className='flex items-center gap-3'>
               <Pencil strokeWidth={0.9} size={20} />
-              <span>{t("Edit")}</span>
+              <span>{"Edit"}</span>
             </div>
           }
-          // onSelect={handleDialogItemSelect}
           onOpenChange={handleOpenEdit}
           open={openEditDialog}
           className='w-[350px] sm:w-[500px] '
         >
-          <DialogTitle>{t("Edit Category")}</DialogTitle>
+          <DialogTitle>{"Edit Category"}</DialogTitle>
           <EditCategory
             initialState={{ name: category.name, image: category.image, id: id }}
             setVisible={handleOpenEdit}
@@ -119,7 +88,7 @@ export default function CategoryColumnAction({ id, category }) {
           triggerChildren={
             <div className='flex items-center gap-3'>
               <Trash2 strokeWidth={0.9} size={20} />
-              <span>{t("Delete")}</span>
+              <span>{"Delete"}</span>
             </div>
           }
           // onSelect={handleDialogItemSelect}
@@ -129,8 +98,8 @@ export default function CategoryColumnAction({ id, category }) {
           className='w-[350px] sm:w-[500px]'
         >
           <DialogHeader>
-            <DialogTitle>{t("Are you sure?")}</DialogTitle>
-            <DialogDescription>{t("This action will remove this category permanently!")}</DialogDescription>
+            <DialogTitle>{"Are you sure?"}</DialogTitle>
+            <DialogDescription>{"This action will remove this category permanently!"}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button
@@ -141,7 +110,7 @@ export default function CategoryColumnAction({ id, category }) {
               }}
               variant='secondary'
             >
-              {t("Cancel")}
+              {"Cancel"}
             </Button>
             <Button
               onClick={() => {
@@ -151,7 +120,7 @@ export default function CategoryColumnAction({ id, category }) {
               disabled={busy}
             >
               <span className='w-12 flex items-center justify-center'>
-                {busy ? <Loader className='animate-spin' /> : t("Delete")}
+                {busy ? <Loader className='animate-spin' /> : "Delete"}
               </span>
             </Button>
           </DialogFooter>

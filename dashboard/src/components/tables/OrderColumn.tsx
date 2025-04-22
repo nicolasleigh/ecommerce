@@ -1,12 +1,10 @@
-import { ColumnDef } from "@tanstack/react-table";
-import CategoryColumnAction from "./CategoryColumnAction";
-import i18n from "@/utils/i18n";
-import OrderColumnAction from "./OrderColumnAction";
-import { Button } from "../ui/button";
-import { ChevronDown, ChevronRight } from "lucide-react";
 import { getShortObjectID } from "@/utils/utils";
-import { Badge } from "../ui/badge";
+import { ColumnDef } from "@tanstack/react-table";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import moment from "moment";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import OrderColumnAction from "./OrderColumnAction";
 
 export type Order = {
   id: string;
@@ -15,13 +13,6 @@ export type Order = {
 };
 
 export const columns: ColumnDef<Order>[] = [
-  // {
-  //   accessorKey: "number",
-  //   header: "NO.",
-  //   cell: ({ row }) => {
-  //     return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{row.index + 1}</div>;
-  //   },
-  // },
   {
     accessorKey: "id",
     header: "ID",
@@ -84,7 +75,6 @@ export const columns: ColumnDef<Order>[] = [
     },
   },
   {
-    // header: "Expand",
     id: "expand",
     cell: ({ row }) => {
       return row.getCanExpand() ? (

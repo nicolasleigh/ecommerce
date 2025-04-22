@@ -1,12 +1,11 @@
-import { FaFacebookF, FaGoogle } from "react-icons/fa";
+import { Loader } from "lucide-react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { customer_register, messageClear } from "../store/reducers/authReducer";
-import toast from "react-hot-toast";
-import { Loader } from "lucide-react";
 
 export default function Register() {
   const [state, setState] = useState({

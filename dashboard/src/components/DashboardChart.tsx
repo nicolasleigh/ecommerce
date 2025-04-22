@@ -1,15 +1,6 @@
-import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-// const chartData = [
-//   { category: "Puppy", orders: 2, sales: 80 },
-//   { category: "Kitten", orders: 4, sales: 200 },
-//   { category: "Hamster", orders: 6, sales: 120 },
-//   { category: "Rabbit", orders: 1, sales: 190 },
-//   { category: "Food", orders: 10, sales: 130 },
-// ];
 
 const chartConfig = {
   orders: {

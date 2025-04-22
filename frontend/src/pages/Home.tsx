@@ -15,7 +15,7 @@ export default function Home() {
   useEffect(() => {
     dispatch(get_products());
   }, []);
-  console.log(discountProduct);
+  // console.log(discountProduct);
 
   return (
     <div className='w-full'>

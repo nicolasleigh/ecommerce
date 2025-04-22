@@ -1,9 +1,7 @@
-import { ColumnDef } from "@tanstack/react-table";
-import CategoryColumnAction from "./CategoryColumnAction";
-import i18n from "@/utils/i18n";
-import ProductColumnAction from "./ProductColumnAction";
 import { getShortObjectID } from "@/utils/utils";
+import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "../ui/badge";
+import ProductColumnAction from "./ProductColumnAction";
 
 export type Product = {
   id: string;
@@ -27,18 +25,6 @@ export const columns: ColumnDef<Product>[] = [
       return <div className='capitalize text-[10px] sm:text-xs lg:text-sm'>{getShortObjectID(id)}</div>;
     },
   },
-  // {
-  //   accessorKey: "images",
-  //   header: "Image",
-  //   cell: ({ row }) => {
-  //     const value = row.getValue("images");
-  //     return (
-  //       <div className='w-20 sm:w-28'>
-  //         <img src={value} alt='category image' className='w-full rounded' />
-  //       </div>
-  //     );
-  //   },
-  // },
   {
     accessorKey: "name",
     header: "Name",

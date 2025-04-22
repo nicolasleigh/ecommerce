@@ -1,13 +1,12 @@
-import { useEffect } from "react";
-import { RiCheckboxIndeterminateFill, RiExchangeCnyFill, RiMoneyCnyBoxFill, RiShoppingCart2Fill } from "react-icons/ri";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { get_dashboard_index_data } from "../../store/reducers/dashboardReducer";
 import { getShortObjectID } from "@/utils/helper";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { RiCheckboxIndeterminateFill, RiMoneyCnyBoxFill, RiShoppingCart2Fill } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { get_dashboard_index_data } from "../../store/reducers/dashboardReducer";
 
 export default function Index() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
   const { recentOrders, totalOrder, pendingOrder, cancelledOrder } = useSelector((state) => state.dashboard);

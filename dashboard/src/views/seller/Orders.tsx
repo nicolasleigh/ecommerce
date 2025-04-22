@@ -14,9 +14,9 @@ export default function Orders() {
   const [searchValue, setSearchValue] = useState("");
   const dispatch = useDispatch();
 
-  const { myOrders, totalOrder } = useSelector((state) => state.order);
+  const { myOrders } = useSelector((state) => state.order);
   const { userInfo } = useSelector((state) => state.auth);
-  console.log(myOrders);
+  // console.log(myOrders);
 
   useEffect(() => {
     const obj = {

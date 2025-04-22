@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 import { add_friend, messageClear, send_message, updateMessage } from "../../store/reducers/chatReducer";
-import CustomerAvatar from "../CustomerAvatar";
 
 const socket = io("http://localhost:8083");
 

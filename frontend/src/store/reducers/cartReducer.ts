@@ -4,7 +4,7 @@ import api from "../../api";
 export const add_to_cart = createAsyncThunk("cart/add_to_cart", async (info, { rejectWithValue, fulfillWithValue }) => {
   try {
     const { data } = await api.post("/home/product/add-to-cart", info);
-    console.log(data);
+    // console.log(data);
     return fulfillWithValue(data);
   } catch (error) {
     return rejectWithValue(error.response.data);
@@ -16,7 +16,7 @@ export const get_cart_products = createAsyncThunk(
   async (userId, { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.get(`/home/product/get-cart-product/${userId}`);
-      console.log(data);
+      // console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);

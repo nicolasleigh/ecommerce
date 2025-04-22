@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { getSellerOrder, messageClear, sellerOrderStatusUpdate } from "../../store/reducers/orderReducer";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { getProduct } from "@/store/reducers/productReducer";
 import { getShortObjectID } from "@/utils/utils";
-import { Button } from "@/components/ui/button";
+import moment from "moment";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { messageClear } from "../../store/reducers/orderReducer";
 
 export default function ProductDetails() {
   const { productId } = useParams();
@@ -49,7 +49,7 @@ export default function ProductDetails() {
         <div className='p-4 space-y-3'>
           <div className='flex items-center gap-4 '>
             <Label>Product ID: </Label>
-            <span className='text-sm'>#{getShortObjectID(product._id)}</span>
+            <span className='text-sm'>{getShortObjectID(product._id)}</span>
           </div>
           <div className='flex items-center gap-4  '>
             <Label>Category: </Label>
@@ -66,12 +66,12 @@ export default function ProductDetails() {
           </div>
 
           <div className='flex items-center gap-4  '>
-            <Label>Product Creation Time: </Label>
-            <span className='text-sm'>{product.createdAt}</span>
+            <Label>Product Created At: </Label>
+            <span className='text-sm'>{moment(product.createdAt).format("lll")}</span>
           </div>
           <div className='flex items-center gap-4  '>
-            <Label>Product Updated Time: </Label>
-            <span className='text-sm'>{product.updatedAt}</span>
+            <Label>Product Updated At: </Label>
+            <span className='text-sm'>{moment(product.updatedAt).format("lll")}</span>
           </div>
 
           <div className='flex items-center gap-4  '>

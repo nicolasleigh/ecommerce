@@ -40,7 +40,7 @@ export const query_products = createAsyncThunk("product/query_products", async (
         query.searchValue ? query.searchValue : ""
       }`
     );
-    console.log(data);
+    // console.log(data);
     return fulfillWithValue(data);
   } catch (error) {
     console.log(error.response);

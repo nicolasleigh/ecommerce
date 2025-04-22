@@ -10,7 +10,6 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Search from "@/views/components/Search";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { DataTablePagination } from "./Pagination";
 import { cn } from "@/lib/utils";
 // import useWindowSize from "@/hooks/useWindowSize";
@@ -52,7 +51,6 @@ export function DataTable<TData, TValue>({
       // },
     },
   });
-  const { t } = useTranslation();
 
   return (
     <div className='px-1'>
@@ -70,7 +68,7 @@ export function DataTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.id !== "actions" && t(header.column.columnDef.header as string),
+                            header.id !== "actions" && (header.column.columnDef.header as string),
                             header.getContext()
                           )}
                     </TableHead>
@@ -95,7 +93,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className='h-24 text-center'>
-                  {t("No results.")}
+                  {"No results."}
                 </TableCell>
               </TableRow>
             )}

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { getShortObjectID } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
+import moment from "moment";
 
 export default function OrderDetails() {
   const { orderId } = useParams();
@@ -69,8 +70,8 @@ export default function OrderDetails() {
             <span className=''>{getShortObjectID(order._id)}</span>
           </div>
           <div className='flex items-center gap-4  '>
-            <Label>Order Creation Time: </Label>
-            <span>{order.date}</span>
+            <Label>Order Created At: </Label>
+            <span>{moment(order.date).format("lll")}</span>
           </div>
           <div className='flex items-center gap-4  '>
             <Label>Customer Name: </Label>

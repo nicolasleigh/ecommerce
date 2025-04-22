@@ -20,7 +20,6 @@ import {
   UserRoundPen,
   Wallet,
 } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useTheme } from "../theme-provider";
@@ -70,7 +69,6 @@ const items = [
 ];
 
 export function AppSidebar() {
-  const { t } = useTranslation();
   const { theme } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -98,7 +96,7 @@ export function AppSidebar() {
                   >
                     <div>
                       {item.icon}
-                      <span>{t(item.title)}</span>
+                      <span>{item.title}</span>
                     </div>
                   </Button>
                 </NavLink>
@@ -115,7 +113,7 @@ export function AppSidebar() {
           className='flex items-center justify-start w-full py-1 px-2'
         >
           <LogOut size={18} />
-          <span>{t("Log out")}</span>
+          <span>{"Log out"}</span>
         </Button>
       </SidebarFooter>
     </Sidebar>

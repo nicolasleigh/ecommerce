@@ -1,23 +1,13 @@
+import { LogIn, MailCheck, SquareArrowOutUpRight } from "lucide-react";
 import { useState } from "react";
-import {
-  FaFacebookF,
-  FaGithub,
-  FaHeart,
-  FaLinkedin,
-  FaList,
-  FaLock,
-  FaPhoneAlt,
-  FaTwitter,
-  FaUser,
-} from "react-icons/fa";
-import { IoIosArrowDown, IoMdArrowDropdown, IoMdPhonePortrait } from "react-icons/io";
-import { MdEmail } from "react-icons/md";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FaGithub, FaHeart, FaList } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
+import { IoIosArrowDown } from "react-icons/io";
+import { MdEmail } from "react-icons/md";
 import { useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import LanguageButton from "./LanguageButton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { LogIn, MailCheck, SquareArrowOutUpRight } from "lucide-react";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -67,14 +57,14 @@ export default function Header() {
             </ul>
             <div>
               <div className='flex justify-center items-center gap-10'>
-                <div className='flex justify-center items-center gap-4 text-green-50'>
+                {/* <div className='flex justify-center items-center gap-4 text-green-50'>
                   <Link target='_blank' rel='noreferrer' to='https://github.com/nicolasleigh'>
                     <FaGithub />
                   </Link>
-                </div>
-                <div className='flex group cursor-pointer text-green-50 text-sm justify-center items-center gap-1 relative after:h-[18px] after:w-[1px] after:bg-green-50 after:-right-[16px] after:absolute before:absolute before:h-[18px] before:bg-green-50 before:w-[1px] before:-left-[20px] '>
+                </div> */}
+                {/* <div className='flex group cursor-pointer text-green-50 text-sm justify-center items-center gap-1 relative after:h-[18px] after:w-[1px] after:bg-green-50 after:-right-[16px] after:absolute before:absolute before:h-[18px] before:bg-green-50 before:w-[1px] before:-left-[20px] '>
                   <LanguageButton />
-                </div>
+                </div> */}
                 {userInfo ? (
                   <Link
                     className='flex cursor-pointer justify-center items-center gap-2 text-sm text-green-50'
