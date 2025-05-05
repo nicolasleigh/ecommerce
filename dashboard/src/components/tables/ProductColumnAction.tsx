@@ -30,7 +30,7 @@ export default function ProductColumnAction({ productId }) {
   const handleDelete = async (setOpenDialog) => {
     setBusy(true);
     // await new Promise((resolve) => setTimeout(resolve, 1000));
-    toast.error(t("Not authorized to perform this operation"));
+    toast.error("Not authorized to perform this operation");
     setBusy(false);
     setOpenDialog(false);
   };

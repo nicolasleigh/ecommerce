@@ -9,8 +9,8 @@ import { customer_login, messageClear } from "../store/reducers/authReducer";
 
 export default function Login() {
   const [state, setState] = useState({
-    email: "",
-    password: "",
+    email: "miao.li@hotmail.com",
+    password: "123123123",
   });
   const dispatch = useDispatch();
   const { loader, userInfo, successMessage, errorMessage } = useSelector((state) => state.auth);
