@@ -1,4 +1,4 @@
-import { Book, Heart, House, Lock, LogOut, MessageSquareMore } from "lucide-react";
+import { ArrowBigLeft, Book, Heart, House, Lock, LogOut, MessageSquareMore } from "lucide-react";
 import { useState } from "react";
 import { FaList } from "react-icons/fa";
 import { useDispatch } from "react-redux";
@@ -111,6 +111,19 @@ export default function Dashboard() {
                     <LogOut size={20} />
                   </span>
                   <div className='block'>Logout</div>
+                </li>
+                <li className='flex justify-start items-center gap-2 py-2 px-4 cursor-pointer hover:bg-muted rounded-md'>
+                  <span className='text-xl'>
+                    <ArrowBigLeft size={20} />
+                  </span>
+                  <a
+                    href='https://seller.pet.linze.pro'
+                    target='_blank'
+                    referrerPolicy='no-referrer'
+                    className='block '
+                  >
+                    Seller Page
+                  </a>
                 </li>
               </ul>
             </div>

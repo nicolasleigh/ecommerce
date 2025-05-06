@@ -65,6 +65,15 @@ export default function Header() {
                 {/* <div className='flex group cursor-pointer text-green-50 text-sm justify-center items-center gap-1 relative after:h-[18px] after:w-[1px] after:bg-green-50 after:-right-[16px] after:absolute before:absolute before:h-[18px] before:bg-green-50 before:w-[1px] before:-left-[20px] '>
                   <LanguageButton />
                 </div> */}
+                <a
+                  href='https://seller.pet.linze.pro'
+                  target='_blank'
+                  referrerPolicy='no-referrer'
+                  className='text-white text-sm'
+                >
+                  Seller Page
+                </a>
+                <span className='text-white'>|</span>
                 {userInfo ? (
                   <Link
                     className='flex cursor-pointer justify-center items-center gap-2 text-sm text-green-50'
@@ -260,6 +269,16 @@ export default function Header() {
                 >
                   Contact Seller
                 </Link>
+              </li>
+              <li>
+                <a
+                  href='https://seller.pet.linze.pro'
+                  target='_blank'
+                  referrerPolicy='no-referrer'
+                  className='py-2 block  text-slate-600'
+                >
+                  Seller Page
+                </a>
               </li>
             </ul>
             <div className='flex flex-col justify-start  gap-2'>

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sidebar";
 import { logout } from "@/store/reducers/authReducer";
 import {
+  ArrowBigLeft,
   CreditCard,
   Gauge,
   LayoutList,
@@ -66,6 +67,11 @@ const items = [
     icon: <UserRoundPen />,
     url: "/profile",
   },
+  {
+    title: "Customer Page",
+    icon: <ArrowBigLeft />,
+    url: "https://pet.linze.pro",
+  },
 ];
 
 export function AppSidebar() {
@@ -87,6 +93,7 @@ export function AppSidebar() {
               <SidebarMenuButton className='p-0'>
                 <NavLink
                   to={item.url}
+                  target={item.url.startsWith("https://") ? "_blank" : "_self"}
                   className={({ isActive }) => (isActive ? "bg-primary text-primary-foreground" : " ") + " w-full"}
                 >
                   <Button
