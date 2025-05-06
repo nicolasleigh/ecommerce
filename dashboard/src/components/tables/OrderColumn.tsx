@@ -70,7 +70,10 @@ export const columns: ColumnDef<Order>[] = [
     header: "Date",
     cell: ({ row }) => {
       const value = row.getValue("date") as string;
-      const formatted = moment(value).format("lll");
+      let formatted = "";
+      if (value) {
+        formatted = moment(value).format("lll");
+      }
       return <div className='capitalize text-[10px] max-sm:w-20 sm:text-xs lg:text-sm'>{formatted}</div>;
     },
   },
